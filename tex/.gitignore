@@ -1,0 +1,7 @@
+
+
+*.blg
+*.aux
+*.bbl
+*.log
+flock-comment-main.pdf
