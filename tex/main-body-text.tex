@@ -27,3 +27,56 @@ compare different methods; and 3) providing a principled perspective
 from which to argue about the expected strengths and weaknesses of any 
 method.
 
+Methods for the unsupervised clustering of genotypes has received 
+considerable attention in the molecular ecology literature.  
+The best known example of this class of methods is {\sc structure} 
+\citep{Pritchardetal2000}.  {\sc structure} itself can be interpreted 
+as an elaboration of earlier models used to identify the spawning 
+stock of salmon \citep{Smouseetal1990}, and a variety of other 
+clustering methods have been developed that are all closely related to 
+{\sc structure}, for example {\sc NewHybrids} \citep{And&Tho2002}, {\sc 
+BayesAss+} \citep{Wil&Ran2003}, and {\sc baps} 
+\citep{Coranderetal2004}. (An overview of these similarities can be 
+found in \citealt{Anderson2009PGAC})   
+
+
+\section*{Comparison of methods}
+
+\subsection*{{\sc flock}}
+One issue I have with it is that it is described as a ``procedure'' or 
+an ``algorithm,'' without an attempt to see it as a special case of 
+well known inference frameworks.
+
+Some quotations to ponder.
+\begin{itemize}
+\item ``FLOCK is a non- Bayesian method and therefore differs 
+substantially from previous clustering algorithms''(p.~1333)
+
+\item ``However, its working principle does not involve a probabilistic 
+walk through the space of all possible k-partitions of sample S as is 
+the case with clustering algorithms such as Structure (Pritchard et al. 
+2000), BAPS (Corander et al. 2003) and NewHybrids (Anderson \& Thompson 
+2002).''(p.~1334).
+
+\item ``Partition (Dawson \& Belkhir 2001) is another clustering 
+program. However, since it is assuming Hardy–Weinberg and linkage 
+equilibrium, it is not suitable for the analysis of samples originating 
+from genetic groups in the process of becoming admixed.''(p.~1334).
+
+\item In \citet{Duc&Tur2012}: ``Note that FLOCK is very different from 
+other clustering 
+programs. It does not sample the space of partitions through small 
+random step walks as in MCMC, and it does not try to optimize some 
+target function, such as HWLE. Briefly stated, it is not based on a 
+probabilistic search algorithm. On the contrary, FLOCK is 
+entirely deterministic.''(p.~736).
+
+
+\end{itemize}
+
+\subsection*{{\sc structure}}
+
+\subsection*{{\sc flock} as a special case of {\sc structure}}
+
+\section*{Conclusions}
+
