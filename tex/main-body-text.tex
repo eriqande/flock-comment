@@ -30,14 +30,14 @@ method.
 Methods for the unsupervised clustering of genotypes have received 
 considerable attention in the molecular ecology literature.  
 The best known example of this class of methods is {\sc structure} 
-\citep{Pritchardetal2000}.  {\sc structure} itself can be interpreted 
+\citep{Pritchardetal2000}.  {\sc structure} itself can be described 
 as an elaboration of earlier models used to identify the spawning 
 stock of salmon \citep{Smouseetal1990}, and a variety of other 
 clustering methods have been developed that are all closely related to 
 {\sc structure}, for example {\sc NewHybrids} \citep{And&Tho2002}, {\sc 
 BayesAss+} \citep{Wil&Ran2003}, and {\sc baps} 
-\citep{Coranderetal2004}. (An overview of these similarities can be 
-found in \citealt{Anderson2009PGAC}.)   
+\citep{Coranderetal2004}. An overview of these similarities can be 
+found in \citet{Anderson2009PGAC}.
 
 Recently, a description of the software {\sc flock} was published, 
 billing the method as a ``non-Bayesian method [that] differs substantially from previous 
@@ -54,18 +54,20 @@ These papers describe the rationale behind the {\sc flock} algorithm in
 intuitive terms with analogies to the coalescence of flocks of birds
 or the accretion of snow on a moving snowball, \etc.  
 
-Here, we provide a different perspective on the {\sc flock} algorithm
+Here, we provide a different perspective on the {\sc flock} algorithm,
 showing it to be a special, restricted case of the simulated annealing algorithm for finding the Bayesian maximum {\em a posteriori} (MAP) estimate from a marginalized form of the {\sc structure} model with no admixture and non-correlated allele frequencies. 
 
 \section*{Comparison of methods}
-We start with a succinct mathematical description of the {\sc flock} algorithm, and then\ldots
+We start with a succinct mathematical description of the {\sc structure} algorithm, and then\ldots
+
+
+\subsection*{{\sc structure}}
 
 \subsection*{{\sc flock}}
 One issue I have with it is that it is described as a ``procedure'' or 
 an ``algorithm,'' without an attempt to see it as a special case of 
 well known inference frameworks.
 
-\subsection*{{\sc structure}}
 
 \subsection*{{\sc flock} as a special case of {\sc structure}}
 
