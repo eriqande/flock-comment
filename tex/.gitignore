@@ -1,7 +1,8 @@
 
-
+*~
 *.blg
 *.aux
 *.bbl
 *.log
+*synctex.gz
 flock-comment-main.pdf
