@@ -64,10 +64,80 @@ admixture and non-correlated allele frequencies.
 
 \section*{Comparison of methods}
 We start with a succinct mathematical description of the {\sc structure}
-algorithm, and then\ldots
+algorithm, then describe the {\sc flock} algorithm, and finally explain
+the close relationship between the two.
 
 
 \subsection*{{\sc structure}}
+In the {\sc structure} model with no admixture, the unknown ``subpopulation'' that the 
+$i\thh$ individual ($i=1,\ldots,N)$ belongs to is denoted by $Z_i \in \{1,\ldots,K\}$, where $K$ is the 
+number of subpopulations (or clusters, as they are often referred to).  
+In a diploid individual from cluster $k$, the 
+allelic types of the two gene copies at the $\ell\thh$ locus are assumed
+to be drawn independently from the vector of allele frequencies at
+locus $\ell$,  $\theta_{k\ell}=(\theta_{k\ell 1},\ldots,\theta_{k\ell A_\ell})$, where $A_\ell$ 
+denotes the number of alleles observed in the data set at locus $\ell$.
+Hence, if $Y_{ij}$ denotes a vector of length $A_\ell$ whose components denote the number
+of copies of each of the $A_\ell$ alleles at locus $j$ in individual $i$, and 
+$Z_i=k$, then $Y_{i\ell}$ follows the multinomial distribution of two trials with
+with $A_\ell$  components and cell probabilities given by the allele frequencies: 
+\begin{equation}
+(Y_{i\ell}~|~Z_i=k) \sim \mathrm{Mult}_{A_\ell}(2, \theta_{k\ell}).
+\end{equation}
+In the model without physical linkage, the genotypes at the loci are assumed to
+be independent of one another, so the probability of the genotype data at
+all $L$ loci---$Y_i=(Y_{i1},\ldots,Y_{iL})$---is simply a product of multinomial probabilities.
+In the uncorrelated allele frequencies model, the prior on each $\theta_{k\ell}$ is a
+Dirichlet distribution with parameters $(\lambda_{k\ell1},\ldots,\lambda_{k\ell A_\ell})$,
+which are usually set to a value like $1/A_\ell$.  
+
+Inference in the model proceeds by sampling from the joint posterior of the 
+$Z_i$'s and $\theta = (\theta_1,\ldots,\theta_K)$ using Gibbs sampling.  That is,
+at iteration $t$:
+\begin{enumerate}
+\item each $Z^{(t)}_i$ is updated to $Z^{(t+1)}_i$ by sampling a value from 
+the full conditional distribution of $Z_i$ given
+$Y_i$ and $\theta^{(t)}$ (the current estimate of the allele frequencies).  This
+distribution is found using Bayes' theorem. In {\sc structure}'s formulation, the 
+prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$.     
+\item $\theta^{(t)}$ is updated from its full conditional distribution.  For each cluster
+$k$, and locus $\ell$ the full conditional for $\theta_{k\ell}$ is independently a 
+Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for $j=1,\ldots, A_\ell$,
+where $\#(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$ observed in 
+individuals whose $Z^{(t+1)}_i = k$.   
+\end{enumerate}
+
+It will be useful for our comparison with {\sc flock} to point out that another way 
+of pursuing inference in this model would be to first integrate out the 
+Dirichlet priors on the allele frequencies and then sample from the posterior
+for the $Z_i$'s by Gibbs sampling.  When $\theta$ is integrated out, the genotypes 
+of the individuals are no longer conditionally independent (they were originally
+independent {\em conditional} on $\theta$ and the $Z_i$'s), so the calculation of 
+the full conditional distribution of $Z_i$ is now somewhat more involved: the full 
+conditional distribution of $Y_{i\ell}$ given $Z_i=k$, and $Z_{(-i)}$ and $Y_{(-i)\ell}$---the
+cluster memberships and genotypes, respectively,  of all the remaining individuals---is
+now a Compound Dirichlet Multinomial distribution (CDM):
+\begin{eqnarray}
+\lefteqn{(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell}) \sim} \label{eq:cdm}\\
+& & \mathrm{CDM}(\lambda_{k\ell 1} + \#_{(-i)}(k,\ell,1), \ldots,
+\lambda_{k\ell A_\ell} + \#_{(-i)}(k,\ell,A\ell)), \nonumber
+\end{eqnarray}
+where $\#_{(-i)}(k,\ell,1)$ is the number of alleles of type $j$ at locus $\ell$
+found in individuals {\em other than individual $i$} that currently
+belong to cluster $k$. Calculating (\ref{eq:cdm}) for each value of $Z_i=k \in \{1,\ldots,K\}$ 
+and normalizing to sum to one gives the full conditional distribution for 
+$Z_i$:
+\begin{equation}
+P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})~~,~~k=1,\ldots,K.
+\label{eq:fc}
+\end{equation}
+A new value of $Z_i$ would be drawn from (\ref{eq:fc}) if doing Gibbs sampling in this
+version of the {\sc structure} model in which $\theta$ has been integrated out.  In fact,
+this is the approach (with a slightly different prior weight on the $Z_i$'s) taken to update 
+$Z_i$ in both {\sc hwler} \citep{Pel&Mas2006} and {\sc structurama} \cite{Hue&And2007} when not
+proposing changes to the number of clusters.
+
+
 
 \subsection*{{\sc flock}}
 One issue I have with it is that it is described as a ``procedure'' or 
