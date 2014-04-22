@@ -70,14 +70,17 @@ the close relationship between the two.
 
 \subsection*{{\sc structure}}
 In the {\sc structure} model with no admixture, the unknown ``subpopulation'' that the 
-$i\thh$ individual ($i=1,\ldots,N)$ belongs to is denoted by $Z_i \in \{1,\ldots,K\}$, where $K$ is the 
+$i\thh$ individual ($i=1,\ldots,N)$ belongs to is denoted by $Z_i \in \{1,\ldots,K\}$, 
+where $K$ is the 
 number of subpopulations (or clusters, as they are often referred to).  
 In a diploid individual from cluster $k$, the 
 allelic types of the two gene copies at the $\ell\thh$ locus are assumed
 to be drawn independently from the vector of allele frequencies at
-locus $\ell$,  $\theta_{k\ell}=(\theta_{k\ell 1},\ldots,\theta_{k\ell A_\ell})$, where $A_\ell$ 
+locus $\ell$,  $\theta_{k\ell}=(\theta_{k\ell 1},\ldots,\theta_{k\ell A_\ell})$, where 
+$A_\ell$ 
 denotes the number of alleles observed in the data set at locus $\ell$.
-Hence, if $Y_{ij}$ denotes a vector of length $A_\ell$ whose components denote the number
+Hence, if $Y_{ij}$ denotes a vector of length $A_\ell$ whose components denote the 
+number
 of copies of each of the $A_\ell$ alleles at locus $j$ in individual $i$, and 
 $Z_i=k$, then $Y_{i\ell}$ follows the multinomial distribution of two trials with
 with $A_\ell$  components and cell probabilities given by the allele frequencies: 
@@ -86,9 +89,11 @@ with $A_\ell$  components and cell probabilities given by the allele frequencies
 \end{equation}
 In the model without physical linkage, the genotypes at the loci are assumed to
 be independent of one another, so the probability of the genotype data at
-all $L$ loci---$Y_i=(Y_{i1},\ldots,Y_{iL})$---is simply a product of multinomial probabilities.
+all $L$ loci---$Y_i=(Y_{i1},\ldots,Y_{iL})$---is simply a product of multinomial 
+probabilities.
 In the uncorrelated allele frequencies model, the prior on each $\theta_{k\ell}$ is a
-Dirichlet distribution with parameters $(\lambda_{k\ell1},\ldots,\lambda_{k\ell A_\ell})$,
+Dirichlet distribution with parameters $(\lambda_{k\ell1},\ldots,\lambda_{k\ell A_
+\ell})$,
 which are usually set to a value like $1/A_\ell$.  
 
 Inference in the model proceeds by sampling from the joint posterior of the 
@@ -100,9 +105,11 @@ the full conditional distribution of $Z_i$ given
 $Y_i$ and $\theta^{(t)}$ (the current estimate of the allele frequencies).  This
 distribution is found using Bayes' theorem. In {\sc structure}'s formulation, the 
 prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$.     
-\item $\theta^{(t)}$ is updated from its full conditional distribution.  For each cluster
+\item $\theta^{(t)}$ is updated from its full conditional distribution.  For each 
+cluster
 $k$, and locus $\ell$ the full conditional for $\theta_{k\ell}$ is independently a 
-Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for $j=1,\ldots, A_\ell$,
+Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for 
+$j=1,\ldots, A_\ell$,
 where $\#(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$ observed in 
 individuals whose $Z^{(t+1)}_i = k$.   
 \end{enumerate}
@@ -114,8 +121,10 @@ for the $Z_i$'s by Gibbs sampling.  When $\theta$ is integrated out, the genotyp
 of the individuals are no longer conditionally independent (they were originally
 independent {\em conditional} on $\theta$ and the $Z_i$'s), so the calculation of 
 the full conditional distribution of $Z_i$ is now somewhat more involved: the full 
-conditional distribution of $Y_{i\ell}$ given $Z_i=k$, and $Z_{(-i)}$ and $Y_{(-i)\ell}$---the
-cluster memberships and genotypes, respectively,  of all the remaining individuals---is
+conditional distribution of $Y_{i\ell}$ given $Z_i=k$, and $Z_{(-i)}$ and $Y_{(-i)
+\ell}$---the
+cluster memberships and genotypes, respectively,  of all the remaining individuals---
+is
 now a Compound Dirichlet Multinomial distribution (CDM):
 \begin{eqnarray}
 \lefteqn{(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell}) \sim} \label{eq:cdm}\\
@@ -124,7 +133,8 @@ now a Compound Dirichlet Multinomial distribution (CDM):
 \end{eqnarray}
 where $\#_{(-i)}(k,\ell,1)$ is the number of alleles of type $j$ at locus $\ell$
 found in individuals {\em other than individual $i$} that currently
-belong to cluster $k$. Calculating (\ref{eq:cdm}) for each value of $Z_i=k \in \{1,\ldots,K\}$ 
+belong to cluster $k$. Calculating (\ref{eq:cdm}) for each value of $Z_i=k \in 
+\{1,\ldots,K\}$ 
 and normalizing to sum to one gives the full conditional distribution for 
 $Z_i$:
 \begin{equation}
@@ -132,9 +142,12 @@ P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})~~,~~k=1,\ldots,K.
 \label{eq:fc}
 \end{equation}
 A new value of $Z_i$ would be drawn from (\ref{eq:fc}) if doing Gibbs sampling in this
-version of the {\sc structure} model in which $\theta$ has been integrated out.  In fact,
-this is the approach (with a slightly different prior weight on the $Z_i$'s) taken to update 
-$Z_i$ in both {\sc hwler} \citep{Pel&Mas2006} and {\sc structurama} \cite{Hue&And2007} when not
+version of the {\sc structure} model in which $\theta$ has been integrated out.  In 
+fact,
+this is the approach (with a slightly different prior weight on the $Z_i$'s) taken to 
+update 
+$Z_i$ in both {\sc hwler} \citep{Pel&Mas2006} and {\sc structurama} \cite{Hue&And2007} 
+when not
 proposing changes to the number of clusters.
 
 
@@ -150,21 +163,65 @@ well known inference frameworks.
 \section*{Results}
 
 \subsection*{{\sc flock} analysis of coasta California steelhead} 
-{\sc flock} was run four times using the default setting for all run parameters \textit{(initial partition = random, number of iterations = 20, number of runs = 50, LLOD threshold = 0)} for values of \textit{k} from 2 to 6. The stopping point of \textit{k}=6 was chosen because four consecutive runs with 0 length plateaus were produced. 
-Run times were relatively short. The four groups of runs for the default settings averaged 217 minutes (30min SD) on an i7 3.40GHz processor with 8GB of RAM. While no plateaus were observed in any of the four groups for a \textit{k} greater than two, the plateau record varied greatly among each group for \textit{k}=2 (plateau sequences- Run1=3,2,5,6,3; Run2=2,2,2,4,3,2; Run3=2,3,2,4; and Run4=2,3,3,4,2,2,5,2). The plateau analysis procedure suggested by \citet{Duc&Tur2012} leads to two different conclusions for the plateau sequences observed: \textit{k}=2 is the lower bound estimate (Run1) or there is no estimate (\textit{undecided}: Runs 2-4). Despite different conclusions, the allocation of individuals for the 'best run' from each group differed by a only a single individual. When \textit{k}=2, {\sc flock} identifies a boundary in the Russian Gulch area clustering individuals into northern and southern groups (Fig. 1). 
+{\sc flock} was run four times using the default setting for all run parameters 
+\textit{(initial partition = random, number of iterations = 20, number of runs = 50, 
+LLOD threshold = 0)} for values of \textit{k} from 2 to 6. The stopping point of 
+\textit{k}=6 was chosen because four consecutive runs with 0 length plateaus were 
+produced. 
+Run times were relatively short. The four groups of runs for the default settings 
+averaged 217 minutes (30min SD) on an i7 3.40GHz processor with 8GB of RAM. While no 
+plateaus were observed in any of the four groups for a \textit{k} greater than two, 
+the plateau record varied greatly among each group for \textit{k}=2 (plateau 
+sequences- Run1=3,2,5,6,3; Run2=2,2,2,4,3,2; Run3=2,3,2,4; and Run4=2,3,3,4,2,2,5,2). 
+The plateau analysis procedure suggested by \citet{Duc&Tur2012} leads to two different 
+conclusions for the plateau sequences observed: \textit{k}=2 is the lower bound 
+estimate (Run1) or there is no estimate (\textit{undecided}: Runs 2-4). Despite 
+different conclusions, the allocation of individuals for the 'best run' from each 
+group differed by a only a single individual. When \textit{k}=2, {\sc flock} 
+identifies a boundary in the Russian Gulch area clustering individuals into northern 
+and southern groups (Fig. 1). 
 
 \begin{figure*}
 \begin{center}
     \includegraphics[width=\textwidth]{images/Figures-Pat/FLOCK_OneSampDefault.pdf}
-    \caption{Assignment to reference population (from \textit{k} = 2-6) plots created in the program {\sc flock}. Each horizontal plot represents the 'best run' from a series where individuals are reallocated into \textit{k} clusters. Within each plot the normalized individual likelihood for each reference population is represented by a colored vertical bar. Major geographic boundaries that were attributed to genetic structure in \citet{Garzaetal_norcal} are indicated with black vertical lines. Results from the 'best runs' showed similar geographic differentiation to \citet{Garzaetal_norcal} analysis. The plateau analysis developed by \citet{Duc&Tur2012} indicate that either an undecided structure or that \textit{k}=2 is the lower bound estimate.}
+    \caption{Assignment to reference population (from \textit{k} = 2-6) plots created 
+in the program {\sc flock}. Each horizontal plot represents the 'best run' from a 
+series where individuals are reallocated into \textit{k} clusters. Within each plot 
+the normalized individual likelihood for each reference population is represented by a 
+colored vertical bar. Major geographic boundaries that were attributed to genetic 
+structure in \citet{Garzaetal_norcal} are indicated with black vertical lines. Results 
+from the 'best runs' showed similar geographic differentiation to 
+\citet{Garzaetal_norcal} analysis. The plateau analysis developed by 
+\citet{Duc&Tur2012} indicate that either an undecided structure or that \textit{k}=2 
+is the lower bound estimate.}
     \label{Fig.1}
 \end{center}
 \end{figure*}
 
-With increased \textit{k} {\sc flock} continues to splits individuals approximately based on geographical boundaries identified by \citet{Garzaetal_norcal} using {\sc structure}. Once \textit{k} = 6 is reached no new regions are identified.
+With increased \textit{k} {\sc flock} continues to splits individuals approximately 
+based on geographical boundaries identified by \citet{Garzaetal_norcal} using {\sc 
+structure}. Once \textit{k} = 6 is reached no new regions are identified.
 
-To investigate the ability of the arrangement of individuals within the reference populations to move around the partition space we varied the number of iterations that each run goes through to find the 'optimal' allocation of individuals. Unfortuantely only the reallocation matrix for the 'best run' is given as output. Increasing the number of iterations did not affect the overall inference of \textit{k}. It was observed that often during the last iterations individuals would alternate between reference groups during subsequent iterations. Increasing the log likelihood difference threshold for reallocation to 0.18 (there needs to be at least a 1.5 times higher likelihood to reallocate the individual) minimized this, but did not affect the inference of \textit{k} (lower bound estimate of \textit{k} = 2). 
+To investigate the ability of the arrangement of individuals within the reference 
+populations to move around the partition space we varied the number of iterations that 
+each run goes through to find the 'optimal' allocation of individuals. Unfortuantely 
+only the reallocation matrix for the 'best run' is given as output. Increasing the 
+number of iterations did not affect the overall inference of \textit{k}. It was 
+observed that often during the last iterations individuals would alternate between 
+reference groups during subsequent iterations. Increasing the log likelihood 
+difference threshold for reallocation to 0.18 (there needs to be at least a 1.5 times 
+higher likelihood to reallocate the individual) minimized this, but did not affect the 
+inference of \textit{k} (lower bound estimate of \textit{k} = 2). 
 
 
 \section*{Conclusions}
-The partition space over which {\sc flock} evaluates how individuals are clustered greatly increases with both the number of individuals and the number of clusters into which they can be partitioned. The total partition space for any given k can be defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the second kind. The results of {\sc flock} depend primarily on the initial partition of individuals. It is not surprising that with 2,596 individuals we could have drastically different plateau sequences with just two clusters. It is difficult to access how well the reallocation process moves the cluster of individuals within the partition space due to the fact that the reallocation matrix from only the 'best-run' is reported. 
+The partition space over which {\sc flock} evaluates how individuals are clustered 
+greatly increases with both the number of individuals and the number of clusters into 
+which they can be partitioned. The total partition space for any given k can be 
+defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
+second kind. The results of {\sc flock} depend primarily on the initial partition of 
+individuals. It is not surprising that with 2,596 individuals we could have 
+drastically different plateau sequences with just two clusters. It is difficult to 
+access how well the reallocation process moves the cluster of individuals within the 
+partition space due to the fact that the reallocation matrix from only the 'best-run' 
+is reported. 
