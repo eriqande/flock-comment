@@ -83,7 +83,7 @@ Hence, if $Y_{ij}$ denotes a vector of length $A_\ell$ whose components denote t
 number
 of copies of each of the $A_\ell$ alleles at locus $j$ in individual $i$, and 
 $Z_i=k$, then $Y_{i\ell}$ follows the multinomial distribution of two trials with
-with $A_\ell$  components and cell probabilities given by the allele frequencies: 
+$A_\ell$  components and cell probabilities given by the allele frequencies: 
 \begin{equation}
 (Y_{i\ell}~|~Z_i=k) \sim \mathrm{Mult}_{A_\ell}(2, \theta_{k\ell}).
 \end{equation}
@@ -107,11 +107,11 @@ distribution is found using Bayes' theorem. In {\sc structure}'s formulation, th
 prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$.     
 \item $\theta^{(t)}$ is updated from its full conditional distribution.  For each 
 cluster
-$k$, and locus $\ell$ the full conditional for $\theta_{k\ell}$ is independently a 
+$k$ and locus $\ell$, the full conditional for $\theta_{k\ell}$ is independently a 
 Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for 
 $j=1,\ldots, A_\ell$,
 where $\#(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$ observed in 
-individuals whose $Z^{(t+1)}_i = k$.   
+individuals with $Z^{(t+1)}_i = k$.   
 \end{enumerate}
 
 It will be useful for our comparison with {\sc flock} to point out that another way 
@@ -120,12 +120,14 @@ Dirichlet priors on the allele frequencies and then sample from the posterior
 for the $Z_i$'s by Gibbs sampling.  When $\theta$ is integrated out, the genotypes 
 of the individuals are no longer conditionally independent (they were originally
 independent {\em conditional} on $\theta$ and the $Z_i$'s), so the calculation of 
-the full conditional distribution of $Z_i$ is now somewhat more involved: the full 
-conditional distribution of $Y_{i\ell}$ given $Z_i=k$, and $Z_{(-i)}$ and $Y_{(-i)
-\ell}$---the
-cluster memberships and genotypes, respectively,  of all the remaining individuals---
-is
-now a Compound Dirichlet Multinomial distribution (CDM):
+the full conditional distribution of $Z_i$ becomes somewhat more involved,
+but can be computed by the following reasoning. First, the full 
+conditional distribution of $Y_{i\ell}$, given that individual $i$ is from subpopulation $k$
+(\ie $Z_i=k$) depends on the 
+cluster memberships and genotypes  of all the remaining individuals,
+which we denote by  $Z_{(-i)}$ and $Y_{(-i)\ell}$, respectively.
+This full conditional for $Y_{i\ell}$ follows 
+a Compound Dirichlet Multinomial distribution (CDM):
 \begin{eqnarray}
 \lefteqn{(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell}) \sim} \label{eq:cdm}\\
 & & \mathrm{CDM}(\lambda_{k\ell 1} + \#_{(-i)}(k,\ell,1), \ldots,
@@ -133,7 +135,7 @@ now a Compound Dirichlet Multinomial distribution (CDM):
 \end{eqnarray}
 where $\#_{(-i)}(k,\ell,1)$ is the number of alleles of type $j$ at locus $\ell$
 found in individuals {\em other than individual $i$} that currently
-belong to cluster $k$. Calculating (\ref{eq:cdm}) for each value of $Z_i=k \in 
+belong to cluster $k$. Thus, calculating (\ref{eq:cdm}) for each value of $Z_i=k \in 
 \{1,\ldots,K\}$ 
 and normalizing to sum to one gives the full conditional distribution for 
 $Z_i$:
@@ -153,6 +155,15 @@ proposing changes to the number of clusters.
 
 
 \subsection*{{\sc flock}}
+Here we translate the recipe given by \citeauthor{Duc&Tur2009} for the 
+{\sc flock} algorithm into a concise specification in terms of the variables
+defined in the previous section.  We provide the description for case when
+it is assumed there are $K$ clusters.
+
+The first step of the flock algorithm is initialization.  [Now echo what the
+authors say about this, and then translate that into an equation on $Z_i$]
+
+
 One issue I have with it is that it is described as a ``procedure'' or 
 an ``algorithm,'' without an attempt to see it as a special case of 
 well known inference frameworks.
