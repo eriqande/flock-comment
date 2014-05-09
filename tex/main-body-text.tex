@@ -157,12 +157,15 @@ proposing changes to the number of clusters.
 \subsection*{{\sc flock}}
 Here we translate the recipe given by \citeauthor{Duc&Tur2009} for the 
 {\sc flock} algorithm into a concise specification in terms of the variables
-defined in the previous section.  We provide the description for case when
+defined in the previous section.  We provide the description for a case in which
 it is assumed there are $K$ clusters.
 
-The first step of the flock algorithm is initialization.  [Now echo what the
-authors say about this, and then translate that into an equation on $Z_i$]
-
+The first step of the flock algorithm is initialization, during which 
+the program randomly allocates each of the $N$ individuals to one of 
+$K$ clusters.  Then a number of reallocation steps are performed.  During every one of 
+these steps, each individual is given the chance to be reallocated 
+(\ie moved to a different cluster).  This is done on the basis of 
+maximum likelihood: 
 
 One issue I have with it is that it is described as a ``procedure'' or 
 an ``algorithm,'' without an attempt to see it as a special case of 
@@ -173,7 +176,7 @@ well known inference frameworks.
 
 \section*{Results}
 
-\subsection*{{\sc flock} analysis of coasta California steelhead} 
+\subsection*{{\sc flock} analysis of coastal California steelhead} 
 {\sc flock} was run four times using the default setting for all run parameters 
 \textit{(initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0)} for values of \textit{k} from 2 to 6. The stopping point of 
