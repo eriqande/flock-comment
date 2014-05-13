@@ -179,30 +179,20 @@ well known inference frameworks.
 \subsection*{Analysis of coastal California steelhead} 
 To evaluate the preformance and computational efficiency of {\sc flock}  we used a published 
 dataset from \citet{Garzaetal_norcal} comprised of 2596 steelhead \textit{Oncorhynchus mykiss}
-genotyped at 15 microsatellite loci.  {\sc flock} was run six times using the default setting for all run parameters 
-
-\textit{(initial partition = random, number of iterations = 20, number of runs = 50, 
+genotyped at 15 microsatellite loci.  {\sc flock} was run six times using the default setting for all run parameters \textit{(initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0)} for values of \textit{k} from 2 to 6. The stopping point of 
-\textit{k}=6 was chosen because four consecutive runs with 0 length plateaus were 
-produced. The non-admixture, uncorrelated allele frequency model implemented in {\sc structure}
-was run with six iterations of a 50,000 sweep burn-in followed by 150,000 sweep sample 
-from the posterior of \textit{k} from 2 to 6. To facilitate the comparison of the two programs,
+\textit{k}=6 was chosen after four consecutive runs yielded no plateau. The non-admixture, uncorrelated allele frequency model implemented in {\sc structure} was run with six iterations of a 50,000 sweep burn-in followed by 150,000 sweep sample from the posterior of \textit{k} from 2 to 6. All runs were performed with an i7 3.40GHz processor and 8GB of RAM. To facilitate the comparison of the two programs,
 the program {\sc clump} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
 while the program Distruct \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
 
 \subsection*{Results} 
-Run times were relatively short. The four groups of runs for the default settings 
-averaged 217 minutes (30min SD) on an i7 3.40GHz processor with 8GB of RAM. While no 
-plateaus were observed in any of the four groups for a \textit{k} greater than two, 
-the plateau record varied greatly among each group for \textit{k}=2 (plateau 
-sequences- Run1=3,2,5,6,3; Run2=2,2,2,4,3,2; Run3=2,3,2,4; and Run4=2,3,3,4,2,2,5,2). 
-The plateau analysis procedure suggested by \citet{Duc&Tur2012} leads to two different 
-conclusions for the plateau sequences observed: \textit{k}=2 is the lower bound 
-estimate (Run1) or there is no estimate (\textit{undecided}: Runs 2-4). Despite 
-different conclusions, the allocation of individuals for the 'best run' from each 
-group differed by a only a single individual. When \textit{k}=2, {\sc flock} 
-identifies a boundary in the Russian Gulch area clustering individuals into northern 
-and southern groups (Fig. 1). 
+Run times were relatively short. The six groups of runs for the default settings 
+averaged 188.8 minutes (1.5 min SD). While no  plateaus were observed in any of the six groups for a \textit{k} greater than two, the plateau record varied greatly among each group for \textit{k}=2 (plateau 
+sequences- Run1= 3,2,3,5,2,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; Run4=2,3,4,2,2,2,3; Run5=2,2,2,4,3,2; 
+and; Run6=2,3,3,4,2,2,5,2). The plateau analysis procedure suggested by \citet{Duc&Tur2012} leads to 
+an \textit{undecided} estimate of K as a consequence of no plateau lengths being greater than 6. Despite 
+the K estimation based on rules of thumb devloped by \citet{Duc&Tur2012}, Distruct plots for each group of runs 
+for \textit{k}=2-4 lead to nearly identical clustering of individuals (See supplementary materials). While only two of the six 'best runs' when \textit{k}=2 ended with identical clustering (same mean LLOD score), all other runs differed by at most the allocation of 13 individuals. When \textit{k} was set to three and four all runs provided very similar clustering. 
 
 \begin{figure*}
 \begin{center}
@@ -223,7 +213,16 @@ is the lower bound estimate.}
 
 With increased \textit{k} {\sc flock} continues to splits individuals approximately 
 based on geographical boundaries identified by \citet{Garzaetal_norcal} using {\sc 
-structure}. Once \textit{k} = 6 is reached no new regions are identified.
+structure}.
+
+\begin{figure*}
+\begin{center}
+    \includegraphics[width=\textwidth]{images/Figures-Pat/Qval-StrFloc.pdf}
+    \caption{Individual \textit{$q_i$} values plotted for each cluster for \textit{k}=5. {\sc flock} estimates of likelihood of assignment to each cluster have less uncertainty attributed to them.}
+    \label{Fig.2}
+\end{center}
+\end{figure*}
+
 
 To investigate the ability of the arrangement of individuals within the reference 
 populations to move around the partition space we varied the number of iterations that 
