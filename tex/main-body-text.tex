@@ -272,22 +272,36 @@ while the program Distruct \citep{Rosenberg2004} was used to plot individual \te
 
 \subsection*{Results} 
 Run times were relatively short for both programs. The six groups of runs for {\sc flock} 
-using the default settings required 1133 minutes to complete. Each individual group  of runs 
+required 1133 minutes to complete. Each individual group of runs 
 averaged 188.8 minutes (1.5 min SD). The six iterations of {\sc structure} completed in 
-XXXX minutes with each iterations averaging XXXX (SD). 
+486 minutes with each of the six iterations averaging 80.8 minutes (0.8 min SD). Increasing
+the number of putative clusters from \textit{k} of two to six yielded a 2.4 fold increase 
+in processing time for {\sc flock}, whereas a 1.6 fold increase was observed for runs of 
+{\sc structure}. 
 
-While no  plateaus were observed in any of the six groups for a \textit{k} greater than 
-two, the plateau record varied greatly among each
+The allocation of indivividuals into K clusters is congruent for each program. For all six groups 
+of runs from \textit{k}=2-4, {\sc flock} lead to nearly identical clustering of individuals 
+(See supplementary materials). It should be noted
+that of the 50 starting allocations of individuals in the {\sc flock} procedure only the LLOD for the 
+ 'best run' is reported. Of these 'best runs' for a \textit{k} of 2 only two  
+ended with identical clustering (same mean LLOD score), all other runs 
+differed by at most the allocation of 13 individuals. As \textit{k} increases so do the number of solutions
+that {\sc flock} finds (Fig 1). These solutions, however, are suprisingly similar to
+ the partions identified by {\sc structure}. Both programs idenfity clusters 
+which can be attributed to the geographical boundaries identified by \citet{Garzaetal_norcal}.
+
+Despite the similar allocation of individuals into \textit{k} clusters, the 
+plateau analysis in {\sc flock} leads to different conclusions among groups of runs, as well as 
+one that differs from both the pure likelihood 
+and delta K approach in {\sc structure}. While no plateaus were observed in any of the six groups 
+for a \textit{k} $\geq$2, the plateau record varied greatly among each
  group for \textit{k}=2 (plateau  sequences- Run1= 3,2,3,7,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; 
 Run4=2,3,4,2,4,3; Run5=2,2,5,5,3; and; Run6=2,2,2,2,2,3,3). The plateau analysis 
 procedure suggested by \citet{Duc&Tur2012} leads to 
-either an estimate of K$\geq$2 or \textit{undecided} as a consequence of no plateau 
-lengths being greater than 6. Distruct plots for each group of runs for \textit{k}=2-4 
-lead to nearly identical clustering of individuals (See supplementary materials). While 
-only two of the six 'best runs' when 
-\textit{k}=2 ended with identical clustering (same mean LLOD score), all other runs 
-differed by at most the allocation of 13 individuals. When \textit{k} was set to three 
-and four all runs provided very similar clustering. 
+either an estimate of K$\geq$2 (Run1) or \textit{undecided} as a consequence of no plateau 
+lengths being greater than 6. Interpreting the results from {\sc structure} can either be done 
+with the estimated likelihood of the data from the program itself or by the delta k method 
+suggest by Evanno et al XXXXX. Both methods indicate that the most likely \textit{k} for the dataset is 6. 
 
 \begin{figure*}
 \begin{center}
@@ -308,10 +322,6 @@ is the lower bound estimate.}
     \label{Fig.1}
 \end{center}
 \end{figure*}
-
-With increased \textit{k} {\sc flock} continues to splits individuals approximately 
-based on geographical boundaries identified by \citet{Garzaetal_norcal} using {\sc 
-structure}.
 
 \begin{figure*}
 \begin{center}
