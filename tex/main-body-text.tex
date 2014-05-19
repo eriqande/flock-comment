@@ -279,11 +279,12 @@ the number of putative clusters from \textit{k} of two to six yielded a 2.4 fold
 in processing time for {\sc flock}, whereas a 1.6 fold increase was observed for runs of 
 {\sc structure}. 
 
-The allocation of indivividuals into K clusters is congruent for each program. For all six groups 
+The allocation of indivividuals into K clusters was congruent for each program. For all six groups 
 of runs from \textit{k}=2-4, {\sc flock} lead to nearly identical clustering of individuals 
 (See supplementary materials). It should be noted
-that of the 50 starting allocations of individuals in the {\sc flock} procedure only the LLOD for the 
- 'best run' is reported. Of these 'best runs' for a \textit{k} of 2 only two  
+that of the 50 starting allocations of individuals in the {\sc flock} procedure likelihoods of each individual in 
+each reference is only reported for the 
+ 'best run'. Of these 'best runs' for a \textit{k} of 2 only two  
 ended with identical clustering (same mean LLOD score), all other runs 
 differed by at most the allocation of 13 individuals. As \textit{k} increases so do the number of solutions
 that {\sc flock} finds (Fig 1). These solutions, however, are suprisingly similar to
@@ -292,16 +293,17 @@ which can be attributed to the geographical boundaries identified by \citet{Garz
 
 Despite the similar allocation of individuals into \textit{k} clusters, the 
 plateau analysis in {\sc flock} leads to different conclusions among groups of runs, as well as 
-one that differs from both the pure likelihood 
-and delta K approach in {\sc structure}. While no plateaus were observed in any of the six groups 
+one that differs from {\sc structure}. While no plateaus were observed in any of the six groups 
 for a \textit{k} $\geq$2, the plateau record varied greatly among each
  group for \textit{k}=2 (plateau  sequences- Run1= 3,2,3,7,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; 
 Run4=2,3,4,2,4,3; Run5=2,2,5,5,3; and; Run6=2,2,2,2,2,3,3). The plateau analysis 
 procedure suggested by \citet{Duc&Tur2012} leads to 
 either an estimate of K$\geq$2 (Run1) or \textit{undecided} as a consequence of no plateau 
-lengths being greater than 6. Interpreting the results from {\sc structure} can either be done 
-with the estimated likelihood of the data from the program itself or by the delta k method 
-suggest by Evanno et al XXXXX. Both methods indicate that the most likely \textit{k} for the dataset is 6. 
+lengths being greater than 6. Interpreting the results from {\sc structure} is often accomplished by 
+looking at the estimated log likelihood of the data given K, the delta k method \citep{Evannoetal2005}, and plots of 
+individual \textit{$q_i$} values. Both the estimated likelihood of the data
+and the plots of individuals \textit{$q_i$} values suggest that 
+the most likely \textit{k} for the dataset is 6. 
 
 \begin{figure*}
 \begin{center}
@@ -350,13 +352,44 @@ inference of \textit{k} (lower bound estimate of \textit{k} = 2).
 
 
 \section*{Conclusions}
+
+One of the major claimed advantages of {\sc flock} over MCMC methods for solving the 
+K-partition problem is that, '[t]he very short processing times for each run of {\sc flock} allows for
+ comparing partitions from many runs of each \textit{k}'' \citep[][p.~735]{Duc&Tur2012}.
+While the authors observed improved process time in their 
+comparisions we did not observe the same advantage in our analysis. In their comparison, the 
+run parameters for {\sc flock} were 50 runs and 20 iterations for each \textit{k} = 1 to K+4. 
+These process times were compared to the admixture model with correlated allele 
+frequencies in {\sc structure} with ten iterations of a 50,000 sweep burn-in followed 
+by 200,000 sweep sample from the posterior of \textit{k} from 1 to K+3. 
+It seems reasonable, for each \textit{k}, to compare one iteration of {\sc structure} 
+to one iteration of {\sc flock} with 50 different starting allocations that are reallocated 20 times 
+as both evaluate the partition space once. Process speed advantages also may only been observed 
+with low sample sizes. The authors evaluated simulated data sets with sample sizes of N = 60, 120, 
+and 240. 
+
 The partition space over which {\sc flock} evaluates how individuals are clustered 
 greatly increases with both the number of individuals and the number of clusters into 
 which they can be partitioned. The total partition space for any given k can be 
 defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
 second kind. The results of {\sc flock} depend primarily on the initial partition of 
 individuals. It is not surprising that with 2,596 individuals we could have 
-drastically different plateau sequences with just two clusters. It is difficult to 
-access how well the reallocation process moves the cluster of individuals within the 
-partition space due to the fact that the reallocation matrix from only the 'best-run' 
-is reported. 
+drastically different plateau sequences with just two clusters and that as \textit{k} increases
+{\sc flock} finds suboptimal allocations. 
+
+For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
+to estimate K may be overly stringent. While there has been ample 
+discourse concering choosing the optimal K in  {\sc structure} \citep{Evannoetal2005, 
+Pricharedetal2000, Wap&Gag2006} and \citet{Pritchardetal2000} urges users 
+to be cautious of interpreting K, no such care in interpreting results 
+is suggested in running {\sc flock}. The authors developed estimation rules based on simulated data 
+sets with different migration regimes and rates, number of loci, and K. 
+By relying on identical allocations (mean LLOD values) as a means of supporting 
+a particular \textit{k},  similar but not idential 
+allocations will provide no support to a given \textit{k}. This may not be as big an issue with small datasets,
+however, as sample sizes increase this could have a drastic influence on the estimation of 
+K. 
+
+
+
+ 
