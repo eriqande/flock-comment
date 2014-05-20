@@ -1,0 +1,535 @@
+%!PS-Adobe-3.0 EPSF-3.0 
+% Graphical display of results from structure
+% distruct by Noah Rosenberg, November 2002 
+% Command line arguments: ./bin/distruct -d drawparams_popqs_no_labels -K 002 -i intermediate/Output_002.perms_6 -p intermediate/Output_002_PopQ.perms_6 -o ds_Clumped_PopQ_NoLabel_k002r006.ps 
+gsave
+
+% Population Q values from the file: intermediate/Output_002_PopQ.perms_6
+% 2 clusters, 63 populations, 0 individuals
+% Pop. code, number of individuals, membership coefficients
+% 1	21	0.985	0.015	
+% 2	36	0.994	0.006	
+% 3	66	0.923	0.077	
+% 4	52	0.853	0.147	
+% 5	71	0.856	0.144	
+% 6	46	0.988	0.012	
+% 7	58	0.987	0.013	
+% 8	58	0.936	0.064	
+% 9	33	0.943	0.057	
+% 10	27	0.987	0.013	
+% 11	25	0.879	0.121	
+% 12	31	0.935	0.065	
+% 13	52	0.992	0.008	
+% 14	57	0.991	0.009	
+% 15	42	0.988	0.012	
+% 16	42	0.97	0.03	
+% 17	25	0.959	0.041	
+% 18	38	0.899	0.101	
+% 19	35	0.619	0.381	
+% 20	57	0.77	0.23	
+% 21	8	0.745	0.255	
+% 22	54	0.688	0.312	
+% 23	75	0.921	0.079	
+% 24	50	0.817	0.183	
+% 25	42	0.93	0.07	
+% 26	42	0.781	0.219	
+% 27	27	0.108	0.892	
+% 28	27	0.149	0.851	
+% 29	56	0.171	0.829	
+% 30	58	0.072	0.928	
+% 31	41	0.151	0.849	
+% 32	26	0.076	0.924	
+% 33	51	0.351	0.649	
+% 34	31	0.048	0.952	
+% 35	52	0.098	0.902	
+% 36	43	0.149	0.851	
+% 37	23	0.138	0.862	
+% 38	42	0.083	0.917	
+% 39	41	0.3	0.7	
+% 40	33	0.107	0.893	
+% 41	26	0.127	0.873	
+% 42	35	0.194	0.806	
+% 43	22	0.058	0.942	
+% 44	52	0.15	0.85	
+% 45	41	0.151	0.849	
+% 46	46	0.026	0.974	
+% 47	38	0.015	0.985	
+% 48	58	0.012	0.988	
+% 49	55	0.027	0.973	
+% 50	61	0.033	0.967	
+% 51	35	0.051	0.949	
+% 52	23	0.002	0.998	
+% 53	52	0.072	0.928	
+% 54	22	0.032	0.968	
+% 55	35	0.024	0.976	
+% 56	14	0.002	0.998	
+% 57	42	0.02	0.98	
+% 58	39	0.048	0.952	
+% 59	56	0.045	0.955	
+% 60	49	0.053	0.947	
+% 61	27	0.003	0.997	
+% 62	41	0.016	0.984	
+% 63	33	0.002	0.998	
+
+
+% PARAMETERS
+800 288 translate 
+1 1 scale
+0 rotate
+/setrim {1.3 setlinewidth} def 
+/setsep {0.3 setlinewidth} def 
+/setind {0.3 setlinewidth} def 
+/fh {3.3} def    	% Font height 
+/da {4} def    	% Distance above box at which to print names 
+/db {-7} def    	% Distance below box at which to print names 
+/bh {15} def    	% Height of the box 
+/wi {-0.144218} def    	% Width of an individual 
+/aato {60} def  	% Angle at which to print text atop box 
+/abel {60} def  	% Angle at which to print text below box 
+/tot {2596} def   	% Total number of individuals 
+/Helvetica-Bold findfont fh scalefont setfont 
+
+% ABBREVIATED COMMANDS
+/M {moveto} def
+/R {rmoveto} def
+/L {lineto} def
+/V {rlineto} def
+/Cfs {closepath fill stroke} def
+/rotshow {
+  dup dup stringwidth pop abel cos mul neg exch 
+  stringwidth pop abel sin mul neg R
+  gsave abel rotate show grestore
+} def
+/bhm {bh mul} def 	% Multiply by height of the box 
+/nwi {wi neg} def   	% Negative width of an individual 
+/wm {wi mul} def 	% Multiply by width of an individual 
+/ru {bhm M wi 0 V 0} def   	% Right-upwards box motion 
+/ld {bhm V nwi 0 V Cfs} def	% Left-downwards box closure motion
+/bbm {2 div add wm fh 2 div add db M} def       	% Below-box motion
+/abm {2 div add wm fh 2 div add bh da add M} def	% Above-box motion
+/sc {setrgbcolor} def
+
+% COLORS
+/c0 {0.0 0.0 0.0 sc} def    % black 
+/c1 {2.1 0.6 0.3 sc} def    % orange 
+/c2 {0 0.6 0.9 sc} def      % blue   
+/c3 {.9 2.1 0 sc} def       % yellow 
+/c4 {1.5 0.6 0.9 sc} def    % pink   
+/c5 {.2 .6 .2 sc} def       % green  
+/c6 {.5 0 .5 sc} def        % purple 
+/c7 {1.2 0.0 0.3 sc} def    % red     
+/c8 {0 1 0 sc} def          % light_green 
+/c9 {0 0 1 sc} def          % dark_blue
+/c10 {1.2 0 1.8 sc} def     % light_purple 
+/c11 {1.5 0.9 0.6 sc} def   % light_yellow 
+/c12 {0.7 0.3 0.0 sc} def   % brown
+/c13 {0 1.2 1.8 sc} def     % light_blue 
+/c14 {0.5 0.5 0.0 sc} def   % olive_green 
+/c15 {1.8 0.6 0.6 sc} def   % peach 
+/c16 {0 0.5 0.5 sc} def     % sea_green
+/c17 {.6 .75 .15 sc} def    % yellow_green 
+/c18 {0.45 .15 .9 sc} def   % blue_purple  
+/c19 {0.15 0.75 0.6 sc} def % blue_green 
+/c20 {0.5 setgray} def      % gray 
+/c21 {0.05 0.4 0.05 sc} def % dark_green 
+/c22 {0.75 setgray} def     % light_gray 
+/c23 {1 0 0 sc} def         % red2 
+/c24 {0.6 0.9 1.5 sc} def   % light_blue2 
+/c25 {1 0.6 0.4 sc} def     % light_orange 
+/c26 {0.25 setgray} def     % dark_gray 
+/c27 {1.2 0.9 0.9 sc} def   % light_pink 
+/c28 {.6 .2 .2 sc} def      % dark_brown 
+/c29 {1.6 0.4 0 sc} def     % dark_orange 
+/c30 {0.2 0 0.3 sc} def     % dark_purple 
+/c31 {1 setgray} def        % white 
+/d1 {c1} def
+/d2 {c2} def
+
+% FIGURE OUTLINE
+setrim 0 0 M wi tot mul 0 V 0 bh V nwi tot mul 0 V closepath stroke
+
+% STRUCTURE RESULTS
+setind
+d1 0 wm 0 bhm M 21 wm 0 V 0 0.985 bhm V -21 wm 0 V Cfs
+d2 0 wm 0.985 bhm M 21 wm 0 V 0 0.015 bhm V -21 wm 0 V Cfs
+setsep c0 0 wm 0 M 0 bh V stroke
+%atop c0 0 21 abm gsave aato rotate (PChor) show grestore
+%below c0 0 21 bbm (PChor) rotshow
+setind
+d1 21 wm 0 bhm M 36 wm 0 V 0 0.994 bhm V -36 wm 0 V Cfs
+d2 21 wm 0.994 bhm M 36 wm 0 V 0 0.006 bhm V -36 wm 0 V Cfs
+setsep c0 21 wm 0 M 0 bh V stroke
+%atop c0 21 36 abm gsave aato rotate (Ssim) show grestore
+%below c0 21 36 bbm (Ssim) rotshow
+setind
+d1 57 wm 0 bhm M 66 wm 0 V 0 0.923 bhm V -66 wm 0 V Cfs
+d2 57 wm 0.923 bhm M 66 wm 0 V 0 0.077 bhm V -66 wm 0 V Cfs
+setsep c0 57 wm 0 M 0 bh V stroke
+%atop c0 57 66 abm gsave aato rotate (WMont) show grestore
+%below c0 57 66 bbm (WMont) rotshow
+setind
+d1 123 wm 0 bhm M 52 wm 0 V 0 0.853 bhm V -52 wm 0 V Cfs
+d2 123 wm 0.853 bhm M 52 wm 0 V 0 0.147 bhm V -52 wm 0 V Cfs
+setsep c0 123 wm 0 M 0 bh V stroke
+%atop c0 123 52 abm gsave aato rotate (BMont) show grestore
+%below c0 123 52 bbm (BMont) rotshow
+setind
+d1 175 wm 0 bhm M 71 wm 0 V 0 0.856 bhm V -71 wm 0 V Cfs
+d2 175 wm 0.856 bhm M 71 wm 0 V 0 0.144 bhm V -71 wm 0 V Cfs
+setsep c0 175 wm 0 M 0 bh V stroke
+%atop c0 175 71 abm gsave aato rotate (XbBMon) show grestore
+%below c0 175 71 bbm (XbBMon) rotshow
+setind
+d1 246 wm 0 bhm M 46 wm 0 V 0 0.988 bhm V -46 wm 0 V Cfs
+d2 246 wm 0.988 bhm M 46 wm 0 V 0 0.012 bhm V -46 wm 0 V Cfs
+setsep c0 246 wm 0 M 0 bh V stroke
+%atop c0 246 46 abm gsave aato rotate (BSur) show grestore
+%below c0 246 46 bbm (BSur) rotshow
+setind
+d1 292 wm 0 bhm M 58 wm 0 V 0 0.987 bhm V -58 wm 0 V Cfs
+d2 292 wm 0.987 bhm M 58 wm 0 V 0 0.013 bhm V -58 wm 0 V Cfs
+setsep c0 292 wm 0 M 0 bh V stroke
+%atop c0 292 58 abm gsave aato rotate (CMont) show grestore
+%below c0 292 58 bbm (CMont) rotshow
+setind
+d1 350 wm 0 bhm M 58 wm 0 V 0 0.936 bhm V -58 wm 0 V Cfs
+d2 350 wm 0.936 bhm M 58 wm 0 V 0 0.064 bhm V -58 wm 0 V Cfs
+setsep c0 350 wm 0 M 0 bh V stroke
+%atop c0 350 58 abm gsave aato rotate (Corra) show grestore
+%below c0 350 58 bbm (Corra) rotshow
+setind
+d1 408 wm 0 bhm M 33 wm 0 V 0 0.943 bhm V -33 wm 0 V Cfs
+d2 408 wm 0.943 bhm M 33 wm 0 V 0 0.057 bhm V -33 wm 0 V Cfs
+setsep c0 408 wm 0 M 0 bh V stroke
+%atop c0 408 33 abm gsave aato rotate (BSLor) show grestore
+%below c0 408 33 bbm (BSLor) rotshow
+setind
+d1 441 wm 0 bhm M 27 wm 0 V 0 0.987 bhm V -27 wm 0 V Cfs
+d2 441 wm 0.987 bhm M 27 wm 0 V 0 0.013 bhm V -27 wm 0 V Cfs
+setsep c0 441 wm 0 M 0 bh V stroke
+%atop c0 441 27 abm gsave aato rotate (Bould) show grestore
+%below c0 441 27 bbm (Bould) rotshow
+setind
+d1 468 wm 0 bhm M 25 wm 0 V 0 0.879 bhm V -25 wm 0 V Cfs
+d2 468 wm 0.879 bhm M 25 wm 0 V 0 0.121 bhm V -25 wm 0 V Cfs
+setsep c0 468 wm 0 M 0 bh V stroke
+%atop c0 468 25 abm gsave aato rotate (Carb) show grestore
+%below c0 468 25 bbm (Carb) rotshow
+setind
+d1 493 wm 0 bhm M 31 wm 0 V 0 0.935 bhm V -31 wm 0 V Cfs
+d2 493 wm 0.935 bhm M 31 wm 0 V 0 0.065 bhm V -31 wm 0 V Cfs
+setsep c0 493 wm 0 M 0 bh V stroke
+%atop c0 493 31 abm gsave aato rotate (Zayan) show grestore
+%below c0 493 31 bbm (Zayan) rotshow
+setind
+d1 524 wm 0 bhm M 52 wm 0 V 0 0.992 bhm V -52 wm 0 V Cfs
+d2 524 wm 0.992 bhm M 52 wm 0 V 0 0.008 bhm V -52 wm 0 V Cfs
+setsep c0 524 wm 0 M 0 bh V stroke
+%atop c0 524 52 abm gsave aato rotate (Xzaya) show grestore
+%below c0 524 52 bbm (Xzaya) rotshow
+setind
+d1 576 wm 0 bhm M 57 wm 0 V 0 0.991 bhm V -57 wm 0 V Cfs
+d2 576 wm 0.991 bhm M 57 wm 0 V 0 0.009 bhm V -57 wm 0 V Cfs
+setsep c0 576 wm 0 M 0 bh V stroke
+%atop c0 576 57 abm gsave aato rotate (Scott) show grestore
+%below c0 576 57 bbm (Scott) rotshow
+setind
+d1 633 wm 0 bhm M 42 wm 0 V 0 0.988 bhm V -42 wm 0 V Cfs
+d2 633 wm 0.988 bhm M 42 wm 0 V 0 0.012 bhm V -42 wm 0 V Cfs
+setsep c0 633 wm 0 M 0 bh V stroke
+%atop c0 633 42 abm gsave aato rotate (Wadde) show grestore
+%below c0 633 42 bbm (Wadde) rotshow
+setind
+d1 675 wm 0 bhm M 42 wm 0 V 0 0.97 bhm V -42 wm 0 V Cfs
+d2 675 wm 0.97 bhm M 42 wm 0 V 0 0.03 bhm V -42 wm 0 V Cfs
+setsep c0 675 wm 0 M 0 bh V stroke
+%atop c0 675 42 abm gsave aato rotate (Pesca) show grestore
+%below c0 675 42 bbm (Pesca) rotshow
+setind
+d1 717 wm 0 bhm M 25 wm 0 V 0 0.959 bhm V -25 wm 0 V Cfs
+d2 717 wm 0.959 bhm M 25 wm 0 V 0 0.041 bhm V -25 wm 0 V Cfs
+setsep c0 717 wm 0 M 0 bh V stroke
+%atop c0 717 25 abm gsave aato rotate (Spedr) show grestore
+%below c0 717 25 bbm (Spedr) rotshow
+setind
+d1 742 wm 0 bhm M 38 wm 0 V 0 0.899 bhm V -38 wm 0 V Cfs
+d2 742 wm 0.899 bhm M 38 wm 0 V 0 0.101 bhm V -38 wm 0 V Cfs
+setsep c0 742 wm 0 M 0 bh V stroke
+%atop c0 742 38 abm gsave aato rotate (LTran) show grestore
+%below c0 742 38 bbm (LTran) rotshow
+setind
+d1 780 wm 0 bhm M 35 wm 0 V 0 0.619 bhm V -35 wm 0 V Cfs
+d2 780 wm 0.619 bhm M 35 wm 0 V 0 0.381 bhm V -35 wm 0 V Cfs
+setsep c0 780 wm 0 M 0 bh V stroke
+%atop c0 780 35 abm gsave aato rotate (Mille) show grestore
+%below c0 780 35 bbm (Mille) rotshow
+setind
+d1 815 wm 0 bhm M 57 wm 0 V 0 0.77 bhm V -57 wm 0 V Cfs
+d2 815 wm 0.77 bhm M 57 wm 0 V 0 0.23 bhm V -57 wm 0 V Cfs
+setsep c0 815 wm 0 M 0 bh V stroke
+%atop c0 815 57 abm gsave aato rotate (RMari) show grestore
+%below c0 815 57 bbm (RMari) rotshow
+setind
+d1 872 wm 0 bhm M 8 wm 0 V 0 0.745 bhm V -8 wm 0 V Cfs
+d2 872 wm 0.745 bhm M 8 wm 0 V 0 0.255 bhm V -8 wm 0 V Cfs
+setsep c0 872 wm 0 M 0 bh V stroke
+%atop c0 872 8 abm gsave aato rotate (Bluel) show grestore
+%below c0 872 8 bbm (Bluel) rotshow
+setind
+d1 880 wm 0 bhm M 54 wm 0 V 0 0.688 bhm V -54 wm 0 V Cfs
+d2 880 wm 0.688 bhm M 54 wm 0 V 0 0.312 bhm V -54 wm 0 V Cfs
+setsep c0 880 wm 0 M 0 bh V stroke
+%atop c0 880 54 abm gsave aato rotate (Lagun) show grestore
+%below c0 880 54 bbm (Lagun) rotshow
+setind
+d1 934 wm 0 bhm M 75 wm 0 V 0 0.921 bhm V -75 wm 0 V Cfs
+d2 934 wm 0.921 bhm M 75 wm 0 V 0 0.079 bhm V -75 wm 0 V Cfs
+setsep c0 934 wm 0 M 0 bh V stroke
+%atop c0 934 75 abm gsave aato rotate (Xlagu) show grestore
+%below c0 934 75 bbm (Xlagu) rotshow
+setind
+d1 1009 wm 0 bhm M 50 wm 0 V 0 0.817 bhm V -50 wm 0 V Cfs
+d2 1009 wm 0.817 bhm M 50 wm 0 V 0 0.183 bhm V -50 wm 0 V Cfs
+setsep c0 1009 wm 0 M 0 bh V stroke
+%atop c0 1009 50 abm gsave aato rotate (Olema) show grestore
+%below c0 1009 50 bbm (Olema) rotshow
+setind
+d1 1059 wm 0 bhm M 42 wm 0 V 0 0.93 bhm V -42 wm 0 V Cfs
+d2 1059 wm 0.93 bhm M 42 wm 0 V 0 0.07 bhm V -42 wm 0 V Cfs
+setsep c0 1059 wm 0 M 0 bh V stroke
+%atop c0 1059 42 abm gsave aato rotate (Walke) show grestore
+%below c0 1059 42 bbm (Walke) rotshow
+setind
+d1 1101 wm 0 bhm M 42 wm 0 V 0 0.781 bhm V -42 wm 0 V Cfs
+d2 1101 wm 0.781 bhm M 42 wm 0 V 0 0.219 bhm V -42 wm 0 V Cfs
+setsep c0 1101 wm 0 M 0 bh V stroke
+%atop c0 1101 42 abm gsave aato rotate (WRuss) show grestore
+%below c0 1101 42 bbm (WRuss) rotshow
+setind
+d1 1143 wm 0 bhm M 27 wm 0 V 0 0.108 bhm V -27 wm 0 V Cfs
+d2 1143 wm 0.108 bhm M 27 wm 0 V 0 0.892 bhm V -27 wm 0 V Cfs
+setsep c0 1143 wm 0 M 0 bh V stroke
+%atop c0 1143 27 abm gsave aato rotate (Fulle) show grestore
+%below c0 1143 27 bbm (Fulle) rotshow
+setind
+d1 1170 wm 0 bhm M 27 wm 0 V 0 0.149 bhm V -27 wm 0 V Cfs
+d2 1170 wm 0.149 bhm M 27 wm 0 V 0 0.851 bhm V -27 wm 0 V Cfs
+setsep c0 1170 wm 0 M 0 bh V stroke
+%atop c0 1170 27 abm gsave aato rotate (Rolli) show grestore
+%below c0 1170 27 bbm (Rolli) rotshow
+setind
+d1 1197 wm 0 bhm M 56 wm 0 V 0 0.171 bhm V -56 wm 0 V Cfs
+d2 1197 wm 0.171 bhm M 56 wm 0 V 0 0.829 bhm V -56 wm 0 V Cfs
+setsep c0 1197 wm 0 M 0 bh V stroke
+%atop c0 1197 56 abm gsave aato rotate (Elk) show grestore
+%below c0 1197 56 bbm (Elk) rotshow
+setind
+d1 1253 wm 0 bhm M 58 wm 0 V 0 0.072 bhm V -58 wm 0 V Cfs
+d2 1253 wm 0.072 bhm M 58 wm 0 V 0 0.928 bhm V -58 wm 0 V Cfs
+setsep c0 1253 wm 0 M 0 bh V stroke
+%atop c0 1253 58 abm gsave aato rotate (India) show grestore
+%below c0 1253 58 bbm (India) rotshow
+setind
+d1 1311 wm 0 bhm M 41 wm 0 V 0 0.151 bhm V -41 wm 0 V Cfs
+d2 1311 wm 0.151 bhm M 41 wm 0 V 0 0.849 bhm V -41 wm 0 V Cfs
+setsep c0 1311 wm 0 M 0 bh V stroke
+%atop c0 1311 41 abm gsave aato rotate (BSalm) show grestore
+%below c0 1311 41 bbm (BSalm) rotshow
+setind
+d1 1352 wm 0 bhm M 26 wm 0 V 0 0.076 bhm V -26 wm 0 V Cfs
+d2 1352 wm 0.076 bhm M 26 wm 0 V 0 0.924 bhm V -26 wm 0 V Cfs
+setsep c0 1352 wm 0 M 0 bh V stroke
+%atop c0 1352 26 abm gsave aato rotate (SFAlb) show grestore
+%below c0 1352 26 bbm (SFAlb) rotshow
+setind
+d1 1378 wm 0 bhm M 51 wm 0 V 0 0.351 bhm V -51 wm 0 V Cfs
+d2 1378 wm 0.351 bhm M 51 wm 0 V 0 0.649 bhm V -51 wm 0 V Cfs
+setsep c0 1378 wm 0 M 0 bh V stroke
+%atop c0 1378 51 abm gsave aato rotate (BMend) show grestore
+%below c0 1378 51 bbm (BMend) rotshow
+setind
+d1 1429 wm 0 bhm M 31 wm 0 V 0 0.048 bhm V -31 wm 0 V Cfs
+d2 1429 wm 0.048 bhm M 31 wm 0 V 0 0.952 bhm V -31 wm 0 V Cfs
+setsep c0 1429 wm 0 M 0 bh V stroke
+%atop c0 1429 31 abm gsave aato rotate (Kass) show grestore
+%below c0 1429 31 bbm (Kass) rotshow
+setind
+d1 1460 wm 0 bhm M 52 wm 0 V 0 0.098 bhm V -52 wm 0 V Cfs
+d2 1460 wm 0.098 bhm M 52 wm 0 V 0 0.902 bhm V -52 wm 0 V Cfs
+setsep c0 1460 wm 0 M 0 bh V stroke
+%atop c0 1460 52 abm gsave aato rotate (LNFNo) show grestore
+%below c0 1460 52 bbm (LNFNo) rotshow
+setind
+d1 1512 wm 0 bhm M 43 wm 0 V 0 0.149 bhm V -43 wm 0 V Cfs
+d2 1512 wm 0.149 bhm M 43 wm 0 V 0 0.851 bhm V -43 wm 0 V Cfs
+setsep c0 1512 wm 0 M 0 bh V stroke
+%atop c0 1512 43 abm gsave aato rotate (Noyo) show grestore
+%below c0 1512 43 bbm (Noyo) rotshow
+setind
+d1 1555 wm 0 bhm M 23 wm 0 V 0 0.138 bhm V -23 wm 0 V Cfs
+d2 1555 wm 0.138 bhm M 23 wm 0 V 0 0.862 bhm V -23 wm 0 V Cfs
+setsep c0 1555 wm 0 M 0 bh V stroke
+%atop c0 1555 23 abm gsave aato rotate (SFNoy) show grestore
+%below c0 1555 23 bbm (SFNoy) rotshow
+setind
+d1 1578 wm 0 bhm M 42 wm 0 V 0 0.083 bhm V -42 wm 0 V Cfs
+d2 1578 wm 0.083 bhm M 42 wm 0 V 0 0.917 bhm V -42 wm 0 V Cfs
+setsep c0 1578 wm 0 M 0 bh V stroke
+%atop c0 1578 42 abm gsave aato rotate (XsFNo) show grestore
+%below c0 1578 42 bbm (XsFNo) rotshow
+setind
+d1 1620 wm 0 bhm M 41 wm 0 V 0 0.3 bhm V -41 wm 0 V Cfs
+d2 1620 wm 0.3 bhm M 41 wm 0 V 0 0.7 bhm V -41 wm 0 V Cfs
+setsep c0 1620 wm 0 M 0 bh V stroke
+%atop c0 1620 41 abm gsave aato rotate (Puddi) show grestore
+%below c0 1620 41 bbm (Puddi) rotshow
+setind
+d1 1661 wm 0 bhm M 33 wm 0 V 0 0.107 bhm V -33 wm 0 V Cfs
+d2 1661 wm 0.107 bhm M 33 wm 0 V 0 0.893 bhm V -33 wm 0 V Cfs
+setsep c0 1661 wm 0 M 0 bh V stroke
+%atop c0 1661 33 abm gsave aato rotate (LNFTe) show grestore
+%below c0 1661 33 bbm (LNFTe) rotshow
+setind
+d1 1694 wm 0 bhm M 26 wm 0 V 0 0.127 bhm V -26 wm 0 V Cfs
+d2 1694 wm 0.127 bhm M 26 wm 0 V 0 0.873 bhm V -26 wm 0 V Cfs
+setsep c0 1694 wm 0 M 0 bh V stroke
+%atop c0 1694 26 abm gsave aato rotate (LSFTe) show grestore
+%below c0 1694 26 bbm (LSFTe) rotshow
+setind
+d1 1720 wm 0 bhm M 35 wm 0 V 0 0.194 bhm V -35 wm 0 V Cfs
+d2 1720 wm 0.194 bhm M 35 wm 0 V 0 0.806 bhm V -35 wm 0 V Cfs
+setsep c0 1720 wm 0 M 0 bh V stroke
+%atop c0 1720 35 abm gsave aato rotate (RMend) show grestore
+%below c0 1720 35 bbm (RMend) rotshow
+setind
+d1 1755 wm 0 bhm M 22 wm 0 V 0 0.058 bhm V -22 wm 0 V Cfs
+d2 1755 wm 0.058 bhm M 22 wm 0 V 0 0.942 bhm V -22 wm 0 V Cfs
+setsep c0 1755 wm 0 M 0 bh V stroke
+%atop c0 1755 22 abm gsave aato rotate (Smith) show grestore
+%below c0 1755 22 bbm (Smith) rotshow
+setind
+d1 1777 wm 0 bhm M 52 wm 0 V 0 0.15 bhm V -52 wm 0 V Cfs
+d2 1777 wm 0.15 bhm M 52 wm 0 V 0 0.85 bhm V -52 wm 0 V Cfs
+setsep c0 1777 wm 0 M 0 bh V stroke
+%atop c0 1777 52 abm gsave aato rotate (Wages) show grestore
+%below c0 1777 52 bbm (Wages) rotshow
+setind
+d1 1829 wm 0 bhm M 41 wm 0 V 0 0.151 bhm V -41 wm 0 V Cfs
+d2 1829 wm 0.151 bhm M 41 wm 0 V 0 0.849 bhm V -41 wm 0 V Cfs
+setsep c0 1829 wm 0 M 0 bh V stroke
+%atop c0 1829 41 abm gsave aato rotate (Usal) show grestore
+%below c0 1829 41 bbm (Usal) rotshow
+setind
+d1 1870 wm 0 bhm M 46 wm 0 V 0 0.026 bhm V -46 wm 0 V Cfs
+d2 1870 wm 0.026 bhm M 46 wm 0 V 0 0.974 bhm V -46 wm 0 V Cfs
+setsep c0 1870 wm 0 M 0 bh V stroke
+%atop c0 1870 46 abm gsave aato rotate (BiHum) show grestore
+%below c0 1870 46 bbm (BiHum) rotshow
+setind
+d1 1916 wm 0 bhm M 38 wm 0 V 0 0.015 bhm V -38 wm 0 V Cfs
+d2 1916 wm 0.015 bhm M 38 wm 0 V 0 0.985 bhm V -38 wm 0 V Cfs
+setsep c0 1916 wm 0 M 0 bh V stroke
+%atop c0 1916 38 abm gsave aato rotate (SFBea) show grestore
+%below c0 1916 38 bbm (SFBea) rotshow
+setind
+d1 1954 wm 0 bhm M 58 wm 0 V 0 0.012 bhm V -58 wm 0 V Cfs
+d2 1954 wm 0.012 bhm M 58 wm 0 V 0 0.988 bhm V -58 wm 0 V Cfs
+setsep c0 1954 wm 0 M 0 bh V stroke
+%atop c0 1954 58 abm gsave aato rotate (BeHum) show grestore
+%below c0 1954 58 bbm (BeHum) rotshow
+setind
+d1 2012 wm 0 bhm M 55 wm 0 V 0 0.027 bhm V -55 wm 0 V Cfs
+d2 2012 wm 0.027 bhm M 55 wm 0 V 0 0.973 bhm V -55 wm 0 V Cfs
+setsep c0 2012 wm 0 M 0 bh V stroke
+%atop c0 2012 55 abm gsave aato rotate (HTree) show grestore
+%below c0 2012 55 bbm (HTree) rotshow
+setind
+d1 2067 wm 0 bhm M 61 wm 0 V 0 0.033 bhm V -61 wm 0 V Cfs
+d2 2067 wm 0.033 bhm M 61 wm 0 V 0 0.967 bhm V -61 wm 0 V Cfs
+setsep c0 2067 wm 0 M 0 bh V stroke
+%atop c0 2067 61 abm gsave aato rotate (Lawre) show grestore
+%below c0 2067 61 bbm (Lawre) rotshow
+setind
+d1 2128 wm 0 bhm M 35 wm 0 V 0 0.051 bhm V -35 wm 0 V Cfs
+d2 2128 wm 0.051 bhm M 35 wm 0 V 0 0.949 bhm V -35 wm 0 V Cfs
+setsep c0 2128 wm 0 M 0 bh V stroke
+%atop c0 2128 35 abm gsave aato rotate (UInd) show grestore
+%below c0 2128 35 bbm (UInd) rotshow
+setind
+d1 2163 wm 0 bhm M 23 wm 0 V 0 0.002 bhm V -23 wm 0 V Cfs
+d2 2163 wm 0.002 bhm M 23 wm 0 V 0 0.998 bhm V -23 wm 0 V Cfs
+setsep c0 2163 wm 0 M 0 bh V stroke
+%atop c0 2163 23 abm gsave aato rotate (Willi) show grestore
+%below c0 2163 23 bbm (Willi) rotshow
+setind
+d1 2186 wm 0 bhm M 52 wm 0 V 0 0.072 bhm V -52 wm 0 V Cfs
+d2 2186 wm 0.072 bhm M 52 wm 0 V 0 0.928 bhm V -52 wm 0 V Cfs
+setsep c0 2186 wm 0 M 0 bh V stroke
+%atop c0 2186 52 abm gsave aato rotate (Fresh) show grestore
+%below c0 2186 52 bbm (Fresh) rotshow
+setind
+d1 2238 wm 0 bhm M 22 wm 0 V 0 0.032 bhm V -22 wm 0 V Cfs
+d2 2238 wm 0.032 bhm M 22 wm 0 V 0 0.968 bhm V -22 wm 0 V Cfs
+setsep c0 2238 wm 0 M 0 bh V stroke
+%atop c0 2238 22 abm gsave aato rotate (BMad) show grestore
+%below c0 2238 22 bbm (BMad) rotshow
+setind
+d1 2260 wm 0 bhm M 35 wm 0 V 0 0.024 bhm V -35 wm 0 V Cfs
+d2 2260 wm 0.024 bhm M 35 wm 0 V 0 0.976 bhm V -35 wm 0 V Cfs
+setsep c0 2260 wm 0 M 0 bh V stroke
+%atop c0 2260 35 abm gsave aato rotate (Canon) show grestore
+%below c0 2260 35 bbm (Canon) rotshow
+setind
+d1 2295 wm 0 bhm M 14 wm 0 V 0 0.002 bhm V -14 wm 0 V Cfs
+d2 2295 wm 0.002 bhm M 14 wm 0 V 0 0.998 bhm V -14 wm 0 V Cfs
+setsep c0 2295 wm 0 M 0 bh V stroke
+%atop c0 2295 14 abm gsave aato rotate (Sulli) show grestore
+%below c0 2295 14 bbm (Sulli) rotshow
+setind
+d1 2309 wm 0 bhm M 42 wm 0 V 0 0.02 bhm V -42 wm 0 V Cfs
+d2 2309 wm 0.02 bhm M 42 wm 0 V 0 0.98 bhm V -42 wm 0 V Cfs
+setsep c0 2309 wm 0 M 0 bh V stroke
+%atop c0 2309 42 abm gsave aato rotate (LMan) show grestore
+%below c0 2309 42 bbm (LMan) rotshow
+setind
+d1 2351 wm 0 bhm M 39 wm 0 V 0 0.048 bhm V -39 wm 0 V Cfs
+d2 2351 wm 0.048 bhm M 39 wm 0 V 0 0.952 bhm V -39 wm 0 V Cfs
+setsep c0 2351 wm 0 M 0 bh V stroke
+%atop c0 2351 39 abm gsave aato rotate (Panth) show grestore
+%below c0 2351 39 bbm (Panth) rotshow
+setind
+d1 2390 wm 0 bhm M 56 wm 0 V 0 0.045 bhm V -56 wm 0 V Cfs
+d2 2390 wm 0.045 bhm M 56 wm 0 V 0 0.955 bhm V -56 wm 0 V Cfs
+setsep c0 2390 wm 0 M 0 bh V stroke
+%atop c0 2390 56 abm gsave aato rotate (BKlam) show grestore
+%below c0 2390 56 bbm (BKlam) rotshow
+setind
+d1 2446 wm 0 bhm M 49 wm 0 V 0 0.053 bhm V -49 wm 0 V Cfs
+d2 2446 wm 0.053 bhm M 49 wm 0 V 0 0.947 bhm V -49 wm 0 V Cfs
+setsep c0 2446 wm 0 M 0 bh V stroke
+%atop c0 2446 49 abm gsave aato rotate (HLint) show grestore
+%below c0 2446 49 bbm (HLint) rotshow
+setind
+d1 2495 wm 0 bhm M 27 wm 0 V 0 0.003 bhm V -27 wm 0 V Cfs
+d2 2495 wm 0.003 bhm M 27 wm 0 V 0 0.997 bhm V -27 wm 0 V Cfs
+setsep c0 2495 wm 0 M 0 bh V stroke
+%atop c0 2495 27 abm gsave aato rotate (Hunter) show grestore
+%below c0 2495 27 bbm (Hunter) rotshow
+setind
+d1 2522 wm 0 bhm M 41 wm 0 V 0 0.016 bhm V -41 wm 0 V Cfs
+d2 2522 wm 0.016 bhm M 41 wm 0 V 0 0.984 bhm V -41 wm 0 V Cfs
+setsep c0 2522 wm 0 M 0 bh V stroke
+%atop c0 2522 41 abm gsave aato rotate (Wilson) show grestore
+%below c0 2522 41 bbm (Wilson) rotshow
+setind
+d1 2563 wm 0 bhm M 33 wm 0 V 0 0.002 bhm V -33 wm 0 V Cfs
+d2 2563 wm 0.002 bhm M 33 wm 0 V 0 0.998 bhm V -33 wm 0 V Cfs
+setsep c0 2563 wm 0 M 0 bh V stroke
+%atop c0 2563 33 abm gsave aato rotate (SFRow) show grestore
+%below c0 2563 33 bbm (SFRow) rotshow
+
+% CONCLUDING INFORMATION
+% Values of parameters used in distruct: INFILE_POPQ=intermediate/Output_002_PopQ.perms_6, INFILE_INDIVQ=intermediate/Output_002.perms_6, INFILE_LABEL_ATOP=pop_names.txt, INFILE_LABEL_BELOW=pop_names.txt, INFILE_CLUST_PERM=casia.perm, OUTFILE=ds_Clumped_PopQ_NoLabel_k002r0061, K=2, NUMPOPS=63, NUMINDS=2596, PRINT_INDIVS=0, PRINT_LABEL_ATOP=0, PRINT_LABEL_BELOW=0, PRINT_SEP=1, FONTHEIGHT=3.3, DIST_ABOVE=4, DIST_BELOW=-7, BOXHEIGHT=15, INDIVWIDTH=-0.144218, ORIENTATION=0, XORIGIN=800, YORIGIN=288, XSCALE=1, YSCALE=1, ANGLE_LABEL_ATOP=60, ANGLE_LABEL_BELOW=60, LINEWIDTH_RIM=1.3, LINEWIDTH_SEP=0.3, LINEWIDTH_IND=0.3, GRAYSCALE=0, ECHO_DATA=1, REPRINT_DATA=1 
+grestore
+showpage
+%EOF
