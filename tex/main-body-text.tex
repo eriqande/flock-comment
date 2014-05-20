@@ -3,8 +3,8 @@
 \section*{Introduction}
 In most fields, proposed methods that are 
 perceived to be fundamentally novel or new garner more
-attention and accolades---and have a higher chance of publication---
-than methods that are clearly minor elaborations upon existing work. 
+attention and accolades---and have a higher chance of 
+publication---than methods that are clearly minor elaborations upon existing work. 
 Not surprisingly, then, in articles and manuscripts, authors may 
 emphasize the differences and downplay the similarities between their 
 work and the published literature.   In molecular ecology, this 
@@ -19,8 +19,8 @@ Indeed, some authors downplay the similarities between their method and
 existing ones not because they wish to make their method seem more 
 novel, but rather because they are genuinely unaware of the close ties 
 between their work and existing methods.  Identifying the 
-similarities between new and existing work should help the field 
-progress more quickly by 1) reducing end-user confusion about whether 
+similarities between new and existing work should help our field
+by 1) reducing end-user confusion about whether 
 it is necessary to analyze data with a (sometimes overwhelming) variety 
 of computer programs; 2) establishing a common language upon which to 
 compare different methods; and 3) providing a principled perspective 
@@ -54,17 +54,19 @@ entirely deterministic'' \citep[][p.~736]{Duc&Tur2012}.
 \end{quote}
 These papers describe the rationale behind the {\sc flock} algorithm in
 intuitive terms with analogies to the coalescence of flocks of birds
-or the accretion of snow on a moving snowball, \etc.  
+or the accretion of snow on a moving snowball, \etc  
 
 Here, we provide a different perspective on the {\sc flock} algorithm,
 showing it to be a special, restricted case of the simulated annealing
-algorithm for finding the Bayesian maximum {\em a posteriori} (MAP)
+algorithm for finding the Bayesian maximum {\em a posteriori}
 estimate from a marginalized form of the {\sc structure} model with no
-admixture and non-correlated allele frequencies. 
+admixture and non-correlated allele frequencies.  For illustration, we subsequently compare
+the results obtained from {\sc flock} and {\sc structure} on a real data
+set with $>$2,500 individuals.
 
 \section*{Comparison of methods}
 We start with a succinct mathematical description of the {\sc structure}
-algorithm, then describe the {\sc flock} algorithm, and finally explain
+model, then describe the {\sc flock} algorithm, and finally explain
 the close relationship between the two.
 
 
@@ -76,12 +78,12 @@ number of subpopulations (or clusters, as they are often referred to).
 In a diploid individual from cluster $k$, the 
 allelic types of the two gene copies at the $\ell\thh$ locus are assumed
 to be drawn independently from the vector of allele frequencies at
-locus $\ell$,  $\theta_{k\ell}=(\theta_{k\ell 1},\ldots,\theta_{k\ell A_\ell})$, where 
+locus $\ell$ in subpopulation $k$,  $\theta_{k\ell}=(\theta_{k\ell 1},\ldots,\theta_{k\ell A_\ell})$, where 
 $A_\ell$ 
 denotes the number of alleles observed in the data set at locus $\ell$.
-Hence, if $Y_{ij}$ denotes a vector of length $A_\ell$ whose components denote the 
+Hence, if $Y_{i\ell}$ denotes a vector of length $A_\ell$ whose components denote the 
 number
-of copies of each of the $A_\ell$ alleles at locus $j$ in individual $i$, and 
+of copies of each of the $A_\ell$ alleles at locus $\ell$ in individual $i$, and 
 $Z_i=k$, then $Y_{i\ell}$ follows the multinomial distribution of two trials with
 $A_\ell$  components and cell probabilities given by the allele frequencies: 
 \begin{equation}
@@ -94,11 +96,11 @@ probabilities.
 In the uncorrelated allele frequencies model, the prior on each $\theta_{k\ell}$ is a
 Dirichlet distribution with parameters $(\lambda_{k\ell1},\ldots,\lambda_{k\ell A_
 \ell})$,
-which are usually set to a value like $1/A_\ell$.  
+which are usually all set to a value such as 1 or $1/A_\ell$.  
 
-After initializing the unknown allele frequencies to randomly drawn values,
+After initializing the unknown allele frequencies, $\theta = (\theta_1,\ldots,\theta_K)$, to randomly drawn values,
 $\theta^{(0)}$, inference in the model proceeds by sampling from the joint posterior of the 
-$Z_i$'s and $\theta = (\theta_1,\ldots,\theta_K)$ using Gibbs sampling.  That is,
+$Z_i$'s and $\theta$ using Gibbs sampling.  That is,
 at iteration $t = 0, 1, 2, \ldots$:
 \begin{enumerate}
 \item each $Z^{(t)}_i$ is updated to $Z^{(t+1)}_i$ by sampling a value from 
@@ -106,7 +108,7 @@ the full conditional distribution of $Z_i$ given
 $Y_i$ and $\theta^{(t)}$ (the current estimate of the allele frequencies).  This
 distribution is found using Bayes' theorem. In {\sc structure}'s formulation, the 
 prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$.     
-\item $\theta^{(t)}$ is updated from its full conditional distribution.  For each 
+\item $\theta^{(t)}$ is updated to $\theta^{(t+1)}$ from its full conditional distribution.  For each 
 cluster
 $k$ and locus $\ell$, the full conditional for $\theta_{k\ell}$ is independently a 
 Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for 
@@ -132,9 +134,9 @@ a Compound Dirichlet Multinomial distribution (CDM):
 \begin{eqnarray}
 \lefteqn{(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell}) \sim} \label{eq:cdm}\\
 & & \mathrm{CDM}(\lambda_{k\ell 1} + \#_{(-i)}(k,\ell,1), \ldots,
-\lambda_{k\ell A_\ell} + \#_{(-i)}(k,\ell,A\ell)), \nonumber
+\lambda_{k\ell A_\ell} + \#_{(-i)}(k,\ell,A_\ell)), \nonumber
 \end{eqnarray}
-where $\#_{(-i)}(k,\ell,1)$ is the number of alleles of type $j$ at locus $\ell$
+where $\#_{(-i)}(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$
 found in individuals {\em other than individual $i$} that currently
 belong to cluster $k$. Thus, calculating (\ref{eq:cdm}) for each value of $Z_i=k \in 
 \{1,\ldots,K\}$ 
@@ -157,7 +159,7 @@ proposing changes to the number of clusters.
 
 \subsection*{{\sc flock}}
 Here we translate the recipe given by \citeauthor{Duc&Tur2009} for the 
-{\sc flock} algorithm into a concise specification in terms of the variables
+{\sc flock} algorithm into a specification in terms of the variables
 defined in the previous section.  We provide the description for a case in which
 it is assumed there are $K$ clusters.
 
@@ -170,7 +172,7 @@ maximum likelihood: as \citeauthor{Duc&Tur2009} say (2009, p.~1335), ``Re-alloca
 performed following multilocus maximum likelihood (Paetkau et al. 1995).''
 
 From that description, it is not clear how \citeauthor{Duc&Tur2009} treat 
-alleles that appear in an
+alleles that appear in the focal
 individual but do not appear within any other individuals within a cluster.
 The original approach of \citet{Paetkauetal1995} merely added 0.01 or some other
 small value to each allele frequency that was 0, and then renormalized 
@@ -184,7 +186,7 @@ defined in (\ref{eq:cdm}).
 If \citeauthor{Duc&Tur2009} use the simpler ``add 0.01 and renormalize''
 formulation of \citet{Paetkauetal1995}, then their reallocations are based
 on maximizing a likelihood that, although it may not be formally identical to
-that in (\ref{eq:cdm}), is not substantively different from it.   
+that in (\ref{eq:cdm}), is nearly identical to it.   
 
 It is worth pointing out that, since the
 {\sc structure} model without admixture assumes a uniform prior over 
@@ -202,10 +204,11 @@ P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})
 and that the updates that
 {\sc flock} makes to each $Z_i$ involve assigning to $Z_i$
 \begin{equation}
-\arg\max_k P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})
+\arg\max_k P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell}),
 \end{equation}
-\ie, the value of $k$ that maximizes $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})$
-(or, as stated above, a very similar function of $k$).
+\ie the value of $k$ that maximizes $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})$
+(or, as stated above, a nearly identical function of $k$, depending on how
+the program {\sc flock} treats alleles that are not observed in certain clusters).
 
 
 
@@ -225,15 +228,17 @@ distribution
 \[
 \biggl[P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})\biggr]^\beta
 \]
-which is the same full conditional distribution as before, raised
+which is the same full conditional distribution as the marginalized {\sc structure}
+model (equation~\ref{eq:fc}), raised
 to the power $\beta$.  In typical applications of simulated annealing,
-$\beta$ is initially set to a low value $<1$ and as the algorithm proceeds
+$\beta$ is set to a starting value less than 1, and, as the algorithm proceeds,
 $\beta$ is increased according to a ``cooling schedule''\citep{Hajek1988}, until
 the algorithm finds a local maximum in the posterior probability surface.  
 When $\beta$ is small, the process can easily traverse ``valleys''
-in the posterior probability surface and have a better chance of searching
-more of the space for the maximum value.  As $\beta$ gets larger, the process
-tends to move uphill on the probability surface, searching for the
+in the posterior probability surface and has a better chance of searching
+more of the space for the maximum value.  As $\beta$ gets larger, it becomes
+more probable that the process will
+move uphill on the probability surface, tending toward the local
 maximum near where it currently is.    
 
 It should now be clear that the algorithm in {\sc flock} is a simulated annealing 
@@ -246,13 +251,8 @@ In the following section we show that {\sc structure} and {\sc flock} find simil
 solutions in the analysis of a large microsatellite data set, though, as expected,
 {\sc flock} seems to find the same solution less consistently than does {\sc structure}.
 
-\subsection*{boneyard}
- On the other hand, in practice, the 
-posterior probability surface may have several modes that are separated by regions
-of low posterior probability, such that the solution
-an algorithm converges to (whether it is {\sc structure}  doing MCMC or {\sc flock} doing 
-``very cold simulated annealing'') depends almost entirely on the initial random
-starting values.
+
+
 
 
 \section*{Performance Comparison with {\sc structure}}
