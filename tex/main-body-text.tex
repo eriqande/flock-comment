@@ -258,26 +258,43 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 \section*{Performance Comparison with {\sc structure}}
 
 \subsection*{Analysis of coastal California steelhead} 
-To evaluate the preformance and computational efficiency of {\sc flock}  we used a published 
-dataset from \citet{Garzaetal_norcal} comprised of 2596 steelhead \textit{Oncorhynchus mykiss}
-genotyped at 15 microsatellite loci.  {\sc flock} was run six times using the default setting for all 
-run parameters \textit{(initial partition = random, number of iterations = 20, number of runs = 50, 
-LLOD threshold = 0)} for values of \textit{k} from 2 to 6. The stopping point of 
-\textit{k}=6 was chosen after four consecutive runs yielded no plateau. The non-admixture, 
-uncorrelated allele frequency model implemented in {\sc structure} was run with six iterations of a 
-50,000 sweep burn-in followed by 150,000 sweep sample from the posterior of \textit{k} from 2 to 6. 
-All runs were performed with an i7 3.40GHz processor and 8GB of RAM. To facilitate the comparison of
- the two programs, the program {\sc clump} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
-while the program Distruct \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
+To compare the behavior of {\sc flock} to that of {\sc structure} we used a published 
+dataset of 2596 steelhead \textit{Oncorhynchus mykiss}
+genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal}.  {\sc flock} was run six times using the default setting for all 
+run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
+LLOD threshold = 0) for values of $K$ from 2 to 6. The stopping point of 
+$K=6$ was chosen after four consecutive runs (at $K=6$) % <-- Patrick, is that right. were the non-plateau-ing runs at K=6?
+yielded no plateau (see below). For each value of $K$ from 2 to 6, the no-admixture, 
+uncorrelated-allele-frequency model implemented in {\sc structure} was run 6 times using 
+50,000 sweeps of burn-in followed by 150,000 sweeps of sample collection from the posterior. 
+All runs were performed on a (WHAT TYPE OF COMPUTER?) with an i7 3.40GHz processor and 8GB
+of RAM. To facilitate the comparison of results from
+the two programs, we derived $q_i$ values 
+from {\sc flock}'s output by exponentiating the log-likelihood values for cluster membership  % <-- Patrick, please verify.
+and rescaling so they summed to one.  These are then comparable to the $q_i$ values
+returned by {\sc structure}, which, in the no-admixture case, are posterior probabilities of cluster membership.
+The program {\sc clumpp} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
+while the program {\sc district} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
+
+\citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
+subpopulations.  Their approach involves INSERT SHORT DESCRIPTION, INCLUDING DISCUSSION OF PLATEAUS.
+
+It is now common practice to use the approximate marginal likelihood ($\ln P(D)$) from {\sc structure}
+or a derived quantity such as $\Delta K$ \citep{Evannoetal2005} to try to estimate $K$.
+While we take the stance that estimates of $K$ made with {\em any} unsupervised clustering algorithm
+from data on real (non-idealized) populations should always be interpreted and used
+cautiously, it is nonetheless instructive to compare \citet{Duc&Tur2012}'s method for
+estimating $K$ to results obtained using $\ln P(D)$ and $\Delta K$, and we do so. 
+
 
 \subsection*{Results} 
-Run times were relatively short for both programs. The six groups of runs for {\sc flock} 
-required 1133 minutes to complete. Each individual group of runs 
-averaged 188.8 minutes (1.5 min SD). The six iterations of {\sc structure} completed in 
-486 minutes with each of the six iterations averaging 80.8 minutes (0.8 min SD). Increasing
-the number of putative clusters from \textit{k} of two to six yielded a 2.4 fold increase 
-in processing time for {\sc flock}, whereas a 1.6 fold increase was observed for runs of 
-{\sc structure}. 
+Run times were relatively short for both programs. {\sc flock} 
+required 1133 minutes to complete all the runs, averaging 188.8 minutes for 
+each of six groups of runs over $K$ from 2 to 6. {\sc structure} completed all the runs in 
+486 minutes with each of the six groups of runs averaging 80.8 minutes. Increasing
+$K$ from of 2 to 6 increased {\sc flock}'s run time by a factor of 2.4, but {\sc structure}'s
+run time was increased by a factor of only 1.6.  
+\hrule
 
 The allocation of indivividuals into K clusters was congruent for each program. For all six groups 
 of runs from \textit{k}=2-4, {\sc flock} lead to nearly identical clustering of individuals 
@@ -380,7 +397,7 @@ drastically different plateau sequences with just two clusters and that as \text
 For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
 to estimate K may be overly stringent. While there has been ample 
 discourse concering choosing the optimal K in  {\sc structure} \citep{Evannoetal2005, 
-Pricharedetal2000, Wap&Gag2006} and \citet{Pritchardetal2000} urges users 
+Prichardetal2000, Wap&Gag2006} and \citet{Pritchardetal2000} urges users 
 to be cautious of interpreting K, no such care in interpreting results 
 is suggested in running {\sc flock}. The authors developed estimation rules based on simulated data 
 sets with different migration regimes and rates, number of loci, and K. 
