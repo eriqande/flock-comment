@@ -263,21 +263,37 @@ dataset of 2596 steelhead \textit{Oncorhynchus mykiss}
 genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal}.  {\sc flock} was run six times using the default setting for all 
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0) for values of $K$ from 2 to 6. The stopping point of 
-$K=6$ was chosen after four consecutive runs (at $K=6$) % <-- Patrick, is that right. were the non-plateau-ing runs at K=6?
+$K=6$ was chosen after four consecutive values of $K$
 yielded no plateau (see below). For each value of $K$ from 2 to 6, the no-admixture, 
 uncorrelated-allele-frequency model implemented in {\sc structure} was run 6 times using 
 50,000 sweeps of burn-in followed by 150,000 sweeps of sample collection from the posterior. 
-All runs were performed on a (WHAT TYPE OF COMPUTER?) with an i7 3.40GHz processor and 8GB
-of RAM. To facilitate the comparison of results from
-the two programs, we derived $q_i$ values 
-from {\sc flock}'s output by exponentiating the log-likelihood values for cluster membership  % <-- Patrick, please verify.
-and rescaling so they summed to one.  These are then comparable to the $q_i$ values
+All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB
+of RAM running 64-bit Windows 7 OS. For each run {\sc flock} reports the 
+normalized likelihood values (the exponenetiated log-likelihood value for an individuals 
+membership to each $K$ clusters scaled to sum to one). 
+This value is comparable to the $q_i$ values
 returned by {\sc structure}, which, in the no-admixture case, are posterior probabilities of cluster membership.
 The program {\sc clumpp} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
 while the program {\sc district} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
 
 \citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
-subpopulations.  Their approach involves INSERT SHORT DESCRIPTION, INCLUDING DISCUSSION OF PLATEAUS.
+subpopulations. The user must first specify the number of runs (different initial allocation of individuals 
+to each cluster) as well as the number of iterations individual has the chance to be reallocated 
+to a different cluster. For each run the log-likelihood value of membership to all $K$ clusters is computed
+and the difference between the cluster with the highest likelihood and second highest likelihood is reported (LLOD)
+for each individual. Runs that converge on the same solution are indicated by the same mean LLOD score. and 
+are referred to as a plateau. If for a given $k$ there may be multiple local maxima in addition to 
+the global maximum, depending on the initial allocation of individuals the alorithm will result in finding
+different plateaus. The plateau record is a list of how many runs ended up at these different solutions. 
+\citet{Duc&Tur2012} developed two stopping rules that lead to the estimation of $K$. In the abscence of 
+reasonable values for $k$ \citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau 
+$\geq$6 is reached or four consecutive $k$ values yield no plateaus. If the first stopping condition is satisfied,
+the $K$ for which there is a a single plateau $\geq$6 is the point estimate for $K$. Alternatively, 
+if multiple plateaus are observed with at least one plateau$\geq$6, the largest value of $K$ that satisfies 
+this conditon should be taken as the lower bound estimate of $K$. If no plateaus \geq$6 are observed $K$
+is \textit{undecided}.  
+
+ 
 
 It is now common practice to use the approximate marginal likelihood ($\ln P(D)$) from {\sc structure}
 or a derived quantity such as $\Delta K$ \citep{Evannoetal2005} to try to estimate $K$.
