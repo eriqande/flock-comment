@@ -97,13 +97,6 @@ write(line.temp, file = paste("Flock_PopQ_k=",k,"run",r,".txt", sep = ""))
 }#do for all reps
 }#do for all k clusters
 
-# Let's tidy up the space and put them in a folder 
-# run a system command - Folder = Flock PopQ
-folder<-'Flock\" \"PopQ'
-system(paste0("mkdir ",folder))
-String2pass<-paste('mv ',wd,'/Flock_PopQ_k=*run*.txt ',wd,'/Flock\" \"PopQ',sep="")
-system(String2pass)
-
 #########################################################################################
 # Lets write some code for extracting the individual q values
 # We have already set the number of max clusters and reps above
@@ -182,23 +175,54 @@ write(line.temp2.2, file = paste("Flock_IndQ_k=",k,"run",r,".txt", sep = ""),app
 }#over r
 }#over k
 
-# Let's tidy up the space and put them in a folder 
-# run a system command - Folder = 'Flock IndQ'
-folder<-'Flock\" \"IndQ'
-system(paste0("mkdir ",folder))
-String2pass<-paste('mv ',wd,'/Flock_IndQ_k=*run*.txt ',wd,'/Flock\" \"IndQ',sep="")
-system(String2pass)
 
 #########################################################################################
+#Use sed to paste in the file!
+#sed '/INCLUDE/ r file' <in >out 
+##sed '/INCLUDE/d' file >out 
+#which file to insert
 
-#Now here you have to manually paste in the flock popq and indq values into 
-#The correct location of the Structure output so that Clump and Distruct 
-#can do their thing. 
 
-#If I wanted to write some script one way of doing it would be to split the original 
-#Structure output into 3 sections: Before the popq values, between popq and indq 
-# and after the indq values. I would convert each of those to strings and then 
-# paste all the bits and pieces together. 
+for (k in 2:6){
+for (r in 1:6){
+Flock.pop<- paste("Flock_PopQ_k=",k,"run",r,".txt",sep="") 
+Flock.ind<-paste("Flock_IndQ_k=",k,"run",r,".txt",sep="") 
+  
+path<-paste("sed '/INSERT POP_Q HERE/ r ",Flock.pop,"' <StructOuput_skeleton_k=",k,".txt >Intermediate.txt",sep="")
+system(path)
+system("sed '/INSERT POP_Q HERE/d' 'Intermediate.txt' >Intermediate2.txt")
+
+path2<- paste("sed '/INSERT IND_Q HERE/ r ",Flock.ind, "' <Intermediate2.txt >Intermediate3.txt",sep="")
+system(path2)
+
+output.file<- paste("StructOuput_genos_slg_pipe.txt_dat002_k00",k,"_Rep00",r,".txt_f",sep="")
+path3<-paste("sed '/INSERT IND_Q HERE/d' 'Intermediate3.txt' >",output.file,sep="")
+system(path3)
+system("rm Inter*.txt")
+}#runs
+}#k
+#tidy up the space
+
+
+#Lets clean up the files that we aren't using anymore
+
+# run a system command - Folder = Flock_PopQ
+folder<-'Flock_PopQ'
+system(paste0("mkdir ",folder))
+String2pass<-paste('mv ',wd,'/Flock_PopQ_k=*run*.txt ',wd,'/Flock_PopQ',sep="")
+system(String2pass)
+
+# run a system command - Folder = 'Flock_IndQ'
+folder<-'Flock_IndQ'
+system(paste0("mkdir ",folder))
+String2pass<-paste('mv ',wd,'/Flock_IndQ_k=*run*.txt ',wd,'/Flock_IndQ',sep="")
+system(String2pass)
+
+# run a system command - Folder = 'Flock-output-Formatted'
+folder<-'Flock-output-Formatted'
+system(paste0("mkdir ",folder))
+String2pass<-paste('mv ',wd,'/StructOuput_genos_slg_pipe.txt_dat002_k00*_Rep00*.txt_f ',wd,'/Flock-output-Formatted',sep="")
+system(String2pass)
 
 #########################################################################################
 #For CLUMP and Distruct we will need the names of each of the populations
@@ -230,8 +254,6 @@ q.floc<-readLines(con=file.path("intermediate",paste("Output_00",k,".perms_",Flo
 #split the strings and put them into some matrices
 q.str.string<-strsplit(q.str,split="[ ]+") # repeating spaces [ ]+
 q.floc.string<-strsplit(q.floc,split="[ ]+")
-head(q.str.string)
-head(q.floc.string)
 
 #get rid of 0s from 1-999
 for (r in 1:999){
@@ -251,13 +273,27 @@ q.matrix[n,2*k+1]<-q.str.string[[n]][1]
 }
 write.csv(q.matrix,"Qval.csv",eol = "\r\n")
 
-par(mfrow=c(1,1))
+par(mfrow=c(1,1),xpd=F)
 plot(q.matrix[,k+1],q.matrix[,1],xlab="Q-val Flock",ylab="Q-val Structure",col="Dark Green")
 abline(0,1)
 points(q.matrix[,k+2],q.matrix[,2],col="Blue")
 points(q.matrix[,k+3],q.matrix[,3],col="Orange")
 points(q.matrix[,k+4],q.matrix[,4],col="Hot Pink")
 points(q.matrix[,k+5],q.matrix[,5],col="Yellow2")
+par(xpd=T)
+legend("topleft",title="Cluster",title.adj=0.1,cex=0.8, inset=c(0.01,0.01),horiz=T,legend=as.character(seq(from=1,to=k,by=1)), pch = c(1,1,1,1,1), col = c("Dark Green", "Blue", "Orange","Hot Pink","Yellow2"))
+
 #plot(q.matrix[,k+6],q.matrix[,6],xlab="Q-val Flock",ylab="Q-val Structure",col="Purple")
 #abline(0,1)
+
+#Greyscale image
+par(mfrow=c(1,1),xpd=F)
+plot(q.matrix[,k+1],q.matrix[,1],xlab="Q-val Flock",ylab="Q-val Structure",pch=1)
+abline(0,1)
+points(q.matrix[,k+2],q.matrix[,2],pch=2)
+points(q.matrix[,k+3],q.matrix[,3],pch=3)
+points(q.matrix[,k+4],q.matrix[,4],pch=4)
+points(q.matrix[,k+5],q.matrix[,5],pch=5)
+par(xpd=T)
+legend("topleft",title="Cluster",title.adj=0.1,cex=0.8, inset=c(0.01,0.01),horiz=T,legend=as.character(seq(from=1,to=k,by=1)), pch = seq(from=1,to=k,by=1))
 
