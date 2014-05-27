@@ -51,17 +51,22 @@ write.csv(x=temp,file=file.path(FOR,paste("k",k," Steelhead_Run",r,"_Defaults-po
 ########################################################################################
 # For the next part I am going to need a way of repeating strings with different indexing
 # For this I'll write a function that takes k as an input and outputs a string
-temp.string<-function(k){
-  #need a clever way of repeating stuff inside of a formating loop
-  #this way I don't have to copy and paste for all k
-  string<- vector()
-  for (i in 3:(k+1)){
-    string[i]<-paste('(formatC(Mpopq.str[,',i, '],width=7,flag=','"+"','))',sep="")
-  }
-  string<-string[-(1:2)]
-  string<-paste(string,collapse=",")
-  return(string)
-}
+#temp.string<-function(k){
+#  #need a clever way of repeating stuff inside of a formating loop
+#  #this way I don't have to copy and paste for all k
+#  string<- vector()
+#  for (i in 3:(k+1)){
+#    string[i]<-paste('(formatC(Mpopq.str[,',i, '],width=7,flag=','"+"','))',sep="")
+#  }
+#  string<-string[-(1:2)]
+#  string<-paste(string,collapse=",")
+#  return(string)
+#}
+
+#Eric suggested a vectorized form to replace the loop. 
+temp.string <- function(k) {
+  i<-3:(k+1); paste(paste('(formatC(Mpopq.str[,',i, '],width=7,flag=','"+"','))',sep=""), collapse=",")}
+
 
 # now we are going to read in each of the structure 
 # output files so that we can eventually put our flock 
