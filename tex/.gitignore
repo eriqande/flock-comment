@@ -6,3 +6,5 @@
 *.log
 *synctex.gz
 flock-comment-main.pdf
+*.fdb_latexmk
+*.fls
