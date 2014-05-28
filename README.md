@@ -18,3 +18,18 @@ public domain within the United States.
 
 See TERMS.md for more information.
 
+## R script 'Flock2Structure' 
+The R script 'Flock2Structure' will read Flock formatted results files (excel .XLS), 
+create populationq values and extract individual q values. These values will be 
+placed inside of the output format of Structure (StructOuput_skeleton_k=*.txt files) 
+so that results can be run through the programs CLUMP and Distruct. If the user wishes
+to run more k, similarly formatted skeleton files should be added to the directory.
+The raw output from Flock should be stored in the working directory in a folder 
+titled 'Flock-output-Raw' and the skeleton files should be stored in the working directory. 
+
+After CLUMP and Distruct have been run, code exists at the end of the R script to 
+import relabeled individual q values for comparison. Relabeled CLUMP output
+should be stored in a folder titled 'intermediate' and  be of the form 
+'Output_00K.perms_X' where K is the number of clusters and X is the iteration.
+
+
