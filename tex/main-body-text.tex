@@ -260,7 +260,8 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 \subsection*{Analysis of coastal California steelhead} 
 To compare the behavior of {\sc flock} to that of {\sc structure} we used a published 
 dataset of 2596 steelhead \textit{Oncorhynchus mykiss}
-genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal}.  {\sc flock} was run six times using the default setting for all 
+genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal}.  {\sc flock} 
+was run six times using the default setting for all 
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0) for values of $K$ from 2 to 6. The stopping point of 
 $K=6$ was chosen after four consecutive values of $K$
@@ -278,13 +279,12 @@ while the program {\sc district} \citep{Rosenberg2004} was used to plot individu
 
 \citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
 subpopulations. The user must first specify the number of runs (different initial allocation of individuals 
-to each cluster) as well as the number of iterations individual has the chance to be reallocated 
-to a different cluster. For each run the log-likelihood value of membership to all $K$ clusters is computed
-and the difference between the cluster with the highest likelihood and second highest likelihood is reported (LLOD)
-for each individual. Runs that converge on the same solution are indicated by the same mean LLOD score. and 
-are referred to as a plateau. If for a given $k$ there may be multiple local maxima in addition to 
-the global maximum, depending on the initial allocation of individuals the alorithm will result in finding
-different plateaus. The plateau record is a list of how many runs ended up at these different solutions. 
+to each cluster) as well as the number of iterations each individual has the opportunity to be reallocated 
+to a different cluster. For each run, the log-likelihood value of membership to all $K$ clusters is computed
+and the log likelihood difference (LLOD), the difference between the cluster with the highest likelihood 
+and second highest likelihood, is reported for each individual. Runs that converge on the same solution 
+are indicated by the same mean LLOD score and 
+are referred to as a plateau. The plateau record is a list of how many runs ended up at these different solutions. 
 \citet{Duc&Tur2012} developed two stopping rules that lead to the estimation of $K$. In the abscence of 
 reasonable values for $k$ \citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau 
 $\geq 6$  is reached or four consecutive $k$ values yield no plateaus. If the first stopping condition is satisfied,
@@ -405,7 +405,8 @@ The partition space over which {\sc flock} evaluates how individuals are cluster
 greatly increases with both the number of individuals and the number of clusters into 
 which they can be partitioned. The total partition space for any given k can be 
 defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
-second kind. The results of {\sc flock} depend primarily on the initial partition of 
+second kind. The likelihood surface may be characterized by multiple peaks and troughs.
+The peak or plateau that the  {\sc flock} algorithm finds is entirely dependent on the initial allocation of 
 individuals. It is not surprising that with 2,596 individuals we could have 
 drastically different plateau sequences with just two clusters and that as \textit{k} increases
 {\sc flock} finds suboptimal allocations. 
