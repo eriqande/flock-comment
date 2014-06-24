@@ -4,11 +4,11 @@
 ###### Note: individuals parts of the code rely on Java and should be run individually 
 ###### If they are all run together you will probably experience a heap error. 
 
-### packages that we will need that probably aren't installed
+### packages that we will need that might not be installed
 install.packages("XLConnect")
 install.packages("stringr")
 
-### 
+### load packages
 require("XLConnect")
 require("stringr")
 
@@ -87,7 +87,7 @@ Flock_popq<-as.matrix(Flock_popq)
 Mpopq.str[,(seq(from=2, to=k+1,by=1))]<- Flock_popq[,c(seq(from=2, to=k+1,by=1))]
 
 # Now I need to write them out with formatting!
-# This will produce some text files will the correct formating to 
+# This will produce some text files will the correct formatting to 
 # paste into the Structure output
 if (k==2){
 line.temp<-paste((formatC(Mpopq.str[,1],width=4,flag="+")),(formatC(Mpopq.str[,2],width=10,flag="+")),(formatC(Mpopq.str[,3],width=7,flag="+")),(formatC(Mpopq.str[,4],width=16,flag="+")),sep="")
@@ -230,6 +230,7 @@ String2pass<-paste('mv ',wd,'/StructOuput_genos_slg_pipe.txt_dat002_k00*_Rep00*.
 system(String2pass)
 
 #########################################################################################
+#########################################################################################
 #For CLUMP and Distruct we will need the names of each of the populations
 #Extract Pop name and number
 Names<-Flock_popq[,1]
@@ -269,7 +270,7 @@ q.floc.string[[r]]<-q.floc.string[[r]][2:(6+k)]
 # make a nice matrix with sample,flock q, structure q values
 q.matrix<-matrix(data=NA, ncol=1+k*2,nrow=2596)
 
-for (n in 1:2596){
+for (n in 1:length(q.str)){
 for (j in 1:k){
   q.matrix[n,j]<-q.str.string[[n]][j+5]
   q.matrix[n,k+j]<-q.floc.string[[n]][j+5]
@@ -301,4 +302,27 @@ points(q.matrix[,k+4],q.matrix[,4],pch=4)
 points(q.matrix[,k+5],q.matrix[,5],pch=5)
 par(xpd=T)
 legend("topleft",title="Cluster",title.adj=0.1,cex=0.8, inset=c(0.01,0.01),horiz=T,legend=as.character(seq(from=1,to=k,by=1)), pch = seq(from=1,to=k,by=1))
+
+#let's make the plot in ggplot
+# we need a new matrix for ggplot, and it isn't easy just to melt the one we have
+q.matrix.g<-matrix(data=NA,ncol=4,nrow=k*length(q.str))
+colnames(q.matrix.g)<-c("k","Ind","Flock_q","Struct_q")
+q.matrix.g[,1]<-rep(seq(from=1,to=k,by=1),times=length(q.str))
+q.matrix.g[,2]<-rep(seq(from=1, to=length(q.str),by=1),each=k)
+k.max<-5
+  for (j in 1:k){#over clusters for every individual
+    q.matrix.g[(seq(from=j,to=(length(q.str)*k.max)+(-k.max+j),by=k.max)),4]<-as.numeric(q.matrix[,j])#Structure Values
+    q.matrix.g[(seq(from=j,to=(length(q.str)*k.max)+(-k.max+j),by=k.max)),3]<-as.numeric(q.matrix[,j+k.max])#Flock Values
+  }#clusters & individuals
+df<-data.frame(q.matrix.g)
+
+ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k))) +
+  geom_point() +
+  scale_shape_discrete(name="Cluster\n(k)") +
+  theme_bw() +
+  theme(legend.key = element_blank()) +
+  labs(y=expression(paste("Structure ", q[i]," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", q[i]," values",sep=""))) +
+  geom_abline(intercept=0, slope=1, linetype=2)
+  
+
 
