@@ -271,21 +271,21 @@ a 50,000 sweep burn-in followed by 150,000 sweep sample from the posterior.
 All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB
 of RAM running 64-bit Windows 7. For each set of runs {\sc flock} reports the 
 normalized likelihood values (the exponenetiated log-likelihood value for an individuals 
-membership to each $K$ clusters scaled to sum to one) for the run that belongs to 
-the longest plateau - the 'best run'. 
+membership to each $K$ clusters scaled to sum to one) for a run belonging to the longest plateau.
 This value is comparable to the $q_i$ values
 returned by {\sc structure}, which, in the no-admixture case, are posterior probabilities of cluster membership.
 The program {\sc clumpp} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
 while the program {\sc district} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
 
 \citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
-subpopulations. The user must first specify the number of runs (different initial allocation of individuals 
+subpopulations. The user must specify both the number of runs (different initial allocation of individuals 
 to each cluster) as well as the number of iterations each individual has the opportunity to be reallocated 
-to a different cluster. For each run, the log-likelihood value of membership to all $K$ clusters is computed
+to a different cluster. For each run, the log-likelihood value for membership to all $K$ clusters is computed
 and the log likelihood difference (LLOD), the difference between the cluster with the highest likelihood 
-and second highest likelihood, is reported for each individual. Runs that converge on the same solution 
+and second highest likelihood, is calculated for each individual. Runs that converge on the same solution 
 are indicated by the same mean LLOD score and 
-are referred to as a plateau. The plateau record is a list of how many runs ended up at these different solutions. 
+are referred to as a plateau. The plateau record is a list of how many runs converged at the same allocation
+of individuals. 
 \citet{Duc&Tur2012} developed two stopping rules that lead to the estimation of $K$. In the abscence of 
 reasonable values for $k$, \citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau 
 $\geq 6$  is reached or four consecutive $K$ values yield no plateaus. If the first stopping condition is satisfied,
@@ -304,16 +304,16 @@ estimating $K$ to results obtained using $\ln P(D)$ and $\Delta K$, and we do so
 
 
 \subsection*{Results} 
-Run times were relatively short for both programs. {\sc flock} 
-required 1133 minutes to complete all the runs, averaging 188.8 minutes for 
-each of six groups of runs over $K$ from 2 to 6. All runs of {\sc structure} were completed in 
-486 minutes. Each of the six groups of runs averaged 80.8 minutes. Increasing
+Run times were relatively short for both programs. All runs of {\sc flock} 
+completed in 1133 minutes. Each of the six groups of runs averaged 188.8 minutes.
+All runs of {\sc structure} were completed in 
+486 minutes and averaged 80.8 minutes to complete each of the six groups of runs. Increasing
 $K$ from of 2 to 6 increased the run time for {\sc flock} by a factor of 2.4, while the run time 
 for {\sc structure} increased by a factor of only 1.6.
 \hrule
 
 The allocation of indivividuals into K clusters was similar for each program. For all six groups 
-of runs from \textit{k} = 2-4, {\sc flock} resulted in nearly identical clustering of individuals 
+of runs from \textit{k} = 2 - 4, {\sc flock} resulted in nearly identical clustering of individuals 
 (See supplementary materials) none of which differed substantially from results obtain from 
 {\sc structure} (Fig 1). Of the 'best runs' for the six groups for \textit{k} of 2, two  
 runs yielded identical clustering (same mean LLOD score), all other runs 
@@ -328,10 +328,10 @@ Despite the similar allocation of individuals into \textit{k} clusters, the
 plateau analysis to estimate $K$ in {\sc flock} leads to different conclusions among groups of runs, as well as 
 one that differs from {\sc structure}. While no plateaus were observed in any of the six groups 
 for a \textit{k} $\geq$2, the plateau record varied greatly among each
-group for \textit{k}=2 (plateau  sequences- Run1= 3,2,3,7,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; 
-Run4=2,3,4,2,4,3; Run5=2,2,5,5,3; and; Run6=2,2,2,2,2,3,3). The plateau analysis 
+group for \textit{k} = 2 (plateau  sequences- Run1 = 3,2,3,7,4; Run2 = 2,5,2,3,2,3; Run3 = 2,2,2,2,2,5; 
+Run4 = 2,3,4,2,4,3; Run5 = 2,2,5,5,3; and; Run6 = 2,2,2,2,2,3,3). The plateau analysis 
 procedure suggested by \citet{Duc&Tur2012} leads to 
-either an estimate of K$\geq$2 (Run1) or \textit{undecided} as a consequence of no plateau 
+either an estimate of K $\geq$ 2 (Run1) or \textit{undecided} as a consequence of no plateau 
 lengths being greater than 6. Interpreting the results from {\sc structure} is often accomplished by 
 looking at the estimated log likelihood of the data given K, the delta k method \citep{Evannoetal2005}, and plots of 
 individual \textit{$q_i$} values. Both the estimated likelihood of the data
@@ -361,7 +361,6 @@ is the lower bound estimate.}
 \begin{figure*}
 \begin{center}
 	% NOTE. Pat replaced old Q-val-StrFloc.pdf with a ggplot version 
-	
  \includegraphics[width=25em]{images/Figures-Pat/Fig2.pdf}
     \caption{Individual \textit{$q_i$} values plotted for each cluster for \textit{k}=5. 
 {\sc flock} estimates of likelihood of assignment to each cluster have less uncertainty
@@ -380,8 +379,7 @@ observed that often during the last iterations individuals would alternate betwe
 reference groups during subsequent iterations. Increasing the log likelihood 
 difference threshold for reallocation to 0.18 (there needs to be at least a 1.5 times 
 higher likelihood to reallocate the individual) minimized this, but did not affect the 
-inference of \textit{k} (lower bound estimate of \textit{k} = 2). 
-
+inference of \textit{k} (lower bound estimate of \textit{k} = 2).
 
 \section*{Conclusions}
 
