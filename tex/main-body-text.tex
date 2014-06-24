@@ -258,16 +258,16 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 \section*{Performance Comparison with {\sc structure}}
 
 \subsection*{Analysis of coastal California steelhead} 
-To compare the behavior of {\sc flock} to that of {\sc structure} we used a published 
-dataset of 2596 steelhead \textit{Oncorhynchus mykiss}
-genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal}.  {\sc flock} 
+We used a published dataset of 2596 steelhead \textit{Oncorhynchus mykiss}
+genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal} to compare the programs
+{\sc flock} and {\sc structure} .  {\sc flock} 
 was run six times using the default setting for all 
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0) for values of $K$ from 2 to 6. The stopping point of 
 $K=6$ was chosen after four consecutive values of $K$
 yielded no plateau (see below). For each value of $K$ from 2 to 6, the no-admixture, 
-uncorrelated-allele-frequency model implemented in {\sc structure} was run 6 times using 
-50,000 sweeps of burn-in followed by 150,000 sweeps of sample collection from the posterior. 
+uncorrelated-allele-frequency model implemented in {\sc structure} was run 6 times with 
+a 50,000 sweep burn-in followed by 150,000 sweep sample from the posterior. 
 All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB
 of RAM running 64-bit Windows 7. For each set of runs {\sc flock} reports the 
 normalized likelihood values (the exponenetiated log-likelihood value for an individuals 
@@ -306,21 +306,21 @@ estimating $K$ to results obtained using $\ln P(D)$ and $\Delta K$, and we do so
 \subsection*{Results} 
 Run times were relatively short for both programs. {\sc flock} 
 required 1133 minutes to complete all the runs, averaging 188.8 minutes for 
-each of six groups of runs over $K$ from 2 to 6. {\sc structure} completed all the runs in 
-486 minutes with each of the six groups of runs averaging 80.8 minutes. Increasing
+each of six groups of runs over $K$ from 2 to 6. All runs of {\sc structure} were completed in 
+486 minutes. Each of the six groups of runs averaged 80.8 minutes. Increasing
 $K$ from of 2 to 6 increased the run time for {\sc flock} by a factor of 2.4, while the run time 
 for {\sc structure} increased by a factor of only 1.6.
 \hrule
 
 The allocation of indivividuals into K clusters was similar for each program. For all six groups 
-of runs from \textit{k}=2-4, {\sc flock} lead to nearly identical clustering of individuals 
+of runs from \textit{k} = 2-4, {\sc flock} resulted in nearly identical clustering of individuals 
 (See supplementary materials) none of which differed substantially from results obtain from 
 {\sc structure} (Fig 1). Of the 'best runs' for the six groups for \textit{k} of 2, two  
-ended with identical clustering (same mean LLOD score), all other runs 
+runs yielded identical clustering (same mean LLOD score), all other runs 
 differed by at most the allocation of 13 individuals. As 
 \textit{k} increases so do the number of solutions
-that {\sc flock} finds (Fig 1). For all froups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
-allocations resulted in solutions that differed slightly. These solutions, however, are suprisingly similar to
+that {\sc flock} finds (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
+allocations resulted in solutions that differed. These solutions, however, are suprisingly similar to
  the partions identified by {\sc structure}. Both programs idenfity clusters 
 which can be attributed to the geographical boundaries identified by \citet{Garzaetal_norcal}.
 
@@ -328,7 +328,7 @@ Despite the similar allocation of individuals into \textit{k} clusters, the
 plateau analysis to estimate $K$ in {\sc flock} leads to different conclusions among groups of runs, as well as 
 one that differs from {\sc structure}. While no plateaus were observed in any of the six groups 
 for a \textit{k} $\geq$2, the plateau record varied greatly among each
- group for \textit{k}=2 (plateau  sequences- Run1= 3,2,3,7,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; 
+group for \textit{k}=2 (plateau  sequences- Run1= 3,2,3,7,4; Run2=2,5,2,3,2,3; Run3=2,2,2,2,2,5; 
 Run4=2,3,4,2,4,3; Run5=2,2,5,5,3; and; Run6=2,2,2,2,2,3,3). The plateau analysis 
 procedure suggested by \citet{Duc&Tur2012} leads to 
 either an estimate of K$\geq$2 (Run1) or \textit{undecided} as a consequence of no plateau 
