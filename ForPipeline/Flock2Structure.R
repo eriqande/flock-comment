@@ -11,6 +11,7 @@ install.packages("stringr")
 ### load packages
 require("XLConnect")
 require("stringr")
+require("ggplot2")
 
 #We are going to work in a folder called 'ForPipeline'
 #So long as the R scrip launches from this point the working directory 
@@ -247,13 +248,18 @@ write(Names,file="Pops.txt")
 
 ##########################################################
 # After running CLUMP and Distruct we can play with the output
-# Lets look at certainty of assignment
-#lets start by pulling two that should look really similar 
-# Read in the clumped files -> clump files should be reorganized.
-k<-5 #which k are we analyzing?
-#which runs do we want to compare
-Str.run<-1
-Flock.run<-5
+# Here is a user defined function to compare the results from different
+#flock and structure runs
+
+Comp.runs<-function(k=k,Str.run=Str.run,Flock.run=Flock.run,greyscale=TRUE,FigOut='Fig2.eps'){
+## Inputs
+#k -> which k are we analyzing?
+#Str.run -> which run from structure do we want to compare
+#Flock.run -> which run from Flock do we want to compare
+#greyscale -> do we want our plot to be greyscale or color?
+#FigOut -> name the Figure... NOTE that the extension determines the type of file we use ggsave
+
+
 # Extract the results from the files in some strings
 q.str<-readLines(con=file.path("intermediate",paste("Output_00",k,".perms_",Str.run,sep="")))
 q.floc<-readLines(con=file.path("intermediate",paste("Output_00",k,".perms_",Flock.run+6,sep="")))
@@ -277,31 +283,6 @@ for (j in 1:k){
 }
 q.matrix[n,2*k+1]<-q.str.string[[n]][1]
 }
-write.csv(q.matrix,"Qval.csv",eol = "\r\n")
-
-par(mfrow=c(1,1),xpd=F)
-plot(q.matrix[,k+1],q.matrix[,1],xlab="Q-val Flock",ylab="Q-val Structure",col="Dark Green")
-abline(0,1)
-points(q.matrix[,k+2],q.matrix[,2],col="Blue")
-points(q.matrix[,k+3],q.matrix[,3],col="Orange")
-points(q.matrix[,k+4],q.matrix[,4],col="Hot Pink")
-points(q.matrix[,k+5],q.matrix[,5],col="Yellow2")
-par(xpd=T)
-legend("topleft",title="Cluster",title.adj=0.1,cex=0.8, inset=c(0.01,0.01),horiz=T,legend=as.character(seq(from=1,to=k,by=1)), pch = c(1,1,1,1,1), col = c("Dark Green", "Blue", "Orange","Hot Pink","Yellow2"))
-
-#plot(q.matrix[,k+6],q.matrix[,6],xlab="Q-val Flock",ylab="Q-val Structure",col="Purple")
-#abline(0,1)
-
-#Greyscale image
-par(mfrow=c(1,1),xpd=F)
-plot(q.matrix[,k+1],q.matrix[,1],xlab="Q-val Flock",ylab="Q-val Structure",pch=1)
-abline(0,1)
-points(q.matrix[,k+2],q.matrix[,2],pch=2)
-points(q.matrix[,k+3],q.matrix[,3],pch=3)
-points(q.matrix[,k+4],q.matrix[,4],pch=4)
-points(q.matrix[,k+5],q.matrix[,5],pch=5)
-par(xpd=T)
-legend("topleft",title="Cluster",title.adj=0.1,cex=0.8, inset=c(0.01,0.01),horiz=T,legend=as.character(seq(from=1,to=k,by=1)), pch = seq(from=1,to=k,by=1))
 
 #let's make the plot in ggplot
 # we need a new matrix for ggplot, and it isn't easy just to melt the one we have
@@ -309,20 +290,41 @@ q.matrix.g<-matrix(data=NA,ncol=4,nrow=k*length(q.str))
 colnames(q.matrix.g)<-c("k","Ind","Flock_q","Struct_q")
 q.matrix.g[,1]<-rep(seq(from=1,to=k,by=1),times=length(q.str))
 q.matrix.g[,2]<-rep(seq(from=1, to=length(q.str),by=1),each=k)
-k.max<-5
+k.max<-k
   for (j in 1:k){#over clusters for every individual
     q.matrix.g[(seq(from=j,to=(length(q.str)*k.max)+(-k.max+j),by=k.max)),4]<-as.numeric(q.matrix[,j])#Structure Values
     q.matrix.g[(seq(from=j,to=(length(q.str)*k.max)+(-k.max+j),by=k.max)),3]<-as.numeric(q.matrix[,j+k.max])#Flock Values
   }#clusters & individuals
 df<-data.frame(q.matrix.g)
 
-ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k))) +
-  geom_point() +
-  scale_shape_discrete(name="Cluster\n(k)") +
+if (greyscale==TRUE) {
+p1 <- ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k))) +
+  geom_point(alpha=0.5) +
+  scale_shape_discrete(name="Cluster (k)") +
   theme_bw() +
   theme(legend.key = element_blank()) +
-  labs(y=expression(paste("Structure ", q[i]," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", q[i]," values",sep=""))) +
+  theme(panel.grid=element_blank()) +
+  theme(legend.position='bottom') +
+  #theme(legend.background = element_rect(fill="gray95", size=.5, linetype="dotted")) +
+  labs(y=expression(paste("Structure ", italic(q[i])," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", italic(q[i])," values",sep=""))) +
   geom_abline(intercept=0, slope=1, linetype=2)
-  
 
+} else {
+  p1 <- ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k),color=factor(k))) +
+    geom_point(alpha=0.5) +
+    scale_shape_discrete(name="Cluster (k)") +
+    scale_color_discrete(name="Cluster (k)") +
+    theme_bw() +
+    theme(legend.key = element_blank()) +
+    theme(panel.grid=element_blank()) +
+    theme(legend.position='bottom') +
+    #theme(legend.background = element_rect(fill="gray95", size=.5, linetype="dotted")) +
+    labs(y=expression(paste("Structure ", italic(q[i])," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", italic(q[i])," values",sep=""))) +
+    geom_abline(intercept=0, slope=1, linetype=2)
 
+} #end else
+# export high res image
+ggsave(plot=p1,filename=file.path(wd,FigOut),dpi=300,width=6,height=6,units='in')
+} # End of Function 
+
+Comp.runs(k=3,Str.run=1,Flock.run=1,greyscale=T,FigOut='Fig2.pdf')
