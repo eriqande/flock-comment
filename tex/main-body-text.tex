@@ -320,12 +320,12 @@ for {\sc structure} increased by a factor of 1.6.
 terms of how individuals are allocated among runs at low values of $K$, 
 while at larger values, {\sc flock} often found, in addition to the solution identified by {\sc structure}, 
 multiple other solutions. For all six groups 
-of runs for \textit{k} = 2 - 4, {\sc flock} resulted in nearly identical clustering of individuals 
+of runs for $K = 2$ to 4, {\sc flock} resulted in nearly identical clustering of individuals 
 (See supplementary materials) none of which differed substantially from results obtain from 
 {\sc structure} (Fig 1). Of the 'best runs' for the six groups for $K$ = 2, two  
 runs yielded identical clustering (same mean LLOD score) while all other runs 
 differed by at most the allocation of 13 individuals. As 
-\textit{k} increases so do the number of solutions
+$K$ increases so do the number of solutions
 that {\sc flock} found (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
 allocations resulted in solutions that differed. 
 {\sc flock} still produces estimates of the LLOD by individual for the 
@@ -372,7 +372,7 @@ from the 'best runs' of {\sc flock} showed similar geographic differentiation to
 \begin{center}
 	% NOTE. Pat replaced old Q-val-StrFloc.pdf with a ggplot version 
  \includegraphics[width=\columnwidth]{images/Figures-Pat/Fig2.pdf}
-    \caption{Individual \textit{$q_i$} values plotted for each cluster for \textit{k}=5. 
+    \caption{Individual \textit{$q_i$} values plotted for each cluster for $K=5$. 
 {\sc flock} estimates of likelihood of assignment to each cluster have less uncertainty
  attributed to them.}
     \label{fig:qscatter}
@@ -383,25 +383,26 @@ To investigate the ability of the arrangement of individuals within the referenc
 populations to move around the partition space we varied the number of iterations that 
 each run goes through to find the 'optimal' allocation of individuals. Unfortuantely 
 only the reallocation matrix for the 'best run' is given as output. Increasing the 
-number of iterations did not affect the overall inference of \textit{k}. We 
+number of iterations did not affect the overall inference of $K$. We 
 observed that often during the last iterations individuals would alternate between 
 reference groups. Increasing the log likelihood 
 difference threshold for reallocation to 0.18 (requiring at least a 1.5 times 
 higher likelihood to reallocate the individual) minimized this, but did not affect the 
-inference of \textit{k} (lower bound estimate of \textit{k} = 2).
+inference of $K$ (lower bound estimate of $K = 2$).
 
 \section*{Conclusions}
 
 One of the major claimed advantages of {\sc flock} over MCMC methods for solving the 
-K-partition problem is that, 'The very short processing times for each run of {\sc flock} allows for
- comparing partitions from many runs of each \textit{k}'' \citep[][p.~735]{Duc&Tur2012}.
+K-partition problem is that, ``The very short processing times for each run of {\sc flock} allows for
+ comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
 While the authors observed improved process time in their 
 comparisions we did not observe the same advantage in our analysis. In their comparison, the 
-run parameters for {\sc flock} were 50 runs and 20 iterations for each \textit{k} = 1 to K+4. 
+run parameters for {\sc flock} were 50 runs and 20 iterations for each $K$ from 1 to four more than 
+the true value of $K$. 
 These process times were compared to the admixture model with correlated allele 
 frequencies in {\sc structure} with ten iterations of a 50,000 sweep burn-in followed 
-by a 200,000 sweep sample from the posterior of \textit{k} from 1 to K+3. 
-It seemed reasonable to compare, for each \textit{k}, one iteration of {\sc structure} 
+by a 200,000 sweep sample from the posterior of $K$ from 1 to K+3. 
+It seemed reasonable to compare, for each $K$, one iteration of {\sc structure} 
 to one iteration of {\sc flock} (50 different starting allocations that are reallocated 20 times) 
 as both evaluate the partition space once. The dataset used in this comparision was an order of magnatude
 larger than the largest used by \citep{Duc&Tur2012} (N = 60, 120, and 240). Any process speed advantages 
@@ -417,7 +418,7 @@ may be characterized by multiple peaks and troughs.
 The peak or plateau that the  {\sc flock} algorithm finds is entirely dependent on the initial allocation of 
 individuals as it has no way to visit areas of the likelihood surface with smaller values.
  It is not surprising that with 2,596 individuals we could have 
-drastically different plateau sequences with just two clusters and that as \textit{k} increases
+drastically different plateau sequences with just two clusters and that as $K$ increases
 {\sc flock} finds suboptimal allocations. If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
 possible partitions making it unlikely that they will converge.
@@ -431,8 +432,8 @@ and thenumber of starting allocations can affect not only the convergence of dif
 inference of $K$. The authors developed estimation rules based on simulated data 
 sets with a modest number of individuals and different migration regimes and rates, number of loci, and K. 
 By relying on identical allocations (mean LLOD values) as a means of supporting 
-a particular \textit{k},  similar but not idential 
-allocations will provide no support to a given \textit{k}.
+a particular $K$,  similar but not idential 
+allocations will provide no support to a given $K$.
 
 
 
