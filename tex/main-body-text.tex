@@ -328,7 +328,8 @@ differed by at most the allocation of 13 individuals. As
 \textit{k} increases so do the number of solutions
 that {\sc flock} found (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
 allocations resulted in solutions that differed. 
-It is unclear in these cases what constitutes the 'best run' as all plateau lengths are 
+{\sc flock} still produces estimates of the LLOD by individual for the 
+'best run', however, it is unclear in these cases what constitutes the 'best run' as all plateau lengths are 
 equal to one. Many of these solutions are, however, suprisingly similar to
  the partions identified by {\sc structure}. Both programs idenfity clusters 
 which can be attributed to the geographical boundaries identified by \citet{Garzaetal_norcal},
@@ -343,8 +344,8 @@ Run4 = 2,3,4,2,4,3; Run5 = 2,2,5,5,3; and; Run6 = 2,2,2,2,2,3,3). The plateau an
 procedure suggested by \citet{Duc&Tur2012} leads to
 either an estimate of K $\geq$ 2 (Run1) or {\em undecided} as a consequence of no plateau 
 lengths being greater than 6. The ($\ln P(D)$) from {\sc structure}
-was largest at $K$ = 6 which was supported by the $q_i$ plots. The $\Delta K$ method, however, 
-supports a $K$ = 2. 
+was largest at $K$ = 6 which was further supported by the $q_i$ plots, however,
+the $\Delta K$ method supported a $K$ of 2. 
  
 \hrule
 
@@ -382,10 +383,10 @@ To investigate the ability of the arrangement of individuals within the referenc
 populations to move around the partition space we varied the number of iterations that 
 each run goes through to find the 'optimal' allocation of individuals. Unfortuantely 
 only the reallocation matrix for the 'best run' is given as output. Increasing the 
-number of iterations did not affect the overall inference of \textit{k}. It was 
+number of iterations did not affect the overall inference of \textit{k}. We 
 observed that often during the last iterations individuals would alternate between 
-reference groups during subsequent iterations. Increasing the log likelihood 
-difference threshold for reallocation to 0.18 (there needs to be at least a 1.5 times 
+reference groups. Increasing the log likelihood 
+difference threshold for reallocation to 0.18 (requiring at least a 1.5 times 
 higher likelihood to reallocate the individual) minimized this, but did not affect the 
 inference of \textit{k} (lower bound estimate of \textit{k} = 2).
 
@@ -399,35 +400,39 @@ comparisions we did not observe the same advantage in our analysis. In their com
 run parameters for {\sc flock} were 50 runs and 20 iterations for each \textit{k} = 1 to K+4. 
 These process times were compared to the admixture model with correlated allele 
 frequencies in {\sc structure} with ten iterations of a 50,000 sweep burn-in followed 
-by 200,000 sweep sample from the posterior of \textit{k} from 1 to K+3. 
-It seems reasonable, for each \textit{k}, to compare one iteration of {\sc structure} 
-to one iteration of {\sc flock} with 50 different starting allocations that are reallocated 20 times 
-as both evaluate the partition space once. Process speed advantages also may only been observed 
-with low sample sizes. The authors evaluated simulated data sets with sample sizes of N = 60, 120, 
-and 240. 
+by a 200,000 sweep sample from the posterior of \textit{k} from 1 to K+3. 
+It seemed reasonable to compare, for each \textit{k}, one iteration of {\sc structure} 
+to one iteration of {\sc flock} (50 different starting allocations that are reallocated 20 times) 
+as both evaluate the partition space once. The dataset used in this comparision was an order of magnatude
+larger than the largest used by \citep{Duc&Tur2012} (N = 60, 120, and 240). Any process speed advantages 
+may only been observed with small sample sizes. 
 
 The partition space over which {\sc flock} evaluates how individuals are clustered 
 greatly increases with both the number of individuals and the number of clusters into 
-which they can be partitioned. The total partition space for any given k can be 
+which they can be partitioned. The total partition space can be 
 defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
-second kind. The likelihood surface may be characterized by multiple peaks and troughs.
+second kind, $k$ is the number of clusters, and $n$ is the number of individuals.
+The likelihood surface spanning all possible partitions
+may be characterized by multiple peaks and troughs.
 The peak or plateau that the  {\sc flock} algorithm finds is entirely dependent on the initial allocation of 
-individuals. It is not surprising that with 2,596 individuals we could have 
+individuals as it has no way to visit areas of the likelihood surface with smaller values.
+ It is not surprising that with 2,596 individuals we could have 
 drastically different plateau sequences with just two clusters and that as \textit{k} increases
-{\sc flock} finds suboptimal allocations. 
+{\sc flock} finds suboptimal allocations. If the number of initial allocations does not increase
+as $K$ is increased, the starting allocations become diffusely scattered in the space of all
+possible partitions making it unlikely that they will converge.
 
 For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
 to estimate K may be overly stringent. While there has been ample 
-discourse concering choosing the optimal K in  {\sc structure} \citep{Evannoetal2005, 
+discourse concering choosing the optimal K in {\sc structure} \citep{Evannoetal2005, 
 Pritchardetal2000, Wap&Gag2006} and \citet{Pritchardetal2000} urges users 
-to be cautious of interpreting K, no such care in interpreting results 
-is suggested in running {\sc flock}. The authors developed estimation rules based on simulated data 
-sets with different migration regimes and rates, number of loci, and K. 
+to be cautious of interpreting K, much less effort has been put forth examining how the number of individuals
+and thenumber of starting allocations can affect not only the convergence of different runs, but also the 
+inference of $K$. The authors developed estimation rules based on simulated data 
+sets with a modest number of individuals and different migration regimes and rates, number of loci, and K. 
 By relying on identical allocations (mean LLOD values) as a means of supporting 
 a particular \textit{k},  similar but not idential 
-allocations will provide no support to a given \textit{k}. This may not be as big an issue with small datasets,
-however, as sample sizes increase this could have a drastic influence on the estimation of 
-K. 
+allocations will provide no support to a given \textit{k}.
 
 
 
