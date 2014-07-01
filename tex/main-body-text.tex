@@ -311,22 +311,22 @@ Run times for both programs were relatively short, albeit non-trivial. All runs 
 completed in 1133 minutes. Each of the six groups of runs averaged 188.8 minutes.
 All runs of {\sc structure} were completed in 
 486 minutes and averaged 80.8 minutes to complete each of the six groups of runs.
-The processing time of each algorithm increased with as the number or 
+The processing time of each algorithm increased as the number or 
 putative clusters increases. Increasing
 $K$ from of 2 to 6 increased the run time for {\sc flock} by a factor of 2.4, while the run time 
-for {\sc structure} increased by a factor of only 1.6.
+for {\sc structure} increased by a factor of 1.6.
 
 {\sc flock} and {\sc structure} provide similar results in 
 terms of how individuals are allocated among runs at low values of $K$, 
-while, at larger values, {\sc flock} often found, in addition to the solution identified by {\sc structure}, 
+while at larger values, {\sc flock} often found, in addition to the solution identified by {\sc structure}, 
 multiple other solutions. For all six groups 
 of runs for \textit{k} = 2 - 4, {\sc flock} resulted in nearly identical clustering of individuals 
 (See supplementary materials) none of which differed substantially from results obtain from 
-{\sc structure} (Fig 1). Of the 'best runs' for the six groups for \textit{k} of 2, two  
-runs yielded identical clustering (same mean LLOD score), all other runs 
+{\sc structure} (Fig 1). Of the 'best runs' for the six groups for $K$ = 2, two  
+runs yielded identical clustering (same mean LLOD score) while all other runs 
 differed by at most the allocation of 13 individuals. As 
 \textit{k} increases so do the number of solutions
-that {\sc flock} finds (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
+that {\sc flock} found (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
 allocations resulted in solutions that differed. 
 It is unclear in these cases what constitutes the 'best run' as all plateau lengths are 
 equal to one. Many of these solutions are, however, suprisingly similar to
@@ -362,7 +362,7 @@ from {\sc flock}  are represented by a
 colored vertical bar.  Results from 
 from the 'best runs' of {\sc flock} showed similar geographic differentiation to 
 \citet{Garzaetal_norcal}.}
-    \label{Fig.1}
+    \label{fig:qplots}
 \end{center}
 \end{figure*}
 
@@ -392,7 +392,7 @@ inference of \textit{k} (lower bound estimate of \textit{k} = 2).
 \section*{Conclusions}
 
 One of the major claimed advantages of {\sc flock} over MCMC methods for solving the 
-K-partition problem is that, '[t]he very short processing times for each run of {\sc flock} allows for
+K-partition problem is that, 'The very short processing times for each run of {\sc flock} allows for
  comparing partitions from many runs of each \textit{k}'' \citep[][p.~735]{Duc&Tur2012}.
 While the authors observed improved process time in their 
 comparisions we did not observe the same advantage in our analysis. In their comparison, the 
