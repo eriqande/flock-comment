@@ -345,7 +345,7 @@ procedure suggested by \citet{Duc&Tur2012} leads to
 either an estimate of K $\geq$ 2 (Run1) or {\em undecided} as a consequence of no plateau 
 lengths being greater than 6. The ($\ln P(D)$) from {\sc structure}
 was largest at $K$ = 6 which was further supported by the $q_i$ plots, however,
-the $\Delta K$ method supported a $K$ of 2. 
+the $\Delta K$ method supported a $K$ of 3.
  
 \hrule
 
@@ -391,49 +391,84 @@ higher likelihood to reallocate the individual) minimized this, but did not affe
 inference of $K$ (lower bound estimate of $K = 2$).
 
 \section*{Conclusions}
+The use of genetic markers to identify population structure, specifically
+the number of genetic clusters in a collection $K$ has drastically exanded
+in the past decade to aid in the fields of evolution, epidemiology, and conservation
+genetics. By virtute of this exanding desire to identify $K$ there has been a push to 
+develop methods that can accurately infer $K$ while at the same time be easy to run
+both in terms of proccess time and user interface. Naturally, a program claiming
+``more accurate allocations and more reliable estimates of $K$ [while running]
+much faster than {\sc structure} \citep[][p.~734]{Duc&Tur2012}'' is particularly 
+appealing. Despite these two claims, we have shown that the algorithm implemented 
+in {\sc flock} is equivalent to 
+a restrictured case of the simulated annealing algorthim to find the Bayesian 
+MAP estimate from the marginalized form of the no admixture and non-correlated
+allele frequency model in {\sc structure} with no processing speed advantage for real datasets. 
 
-One of the major claimed advantages of {\sc flock} over MCMC methods for solving the 
+It is not surprising then, that because of the similaries in the algortims implemented that 
+we obsered  
+congruent results between the 'best run' from {\sc flock} and {\sc structure} using 
+a real data set from \textit{O. mykiss}. Though we observed very similar results
+between the two programs at low values of $K$, {\sc flock} had a tendency to be inconsistent
+among its 'best runs' at higher values - while still finding a similar solution to {\sc structure}.
+This is most likely a result of the rapidly exanding partition space that must be evaluated as $K$ increases. 
+The total partition space is 
+defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
+second kind, $k$ is the number of clusters, and $n$ is the number of individuals.
+The likelihood surface spanning all possible partitions could
+be characterized by multiple peaks and troughs.
+The peak or plateau that the  {\sc flock} algorithm finds is entirely dependent on the initial allocation of 
+individuals as it has no way to visit areas of the likelihood surface with smaller values.
+If the number of initial allocations does not increase
+as $K$ is increased, the starting allocations become diffusely scattered in the space of all
+possible partitions making it unlikely that they will converge. This coupled with the fact that there is 
+ambiguity in what defines a 'best run' when all plateaus are lenght zero obfuscates any interpretation
+of results from {\sc flock} if no non-zero plateaus are encountered.
+
+One of the major claimed advantages of {\sc flock} over methods for solving the 
 K-partition problem is that, ``The very short processing times for each run of {\sc flock} allows for
  comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
 While the authors observed improved process time in their 
-comparisions we did not observe the same advantage in our analysis. In their comparison, the 
+comparisions we did not observe the same advantage in our analysis. This appears to result from two issues:
+(1) the number of individuals in each collection and (2) the lenght of runs for each program in each comparision. 
+In their comparison, the 
 run parameters for {\sc flock} were 50 runs and 20 iterations for each $K$ from 1 to four more than 
 the true value of $K$. 
 These process times were compared to the admixture model with correlated allele 
 frequencies in {\sc structure} with ten iterations of a 50,000 sweep burn-in followed 
-by a 200,000 sweep sample from the posterior of $K$ from 1 to K+3. 
+by a 200,000 sweep sample from the posterior of $K$ from 1 to three more than the true 
+value of $K$. 
 It seemed reasonable to compare, for each $K$, one iteration of {\sc structure} 
 to one iteration of {\sc flock} (50 different starting allocations that are reallocated 20 times) 
-as both evaluate the partition space once. The dataset used in this comparision was an order of magnatude
-larger than the largest used by \citep{Duc&Tur2012} (N = 60, 120, and 240). Any process speed advantages 
-may only been observed with small sample sizes. 
-
-The partition space over which {\sc flock} evaluates how individuals are clustered 
-greatly increases with both the number of individuals and the number of clusters into 
-which they can be partitioned. The total partition space can be 
-defined by $\sum\limits_{i=1}^k S(n,k)$ where S(n,k) is a Stirling number of the 
-second kind, $k$ is the number of clusters, and $n$ is the number of individuals.
-The likelihood surface spanning all possible partitions
-may be characterized by multiple peaks and troughs.
-The peak or plateau that the  {\sc flock} algorithm finds is entirely dependent on the initial allocation of 
-individuals as it has no way to visit areas of the likelihood surface with smaller values.
- It is not surprising that with 2,596 individuals we could have 
-drastically different plateau sequences with just two clusters and that as $K$ increases
-{\sc flock} finds suboptimal allocations. If the number of initial allocations does not increase
-as $K$ is increased, the starting allocations become diffusely scattered in the space of all
-possible partitions making it unlikely that they will converge.
+as both evaluate the partition space once. We chose to run six iterations for each program
+in order to compare the consistency of results between programs and among runs.
+In addition to changing the number of groups of runs of {\sc flock} to compare,
+the dataset used was an order of magnatude
+larger than the largest used by \citep{Duc&Tur2012} (N = 60, 120, and 240). It may hold that {\sc flock}
+is able to process small datasets faster than {\sc structure}, but with the rapid increase in our ability to economically
+genotype a large number of individuals for a great many number of loci, this advantage may not be relevant to many 
+study designs.
 
 For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
 to estimate K may be overly stringent. While there has been ample 
-discourse concering choosing the optimal K in {\sc structure} \citep{Evannoetal2005, 
-Pritchardetal2000, Wap&Gag2006} and \citet{Pritchardetal2000} urges users 
-to be cautious of interpreting K, much less effort has been put forth examining how the number of individuals
-and thenumber of starting allocations can affect not only the convergence of different runs, but also the 
+discourse concering the choice of the optimal K in {\sc structure} \citep{Evannoetal2005, 
+Pritchardetal2000, Wap&Gag2006} much less effort has been put forth examining how the number of individuals
+and the number of starting allocations can affect not only the convergence of different runs, but also the 
 inference of $K$. The authors developed estimation rules based on simulated data 
 sets with a modest number of individuals and different migration regimes and rates, number of loci, and K. 
 By relying on identical allocations (mean LLOD values) as a means of supporting 
 a particular $K$,  similar but not idential 
-allocations will provide no support to a given $K$.
+allocations will provide no support to a given $K$. We highly advise, if using {\sc flock}, to
+run multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} and
+{\sc district} \citep{Rosenberg2004} to visually inspect the 'best run' results.  
+
+The development of software to analyze genetic data is ever increasing. In the face of a growing
+number of programs, end users must wade through a seemingly countless number of programs each with
+their own assumptions, strengths, and weaknesses. Lacking a recognition of these properties
+can result in the ineffectual use of both time and resources.
+By providing a different prespective on the algorithm
+implemented in {\sc flock} we hope to increase understanding of its applicability to a different datasets
+while decreasing end user confusion and misuse. 
 
 
 

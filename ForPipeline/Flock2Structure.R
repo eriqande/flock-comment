@@ -52,18 +52,6 @@ write.csv(x=temp,file=file.path(FOR,paste("k",k," Steelhead_Run",r,"_Defaults-po
 ########################################################################################
 # For the next part I am going to need a way of repeating strings with different indexing
 # For this I'll write a function that takes k as an input and outputs a string
-#temp.string<-function(k){
-#  #need a clever way of repeating stuff inside of a formating loop
-#  #this way I don't have to copy and paste for all k
-#  string<- vector()
-#  for (i in 3:(k+1)){
-#    string[i]<-paste('(formatC(Mpopq.str[,',i, '],width=7,flag=','"+"','))',sep="")
-#  }
-#  string<-string[-(1:2)]
-#  string<-paste(string,collapse=",")
-#  return(string)
-#}
-
 #Eric suggested a vectorized form to replace the loop. 
 temp.string <- function(k) {
   i<-3:(k+1); paste(paste('(formatC(Mpopq.str[,',i, '],width=7,flag=','"+"','))',sep=""), collapse=",")}
@@ -308,7 +296,7 @@ p1 <- ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k))) +
   #theme(legend.background = element_rect(fill="gray95", size=.5, linetype="dotted")) +
   labs(y=expression(paste("Structure ", italic(q[i])," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", italic(q[i])," values",sep=""))) +
   geom_abline(intercept=0, slope=1, linetype=2)
-
+p1
 } else {
   p1 <- ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k),color=factor(k))) +
     geom_point(alpha=0.5) +
@@ -321,10 +309,97 @@ p1 <- ggplot(data=df, aes(x=Flock_q, y=Struct_q, shape=factor(k))) +
     #theme(legend.background = element_rect(fill="gray95", size=.5, linetype="dotted")) +
     labs(y=expression(paste("Structure ", italic(q[i])," values",sep=""), "values",sep=" "),x=expression(paste("Flock ", italic(q[i])," values",sep=""))) +
     geom_abline(intercept=0, slope=1, linetype=2)
-
+p1
 } #end else
 # export high res image
 ggsave(plot=p1,filename=file.path(wd,FigOut),dpi=300,width=6,height=6,units='in')
 } # End of Function 
 
-Comp.runs(k=3,Str.run=1,Flock.run=1,greyscale=T,FigOut='Fig2.pdf')
+Comp.runs(k=5,Str.run=1,Flock.run=5,greyscale=T,FigOut='Fig2.pdf')
+
+######################################################################################
+# Get STRUCTURE LnP(D) values and DeltaK
+LnP<-matrix(data=NA,nrow=k.max-1,ncol=rep)
+for (k in 2:k.max){
+  for (r in 1:rep){
+    # Read in the Structure pop-q information that we need for formating
+    LnP.temp<-scan(file=file.path("Structure-Output",paste("StructOuput_genos_slg_pipe.txt_dat001_k00",k,"_Rep00",r,".txt_f",sep="")), what = "character", skip=(105+k+(k-2)),nlines=1)
+    LnP[k-1,r]<-as.numeric(LnP.temp[7])
+  }#over reps
+}#over k
+#Label things
+colnames(LnP)<-paste(rep("Rep",times=rep),seq(from=1,to=rep,by=1),sep="")
+rownames(LnP)<- paste(rep("K",times=k.max-1),seq(from=2,to=k.max,by=1),sep="")
+#add mean
+LnP.mean<- as.vector(rowMeans(LnP))
+LnP<-cbind(LnP,LnP.mean)
+#add stdev
+LnP.sd<-vector()
+for (sd in 1:k.max-1){
+  LnP.sd[sd]<-sqrt(var(LnP[sd,(1:k.max)]))
+}
+LnP<-cbind(LnP,LnP.sd)
+
+#K'
+K_prime<-vector()
+K_prime[1]<-NA
+for (k in (1:(k.max-2))){
+  K_prime[(k+1)]<-LnP[(k+1),7]-LnP[k,7]
+}
+LnP<-cbind(LnP,K_prime)
+
+#k''
+K_2prime<-as.vector(rep(NA,times=(k.max-1)))
+for (k in (1:(k.max-3))){
+  K_2prime[(k+1)]<-abs(LnP[(k+2),9]-LnP[k+1,9])
+}
+LnP<-cbind(LnP,K_2prime)
+
+#DeltaK
+Delta_K<-as.vector(LnP[,10]/LnP[,8])
+LnP<-cbind(LnP,Delta_K)
+
+
+# Make some graphs!
+LnP.df<-as.data.frame(LnP)
+p2<- qplot(x = seq(from=2,to=k.max,by=1), y = LnP.mean, data = LnP.df,xlab="K",ylab='L(K)') +
+  theme_bw() + geom_line()+
+  geom_errorbar(width=.05, aes(ymin=LnP.mean-LnP.sd, ymax=LnP.mean+LnP.sd), colour="black") 
+p3 <- qplot(x = seq(from=2,to=k.max,by=1), y = K_prime, data = LnP.df,xlab="K",ylab="L(K')") +
+  theme_bw() + geom_line()
+p4<- qplot(x = seq(from=2,to=k.max,by=1), y = K_2prime, data = LnP.df,xlab="K",ylab="L(K'')") +
+  theme_bw() +geom_line()
+p5<-qplot(x = seq(from=2,to=k.max,by=1), y = Delta_K, data = LnP.df,xlab="K",ylab="Delta K") +
+  theme_bw() + geom_line()
+#### Multiplot function from
+#### http://www.peterhaschke.com/r/2013/04/24/MultiPlot.html
+multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  require(grid)
+  
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  if (is.null(layout)) {
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+  
+  if (numPlots == 1) {
+    print(plots[[1]])
+    
+  } else {
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    
+    for (i in 1:numPlots) {
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+###########################################################################################
+
+multiplot(p2,p4,p3,p5,cols=2)
