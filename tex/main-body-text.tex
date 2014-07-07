@@ -392,16 +392,16 @@ inference of $K$ (lower bound estimate of $K = 2$).
 
 \section*{Conclusions}
 The use of genetic markers to identify population structure, specifically
-the number of genetic clusters in a collection $K$ has drastically exanded
+the number of genetic clusters in a collection ($K$) has drastically expanded
 in the past decade to aid in the fields of evolution, epidemiology, and conservation
-genetics. By virtute of this exanding desire to identify $K$ there has been a push to 
-develop methods that can accurately infer $K$ while at the same time be easy to run
-both in terms of proccess time and user interface. Naturally, a program claiming
+genetics. By virtute of this expanding desire to identify $K$ there has been a push to 
+develop methods that can accurately infer $K$ while at the same time remain acessable
+to a wide range of end users and run quickly. Naturally, a program claiming
 ``more accurate allocations and more reliable estimates of $K$ [while running]
 much faster than {\sc structure} \citep[][p.~734]{Duc&Tur2012}'' is particularly 
 appealing. Despite these two claims, we have shown that the algorithm implemented 
 in {\sc flock} is equivalent to 
-a restrictured case of the simulated annealing algorthim to find the Bayesian 
+a restricted case of the simulated annealing algorthim to find the Bayesian 
 MAP estimate from the marginalized form of the no admixture and non-correlated
 allele frequency model in {\sc structure} with no processing speed advantage for real datasets. 
 
@@ -430,8 +430,8 @@ K-partition problem is that, ``The very short processing times for each run of {
  comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
 While the authors observed improved process time in their 
 comparisions we did not observe the same advantage in our analysis. This appears to result from two issues:
-(1) the number of individuals in each collection and (2) the lenght of runs for each program in each comparision. 
-In their comparison, the 
+(1) the number of individuals in each collection and (2) the length of runs for each program in each comparision. 
+In the comparison by \citep{Duc&Tur2012}, the 
 run parameters for {\sc flock} were 50 runs and 20 iterations for each $K$ from 1 to four more than 
 the true value of $K$. 
 These process times were compared to the admixture model with correlated allele 
