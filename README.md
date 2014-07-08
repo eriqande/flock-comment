@@ -16,6 +16,9 @@ The resulting PDF file, `flock-comment-main.pdf` should then be complete.
 As a work partially of the United States Government, this package is in the
 public domain within the United States. 
 
+Of course, it would be awfully lame of anyone to copy this work and claim it as their
+own before we pubish it.
+
 See TERMS.md for more information.
 
 ## R script 'Flock2Structure' 
