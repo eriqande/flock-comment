@@ -396,7 +396,7 @@ much faster than {\sc structure} \citep[][p.~734]{Duc&Tur2012},'' may not, in fa
 a radical departure from {\sc structure} itself.  In particular, we have shown that the algorithm implemented 
 in {\sc flock} is a simulated annealing algorithm for the Bayesian 
 MAP estimate from a marginalized and restricted form of the {\sc structure} model.  
-Given such similarities between the two methods it is not surprising that
+Given such similarities between the two methods, it is not surprising that
 we observed relatively
 congruent results between the ``best run'' from {\sc flock} and {\sc structure} using 
 a real data set from \textit{O. mykiss}.
@@ -424,8 +424,8 @@ While \citeauthor{Duc&Tur2012} observed faster processing times (relative to oth
 comparisons, we did not observe the same advantage in our analysis. This appears to result from two issues. First,
 our example data set was an order of magnitude larger than the largest data set analyzed in \citet{Duc&Tur2012}.  Second, 
 in the comparison by \citet{Duc&Tur2012}, 
-{\sc flock} was set to perform 50 runs and 20 iterations for each $K$ from 1 to four more than 
-the true value of $K$, and computing times for that analysis were compared to times for ten iterations of {\sc structure} using 
+{\sc flock} was set to perform 50 runs and 20 iterations for each $K$ starting at 2 and ending when 
+one of the stopping conditions was met, and computing times for that analysis were compared to ten iterations of {\sc structure} using 
 a 50,000 sweep burn-in followed 
 by a 200,000 sweep sample from the posterior for values of $K$ from 1 to three more than the true 
 value of $K$. 
