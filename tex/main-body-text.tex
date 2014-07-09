@@ -219,7 +219,7 @@ the program {\sc flock} treats alleles that are not observed in certain clusters
 The goal of {\sc structure}'s MCMC algorithm is to sample from the space of 
 $Z$'s in proportion to their posterior probability.  If, all that was desired
 was a point estimate of the $Z_i$'s that maximized the posterior probability,
-then one standard approach to finding that maximimum {\em a posteriori}, or MAP, 
+then one standard approach to finding that maximum {\em a posteriori}, or MAP, 
 estimate, would be to use simulated annealing \citep{Kirkpatricketal1983}.
 To do simulated annealing in the {\sc structure} model with no admixture and
 no correlated allele frequency prior, after integrating out the unknown
@@ -274,14 +274,14 @@ of RAM running 64-bit Windows 7.
 For each set of runs, {\sc flock} reports the 
 normalized likelihood values (the exponentiated log-likelihood value for an individual's 
 membership to each of $K$ clusters, scaled to sum to one) for a run belonging to the longest plateau - refered to as the 'best run' by \citep{Duc&Tur2012} (see below).
-This value is comparable to the $q_i$ values
+These values can be compared to the $q_i$ values
 returned by {\sc structure}, which, in the no-admixture case, are posterior probabilities of cluster membership.
 The program {\sc clumpp} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
 while the program {\sc district} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
 
 \citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
 subpopulations. The user must specify both the number of runs (different initial allocations of individuals 
-to each cluster) as well as the number of iterations. (In every iteration each individual has the opportunity to be reallocated 
+to each cluster) as well as the number of iterations. (In each iteration every individual has the opportunity to be reallocated 
 to a different cluster.) At the conclusion of each run, the log-likelihood value for membership to all $K$ clusters is computed
 and the log likelihood difference (LLOD), the difference between the cluster with the highest likelihood 
 and second highest likelihood, is calculated for each individual. {\sc flock} identifies runs that 
@@ -290,12 +290,12 @@ have converged to the same solution by detecting that they have the same mean LL
 The plateau record is a list of how many runs converged to the same allocation
 of individuals. 
 \citet{Duc&Tur2012} developed two stopping rules that they use to estimate $K$. In the absence of 
-strong prior beliefs about the value of $K$, \citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau 
-$\geq 6$  is reached or four consecutive $K$ values yield no plateaus. If the first stopping condition is satisfied,
-the $K$ for which there is a single plateau $\geq 6$ is the point estimate for $K$. Alternatively, 
-if multiple plateaus are observed with at least one plateau $\geq 6$, the largest value of $K$ that satisfies 
-this conditon should be taken as the lower bound estimate of $K$. If no plateaus $\geq 6$ are observed, $K$
-is \textit{undecided}.  
+strong prior beliefs about the value of $K$, \citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau of
+$\geq 6$ runs is reached or four consecutive $K$ values yield no plateaus. If the first stopping condition is satisfied,
+the $K$ for which there is a single plateau of $\geq 6$ runs is the point estimate for $K$. Alternatively, 
+if multiple plateaus are observed with at least one plateau of $\geq 6$ runs, the largest value of $K$ that satisfies 
+this conditon should be taken as the lower bound estimate of $K$. If no plateaus of $\geq 6$ runs are observed, $K$
+is declared {\em undecided}.  
 
 
 It is now common practice to use the approximate marginal likelihood ($\ln P(D)$) from {\sc structure}
@@ -307,7 +307,7 @@ estimating $K$ to results obtained using $\ln P(D)$ and $\Delta K$, and we do so
 
 
 \subsection*{Results} 
-Run times for both programs were relatively short, albeit non-trivial. All runs of {\sc flock} 
+Run times for both programs were relatively short, albeit not trivial. All runs of {\sc flock} 
 completed in 1133 minutes. Each of the six groups of runs averaged 188.8 minutes.
 All runs of {\sc structure} were completed in 
 486 minutes and averaged 80.8 minutes to complete each of the six groups of runs.
@@ -320,18 +320,18 @@ for {\sc structure} increased by a factor of 1.6.
 terms of how individuals are allocated among runs at low values of $K$, 
 while at larger values, {\sc flock} often found, in addition to the solution identified by {\sc structure}, 
 multiple other solutions. For all six groups 
-of runs for $K = 2$ to 4, {\sc flock} resulted in nearly identical clustering of individuals 
-(See supplementary materials) none of which differed substantially from results obtain from 
-{\sc structure} (Fig 1). Of the 'best runs' for the six groups for $K$ = 2, two  
+of runs with $K = 2$ to 4, {\sc flock} obtained a nearly identical clustering of individuals 
+(See supplementary materials) none of which differed substantially from {\sc structure}'s results
+(Fig.~\ref{fig:qplots}). Of the ``best runs'' for the six groups for $K$ = 2, two  
 runs yielded identical clustering (same mean LLOD score) while all other runs 
 differed by at most the allocation of 13 individuals. As 
-$K$ increases so do the number of solutions
-that {\sc flock} found (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed - all intial 
+$K$ increased so did the number of solutions
+that {\sc flock} found (Fig 1). For all groups of runs for $K$ $\geq 2$, no plateaus were observed---all intial 
 allocations resulted in solutions that differed. 
-{\sc flock} still produces estimates of the LLOD by individual for the 
+{\sc flock} still produced estimates of the LLOD by individual for the 
 'best run', however, it is unclear in these cases what constitutes the 'best run' as all plateau lengths are 
-equal to one. Many of these solutions are, however, suprisingly similar to
- the partions identified by {\sc structure}. Both programs idenfity clusters 
+equal to one. Many of these solutions are, however, surprisingly similar to
+the partitions identified by {\sc structure}. Both programs idenfity clusters 
 which can be attributed to the geographical boundaries identified by \citet{Garzaetal_norcal},
 although less reliably so in the case of {\sc flock}.
 
@@ -379,8 +379,8 @@ from the 'best runs' of {\sc flock} showed similar geographic differentiation to
 
 To investigate the ability of the arrangement of individuals within the reference 
 populations to move around the partition space we varied the number of iterations that 
-each run goes through to find the 'optimal' allocation of individuals. Unfortuantely 
-only the reallocation matrix for the 'best run' is given as output. Increasing the 
+each run goes through to find the ``optimal'' allocation of individuals. Unfortuantely 
+only the reallocation matrix for the ``best run'' is given as output. Increasing the 
 number of iterations did not affect the overall inference of $K$. We 
 observed that often during the last iterations individuals would alternate between 
 reference groups. Increasing the log likelihood 
@@ -391,7 +391,7 @@ inference of $K$ (lower bound estimate of $K = 2$).
 \section*{Conclusions}
 In the past decade, the use of genetic markers to identify population structure and to attempt inference of
 the number of genetic clusters ($K$) in a collection has dramatically increased in the fields of ecology, evolution, epidemiology, and conservation
-genetics. By virtute of this expanding desire to identify $K$ there has been a push to 
+genetics. By virtue of this expanding desire to identify $K$ there has been a push to 
 develop fast and easy-to-use methods that can accurately infer $K$. We show that {\sc flock}, a program billed as providing
 ``more accurate allocations and more reliable estimates of $K$ [while running]
 much faster than {\sc structure} \citep[][p.~734]{Duc&Tur2012},'' may not, in fact, represent such 
@@ -406,30 +406,30 @@ a real data set from \textit{O. mykiss}.
 
 Though we observed very similar results
 between the two programs at low values of $K$, {\sc flock} had a tendency to provide inconsistent solutions
-among its ``best runs'' at higher values, while still finding solutions that were similar to {\sc structure}'s.
+among its ``best runs'' at higher values of $K$, while still finding solutions that were similar to {\sc structure}'s.
 This is likely a consequence of the rapidly increasing size of the search space over possible 
 partitions as $K$ and $n$, the number of individuals, increase. 
 The likelihood surface defined on partitions of this space is likely to be
 be characterized by multiple peaks and troughs.
-The peak or plateau that  {\sc flock}'s deterministic algorithm finds is entirely dependent on the initial allocation of 
+The peak that  {\sc flock}'s deterministic algorithm finds is entirely dependent on the initial allocation of 
 individuals, as it has no way to visit areas of the surface with smaller likelihood values.
 If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
-possible partitions making it unlikely that they will converge. This coupled with the fact that there is 
-ambiguity in what defines a "best run" when all plateaus are of length zero complicates the interpretation
+possible partitions making it unlikely that many (if any at all) will converge to the same local mode. This coupled with the fact that there is 
+ambiguity in what defines a ``best run'' when all plateaus are of length zero complicates the interpretation
 of results from {\sc flock} if no non-zero plateaus are encountered.
 
 One of the major claimed advantages of {\sc flock} over other methods for genetic clustering (like {\sc structure})
 is that, ``The very short processing times for each run of {\sc flock} allows for
 comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
-While the authors observed faster processing times (relative to other methods) in their 
+While \citeauthor{Duc&Tur2012} observed faster processing times (relative to other methods) in their 
 comparisons, we did not observe the same advantage in our analysis. This appears to result from two issues. First,
 our example data set was an order of magnitude larger than the largest data set analyzed in \citet{Duc&Tur2012}.  Second, 
 in the comparison by \citet{Duc&Tur2012}, 
 {\sc flock} was set to perform 50 runs and 20 iterations for each $K$ from 1 to four more than 
 the true value of $K$, and computing times for that analysis were compared to times for ten iterations of {\sc structure} using 
 a 50,000 sweep burn-in followed 
-by a 200,000 sweep sample from the posterior of $K$ from 1 to three more than the true 
+by a 200,000 sweep sample from the posterior for values of $K$ from 1 to three more than the true 
 value of $K$. 
 To us it seemed reasonable to compare, for each $K$, one iteration of {\sc structure} (50,000 burn in and 200,000 sample collection sweeps)
 to one iteration of {\sc flock} (50 different starting allocations that are reallocated 20 times) 
@@ -438,17 +438,15 @@ argue that it would be more appropriate to compare the running times of the prog
 of opportunities that each individual's cluster membership has for random initialization and reallocation.  Under 
 such a perspective, {\sc flock}'s 50 different starting allocations and 20 reallocations should be compared to
 50 separate runs of structure, each of length 20 sweeps, which would surely give {\sc structure}
-an apparent advantage in speed.  Regardless, while it may hold that {\sc flock}
-is able to process small datasets quickly enough to compete with {\sc structure},
-the rapid increase in our ability to economically
-genotype a large number of individuals for a great many loci, may render this advantage less relevant to many 
-study designs in the future.
+an apparent advantage in speed.  Regardless, we did not find a speed advantage from using {\sc flock}.
+If anything, {\sc structure} was somewhat faster.
 
-For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
+
+For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the {\em ad hoc} rules 
 to estimate $K$ may be overly stringent. While there has been lengthy 
 discourse over the choice of estimators for $K$ in {\sc structure} \citep{Pritchardetal2000,Evannoetal2005,Wap&Gag2006,Gaoetal2011} much less effort has been put forth examining how the number of individuals
 and the number of starting allocations can affect not only the convergence of different runs of {\sc flock}, but also its 
-inference of $K$. The authors developed estimation rules based on simulated data 
+inference of $K$. \citeauthor{Duc&Tur2012} developed estimation rules based on simulated data 
 sets with a modest number of individuals and different migration regimes and rates, number of loci, and $K$. 
 By relying on identical allocations (mean LLOD values) as a means of supporting 
 a particular $K$,  similar---but not identical---allocations
@@ -463,7 +461,7 @@ We have known colleagues whose solution to this problem is simply to run their d
 through every program available.  This seems an ineffective use of time and resources 
 that could be counteracted by a more transparent accounting of the similarities between
 methods. As one small step toward that,   
-we have provided a different prespective on the algorithm
+we have provided a different perspective on the algorithm
 implemented in {\sc flock}, showing it to be very similar to {\sc structure}
 using a particular set of options.  We hope this might increase understanding of {\sc flock}'s applicability to different datasets while decreasing end user confusion and misuse. 
 
