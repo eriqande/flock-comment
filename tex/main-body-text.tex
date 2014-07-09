@@ -419,7 +419,7 @@ possible partitions making it unlikely that they will converge. This coupled wit
 ambiguity in what defines a "best run" when all plateaus are of length zero complicates the interpretation
 of results from {\sc flock} if no non-zero plateaus are encountered.
 
-One of the major claimed advantages of {\sc flock} over other methods for genetic clustering
+One of the major claimed advantages of {\sc flock} over other methods for genetic clustering (like {\sc structure})
 is that, ``The very short processing times for each run of {\sc flock} allows for
 comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
 While the authors observed faster processing times (relative to other methods) in their 
@@ -441,21 +441,20 @@ such a perspective, {\sc flock}'s 50 different starting allocations and 20 reall
 an apparent advantage in speed.  Regardless, while it may hold that {\sc flock}
 is able to process small datasets quickly enough to compete with {\sc structure},
 the rapid increase in our ability to economically
-genotype a large number of individuals for a great many number of loci, may render this advantage less relevant to many 
+genotype a large number of individuals for a great many loci, may render this advantage less relevant to many 
 study designs in the future.
 
 For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the adhoc rules 
-to estimate K may be overly stringent. While there has been ample 
-discourse concering the choice of the optimal K in {\sc structure} \citep{Evannoetal2005, 
-Pritchardetal2000, Wap&Gag2006} much less effort has been put forth examining how the number of individuals
-and the number of starting allocations can affect not only the convergence of different runs, but also the 
+to estimate $K$ may be overly stringent. While there has been lengthy 
+discourse over the choice of estimators for $K$ in {\sc structure} \citep{Pritchardetal2000,Evannoetal2005,Wap&Gag2006,Gaoetal2011} much less effort has been put forth examining how the number of individuals
+and the number of starting allocations can affect not only the convergence of different runs of {\sc flock}, but also its 
 inference of $K$. The authors developed estimation rules based on simulated data 
-sets with a modest number of individuals and different migration regimes and rates, number of loci, and K. 
+sets with a modest number of individuals and different migration regimes and rates, number of loci, and $K$. 
 By relying on identical allocations (mean LLOD values) as a means of supporting 
-a particular $K$,  similar but not idential 
-allocations will provide no support to a given $K$. We highly advise, if using {\sc flock}, to
-run multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} and
-{\sc district} \citep{Rosenberg2004} to visually inspect the 'best run' results.  
+a particular $K$,  similar---but not identical---allocations
+will provide no support to a given $K$. If using {\sc flock}, we advise running
+multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} and
+{\sc distruct} \citep{Rosenberg2004} to visually inspect the ``best run'' results.  
 
 The development of software to analyze genetic data is ever increasing. In the face of a growing
 number of programs, end users must wade through a seemingly countless number of programs each with
