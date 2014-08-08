@@ -1,68 +1,45 @@
 %!TEX root = flock-comment-main.tex
 
 \section*{Introduction}
-In most fields, proposed methods that are 
-perceived to be fundamentally novel or new garner more
-attention and accolades---and have a higher chance of 
-publication---than methods that are clearly minor elaborations upon existing work. 
-Not surprisingly, then, in articles and manuscripts, authors may 
-emphasize the differences and downplay the similarities between their 
-work and the published literature.   In molecular ecology, this 
-tendency amongst the creators of statistical methodology can make it 
-difficult for end-users to understand the relationship between 
-different methods.
-
-Of course, new methods almost always build upon pre-existing ones, and 
-much is to be gained by understanding the close relationship between 
-different statistical methods in use in molecular ecology today.  
-Indeed, some authors downplay the similarities between their method and 
-existing ones not because they wish to make their method seem more 
-novel, but rather because they are genuinely unaware of the close ties 
-between their work and existing methods.  Identifying the 
-similarities between new and existing work should help our field
-by 1) reducing end-user confusion about whether 
-it is necessary to analyze data with a (sometimes overwhelming) variety 
-of computer programs; 2) establishing a common language upon which to 
-compare different methods; and 3) providing a principled perspective 
-from which to argue about the expected strengths and weaknesses of any 
-method.
-
 Methods for the unsupervised clustering of genotypes have received 
 considerable attention in the molecular ecology literature.  
 The best known example of this class of methods is {\sc structure} 
-\citep{Pritchardetal2000}.  {\sc structure} itself can be described 
-as an elaboration of earlier models used to identify the spawning 
-stock of salmon \citep{Smouseetal1990}, and a variety of other 
+\citep{Pritchardetal2000}, with over 12,000 citations identified on 
+Google Scholar.  A variety of other 
 clustering methods have been developed that are all closely related to 
 {\sc structure}, for example {\sc NewHybrids} \citep{And&Tho2002}, {\sc 
 BayesAss+} \citep{Wil&Ran2003}, and {\sc baps} 
-\citep{Coranderetal2004}. An overview of these similarities can be 
+\citep{Coranderetal2004}. An overview of the similarities between these methods can be 
 found in \citet{Anderson2009PGAC}.
 
-Recently, a description of the software {\sc flock} was published, 
-billing the method as a ``non-Bayesian method [that] 
+Recently, several colleagues suggested we try using the software {\sc flock} \citep{Duc&Tur2009},
+for analyzing a number of the data sets from our laboratories.
+{\sc flock} is billed as a ``non-Bayesian method [that] 
 differs substantially from previous 
-clustering algorithms'' \citep[][p.~1333]{Duc&Tur2009}. A following
-paper asserts that
-\begin{quote}
-``{\sc flock} is very different from  other clustering 
-programs. It does not sample the space of partitions through small 
+clustering algorithms'' \citep[][p.~1333]{Duc&Tur2009}. As described
+in a later paper, {\sc flock} ``does not sample the space of partitions through small 
 random step walks as in MCMC, and it does not try to optimize some 
 target function, such as HWLE\@. Briefly stated, it is not based on a 
 probabilistic search algorithm. On the contrary, {\sc flock} is 
 entirely deterministic'' \citep[][p.~736]{Duc&Tur2012}.
-\end{quote}
-These papers describe the rationale behind the {\sc flock} algorithm in
-intuitive terms with analogies to the coalescence of flocks of birds
-or the accretion of snow on a moving snowball.  
 
-Here, we provide a different perspective on the {\sc flock} algorithm,
-showing it to be a special, restricted case of the simulated annealing
-algorithm for finding the Bayesian maximum {\em a posteriori}
+In trying to understand the behavior of {\sc flock} we identified 
+a close relationship between {\sc flock}'s algorithm and the program
+{\sc structure}.  In other words, although the algorithm in {\sc flock}
+is, as the authors point out, entirely deterministic, it can be interpreted as a 
+limiting case of a probabilistic search algorithm applied to one of {\sc structure}'s
+models.  More specifically, the {\sc flock} 
+algorithm is a special case of the simulated annealing
+algorithm for finding the Bayesian maximum-{\em a-posteriori}
 estimate from a marginalized form of the {\sc structure} model with no
-admixture and non-correlated allele frequencies.  For illustration, we subsequently compare
-the results obtained from {\sc flock} and {\sc structure} on a real data
-set with $>$2,500 individuals.
+admixture and non-correlated allele frequencies.  
+
+Being able to interpret {\sc flock} in this fashion should help users
+interpret output from {\sc flock} and predict when it might and might not
+give substantially different results than {\sc structure}. Below we describe
+the correspondence between the programs in more detail, and then, for illustration, compare
+the results obtained from {\sc flock} and {\sc structure} on a large, real data
+set.
 
 \section*{Comparison of methods}
 We start with a succinct mathematical description of the {\sc structure}
@@ -71,7 +48,8 @@ the close relationship between the two.
 
 
 \subsection*{{\sc structure}}
-In the {\sc structure} model with no admixture, the unknown ``subpopulation'' that the 
+In the {\sc structure} model with no admixture (which, it should be pointed out, 
+is not the default model in {\sc structure}), the unknown ``subpopulation'' that the 
 $i\thh$ individual ($i=1,\ldots,N)$ belongs to is denoted by $Z_i \in \{1,\ldots,K\}$, 
 where $K$ is the 
 number of subpopulations (or clusters, as they are often referred to).  
@@ -151,7 +129,7 @@ version of the {\sc structure} model in which $\theta$ has been integrated out. 
 fact,
 this is the approach (with a slightly different prior weight on the $Z_i$'s) taken to 
 update 
-$Z_i$ in both {\sc hwler} \citep{Pel&Mas2006} and {\sc structurama} \cite{Hue&And2007} 
+$Z_i$ in both {\sc hwler} \citep{Pel&Mas2006} and {\sc structurama} \citep{Hue&And2007} 
 when not
 proposing changes to the number of clusters.
 
@@ -215,11 +193,11 @@ the program {\sc flock} treats alleles that are not observed in certain clusters
 
 
 
-\subsection*{{\sc flock} as a special case of {\sc structure}}
+\subsection*{The {\sc flock} algorithm and {\sc structure}}
 The goal of {\sc structure}'s MCMC algorithm is to sample from the space of 
 $Z$'s in proportion to their posterior probability.  If, all that was desired
 was a point estimate of the $Z_i$'s that maximized the posterior probability,
-then one standard approach to finding that maximum {\em a posteriori}, or MAP, 
+then one standard approach to finding that maximum-{\em a-posteriori}, or MAP, 
 estimate, would be to use simulated annealing \citep{Kirkpatricketal1983}.
 To do simulated annealing in the {\sc structure} model with no admixture and
 no correlated allele frequency prior, after integrating out the unknown
@@ -244,8 +222,7 @@ maximum near where it currently is.
 It should now be clear that the algorithm in {\sc flock} is a simulated annealing 
 algorithm for the {\sc structure} model in which the cooling schedule is
 ``start with $\beta\rightarrow\infty$ and leave it there for the duration of 
-the algorithm.''  As such, we can expect that it may not provide the best 
-mechanism for searching for the MAP estimate and it may be more susceptible 
+the algorithm.''  As such, we can expect that it may be more susceptible 
 to becoming trapped in local modes of the posterior probability. 
 In the following section we show that {\sc structure} and {\sc flock} find similar
 solutions in the analysis of a large microsatellite data set, though, as expected,
@@ -255,9 +232,8 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 
 
 
-\section*{Performance Comparison with {\sc structure}}
+\section*{Comparison of {\sc structure} and {\sc flock} results}
 
-\subsection*{Analysis of coastal California steelhead} 
 We used a published dataset of 2596 steelhead, \textit{Oncorhynchus mykiss},
 genotyped at 15 microsatellite loci from \citet{Garzaetal_norcal} to compare the programs
 {\sc flock} and {\sc structure}.  {\sc flock} 
@@ -279,7 +255,7 @@ returned by {\sc structure}, which, in the no-admixture case, are posterior prob
 The program {\sc clumpp} \citep{Jak&Ros2007} was used to relabel clusters among different runs,
 while the program {\sc district} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values. 
 
-\citet{Duc&Tur2012} promote a method for using {\sc flock} to estimate, $K$, the number of
+\citet{Duc&Tur2012} describe a method for using {\sc flock} to estimate, $K$, the number of
 subpopulations. The user must specify both the number of runs (different initial allocations of individuals 
 to each cluster) as well as the number of iterations. (In each iteration every individual has the opportunity to be reallocated 
 to a different cluster.) At the conclusion of each run, the log-likelihood value for membership to all $K$ clusters is computed
@@ -322,7 +298,7 @@ while at larger values, {\sc flock} often found, in addition to the solution ide
 multiple other solutions. For all six groups 
 of runs with $K = 2$ to 4, {\sc flock} obtained a nearly identical clustering of individuals 
 (See supplementary materials) none of which differed substantially from {\sc structure}'s results
-(Fig.~\ref{fig:qplots}). Of the ``best runs'' for the six groups for $K$ = 2, two  
+(Fig.~\ref{fig:qplots}). Of the `best runs' for the six groups for $K$ = 2, two  
 runs yielded identical clustering (same mean LLOD score) while all other runs 
 differed by at most the allocation of 13 individuals. As 
 $K$ increased so did the number of solutions
@@ -356,10 +332,10 @@ the $\Delta K$ method supported a $K$ of 3.
 	 % production, it should be changed back to Flock-Fig1.pdf
     \includegraphics[width=\textwidth]{images/Figures-Pat/Flock-Fig1-GreyScale.pdf} % Flock-Fig1.jpg}  
     \caption{Plots of $q_i$ values from {\sc structure} and the normalized likelihood values 
-from {\sc flock} made with the program {\sc distruct}. Each horizontal plot represents an individual run of the program {\sc structure}, or the ``best run'' from a series of runs in {\sc flock}. Within each plot 
+from {\sc flock} made with the program {\sc distruct}. Each horizontal plot represents an individual run of the program {\sc structure}, or the `best run' from a series of runs in {\sc flock}. Within each plot 
 $q_i$ values from {\sc structure} and the normalized likelihood values 
 from {\sc flock}  are represented by a 
-gray-scale vertical bar. The numbers in parentheses on the right indicate how many {\sc structure} runs (out of 6, as indicated) reached the same solution, or how many groups of {\sc flock} runs (out of 6) had the same ``best run.''}
+gray-scale vertical bar. The numbers in parentheses on the right indicate how many {\sc structure} runs (out of 6, as indicated) reached the same visually indistinguishable solution, or how many groups of {\sc flock} runs (out of 6) had the same `best run.'}
     \label{fig:qplots}
 \end{center}
 \end{figure*}
@@ -378,7 +354,7 @@ gray-scale vertical bar. The numbers in parentheses on the right indicate how ma
 To investigate the ability of the arrangement of individuals within the reference 
 populations to move around the partition space we varied the number of iterations that 
 each run goes through to find the ``optimal'' allocation of individuals. Unfortuantely 
-only the reallocation matrix for the ``best run'' is given as output. Increasing the 
+only the reallocation matrix for the `best run' is given as output. Increasing the 
 number of iterations did not affect the overall inference of $K$. We 
 observed that often during the last iterations individuals would alternate between 
 reference groups. Increasing the log likelihood 
@@ -388,81 +364,90 @@ inference of $K$ (lower bound estimate of $K = 2$).
 
 \section*{Conclusions}
 In the past decade, the use of genetic markers to identify population structure and to attempt inference of
-the number of genetic clusters ($K$) in a collection has dramatically increased in the fields of ecology, evolution, epidemiology, and conservation
-genetics. By virtue of this expanding desire to identify $K$ there has been a push to 
-develop fast and easy-to-use methods that can accurately infer $K$. We show that {\sc flock}, a program billed as providing
-``more accurate allocations and more reliable estimates of $K$ [while running]
-much faster than {\sc structure} \citep[][p.~734]{Duc&Tur2012},'' may not, in fact, represent such 
-a radical departure from {\sc structure} itself.  In particular, we have shown that the algorithm implemented 
-in {\sc flock} is a simulated annealing algorithm for the Bayesian 
-MAP estimate from a marginalized and restricted form of the {\sc structure} model.  
-Given such similarities between the two methods, it is not surprising that
-we observed relatively
-congruent results between the ``best run'' from {\sc flock} and {\sc structure} using 
-a real data set from \textit{O. mykiss}.
+the number of genetic clusters ($K$) in a collection has dramatically increased in the fields of ecology, evolution, 
+epidemiology, and conservation
+genetics. The most commonly used program for doing this is {\sc structure} \citep{Pritchardetal2000,Falushetal2003}, 
+a full-featured program with many options that is widely-used, well-tested, and reasonably well-understood. 
+We've shown here that {\sc flock}, a program that uses a deterministic algorithm, can be regarded
+as providing approximate, maximum-{\em a-posteriori} inference from one of the models implemented in 
+{\sc structure}. Given the similarities between the two methods, we expect that {\sc flock}
+and {\sc structure} (using the no-admixture model with non-correlated allele frequencies) will deliver
+similar results.  We observed such similarity in comparing results from {\sc flock} and {\sc structure} 
+on a real data set from \textit{O. mykiss} 
 
 
-Though we observed very similar results
-between the two programs at low values of $K$, {\sc flock} had a tendency to provide inconsistent solutions
-among its ``best runs'' at higher values of $K$, while still finding solutions that were similar to {\sc structure}'s.
+Though we observed similar results
+between the two programs at low values of $K$, {\sc flock}'s ``best-runs'' solutions became somewhat inconsistent at higher values of $K$, though most solutions were still similar to {\sc structure}'s.
 This is likely a consequence of the rapidly increasing size of the search space over possible 
 partitions as $K$ and $n$, the number of individuals, increase. 
-The likelihood surface defined on partitions of this space is likely to be
-be characterized by multiple peaks and troughs.
-The peak that  {\sc flock}'s deterministic algorithm finds is entirely dependent on the initial allocation of 
+The likelihood surface defined on partitions of this space will often
+be multimodal---possessing numerous local peaks and troughs.
+The peak that  {\sc flock}'s deterministic algorithm finds is entirely determined by the initial allocation of 
 individuals, as it has no way to visit areas of the surface with smaller likelihood values.
 If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
-possible partitions making it unlikely that many (if any at all) will converge to the same local mode. This coupled with the fact that there is 
-ambiguity in what defines a ``best run'' when all plateaus are of length zero complicates the interpretation
-of results from {\sc flock} if no non-zero plateaus are encountered.
+possible partitions making it less likely that many (if any at all) will converge to the same local mode. This coupled with the fact that there is 
+ambiguity in what defines a `best run' when all plateaus are of length zero complicates the interpretation
+of results from {\sc flock} if no non-zero plateaus are encountered. Of course, the problem of getting caught in local modes is not unique to {\sc flock}---{\sc structure} itself clearly can wind up sampling predominantly from a fairly isolated part of the space, as evidenced by the different results obtained from different runs of {\sc structure}. 
 
-One of the major claimed advantages of {\sc flock} over other methods for genetic clustering (like {\sc structure})
-is that, ``The very short processing times for each run of {\sc flock} allows for
-comparing partitions from many runs of each $K$'' \citep[][p.~735]{Duc&Tur2012}.
-While \citeauthor{Duc&Tur2012} observed faster processing times (relative to other methods) in their 
-comparisons, we did not observe the same advantage in our analysis. This appears to result from two issues. First,
-our example data set was an order of magnitude larger than the largest data set analyzed in \citet{Duc&Tur2012}.  Second, 
-in the comparison by \citet{Duc&Tur2012}, 
+One of the advantages of {\sc flock} over other methods for genetic clustering
+is reported to be the short processing time for each run of {\sc flock}.
+While \citet{Duc&Tur2012} observed faster processing times (relative to other methods) in their 
+comparisons, we did not observe this advantage in our analysis. This appears to result from two issues. First,
+our example data set was an order of magnitude larger than the largest data set analyzed in \citet{Duc&Tur2012}.  
+Second, in the comparison by \citet{Duc&Tur2012}, 
 {\sc flock} was set to perform 50 runs and 20 iterations for each $K$ starting at 2 and ending when 
 one of the stopping conditions was met, and computing times for that analysis were compared to ten iterations of {\sc structure} using 
 a 50,000 sweep burn-in followed 
 by a 200,000 sweep sample from the posterior for values of $K$ from 1 to three more than the true 
 value of $K$. 
-To us it seemed reasonable to compare, for each $K$, one iteration of {\sc structure} (50,000 burn in and 200,000 sample collection sweeps)
+To us it seemed reasonable to compare, for each $K$, the running times of one iteration of {\sc structure} (50,000 
+burn in and 200,000 sample collection sweeps)
 to one iteration of {\sc flock} (50 different starting allocations that are reallocated 20 times) 
-as both are used to provide a single estimate of the partition of individuals into clusters. One could
-argue that it would be more appropriate to compare the running times of the programs according to the number
-of opportunities that each individual's cluster membership has for random initialization and reallocation.  Under 
-such a perspective, {\sc flock}'s 50 different starting allocations and 20 reallocations should be compared to
-50 separate runs of structure, each of length 20 sweeps, which would surely give {\sc structure}
-an apparent advantage in speed.  Regardless, we did not find a speed advantage from using {\sc flock}.
-If anything, {\sc structure} was somewhat faster.
+as both were used to provide one of 6 total estimates (per value of $K$) of the partition of individuals into 
+clusters. In short,
+it is difficult to reliably assess differences in program run times when there is no clear consensus on what 
+constitutes a reasonable comparison with respect to run length and number of runs.
 
-
-For those that do decide to use {\sc flock} as an alternative to {\sc structure}, the {\em ad hoc} rules 
-to estimate $K$ may be overly stringent. While there has been lengthy 
-discourse over the choice of estimators for $K$ in {\sc structure} \citep{Pritchardetal2000,Evannoetal2005,Wap&Gag2006,Gaoetal2011} much less effort has been put forth examining how the number of individuals
+While there has been lengthy 
+discourse over the choice of estimators for $K$ in {\sc structure} 
+\citep{Pritchardetal2000,Evannoetal2005,Wap&Gag2006,Gaoetal2011}, less has been written on how the number of 
+individuals
 and the number of starting allocations can affect not only the convergence of different runs of {\sc flock}, but also its 
-inference of $K$. \citeauthor{Duc&Tur2012} developed estimation rules based on simulated data 
-sets with a modest number of individuals and different migration regimes and rates, number of loci, and $K$. 
-By relying on identical allocations (mean LLOD values) as a means of supporting 
-a particular $K$,  similar---but not identical---allocations
+inference of $K$. \citeauthor{Duc&Tur2012} developed estimation rules for $K$ based on simulated data 
+sets with a modest number of individuals and different migration regimes and rates, numbers of loci, and $K$. 
+By relying on the number of identical partitions (mean LLOD values) obtained by {\sc flock} over multiple
+runs as a means of supporting 
+a particular $K$,  similar---but not identical---partitions
 will provide no support to a given $K$. If using {\sc flock}, we advise running
 multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} and
-{\sc distruct} \citep{Rosenberg2004} to visually inspect the ``best run'' results.  
+{\sc distruct} \citep{Rosenberg2004} to visually inspect the `best run' results, to determine
+if there are many similar-but-not-identical partitions found amongst {\sc flock}'s replicate 
+solutions.  
 
-For many types of genetic analyses, molecular ecologists can choose from 
-amongst a wide range of published methods.  Choosing one of these methods to use can
-be difficult, especially when the methods have been touted as very different.
-We have known colleagues whose solution to this problem is simply to run their data
-through every program available.  This seems an ineffective use of time and resources 
-that could be counteracted by a more transparent accounting of the similarities between
-methods. As one small step toward that,   
-we have provided a different perspective on the algorithm
-implemented in {\sc flock}, showing it to be very similar to {\sc structure}
-using a particular set of options.  We hope this might increase understanding of {\sc flock}'s applicability to different datasets while decreasing end user confusion and misuse. 
+We should point out that our comparison was between {\sc flock} and the {\em no-admixture} model in 
+{\sc structure} which is not the default model used in {\sc structure}. Rather, by default, {\sc structure} uses 
+its {\em with-admixture} model.  Such a model explicitly tries to account for the admixed origin
+of individuals in the sample and thus may be a more appropriate model than the no-admixture model
+(or {\sc flock}) when the sample contains individuals that are admixed between populations.  A further advantage
+of the with-admixture model is that it allows inferences for the population of origin of individual alleles at 
+different loci within individuals, and not just of the individuals themselves.   We also note that {\sc flock} 
+corresponds to {\sc structure}'s model with uncorrelated allele frequency priors. \citet{Falushetal2003} found that
+using their ``$F$-model,'' which assumes that allele frequencies between populations are correlated {\em a priori}, 
+allowed {\sc structure} to dissect more subtle population structure than was possible using the prior with
+uncorrelated allele frequencies.  Modifying {\sc flock} so as to reap similar benefits from using a prior
+with correlated allele frequencies seems like it would be an interesting challenge, though difficult
+because {\sc flock}'s formulation effectively integrates the allele frequencies out of the model.
+ 
 
 
+Often, newly-developed algorithms come to be understood within more general contexts and 
+frameworks, and this, in turn, can help guide improvement of those algorithms.  For example, in population
+genetics, the ``Markov recursion'' algorithm of \citet{Gri&Tav1994-AI} was identified by \citet{Felsensteinetal1999} 
+as a special case of importance sampling \citep{Ham&Han1964}, a perspective which allowed 
+\citet{Ste&Don2000} to improve upon the algorithm dramatically.  Here we have identified the {\sc flock}
+algorithm as a limiting case of simulating annealing upon {\sc structure}'s no-admixture model. We hope this will
+help users to understand and interpret {\sc flock}'s behavior and will provide insights that may be useful 
+to {\sc flock}'s authors if they further develop their algorithm.   
 
  
