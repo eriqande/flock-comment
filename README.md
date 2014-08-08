@@ -5,7 +5,7 @@ about the similarity between the program FLOCK and structure.
 
 In order to typeset it, `cd` into the `tex` directory and issue this
 command (note that you have to have a TeX system installed on your
-system):
+system, and a decent shell like bash, too):
 ```
 ../compile-documents.sh
 ```
