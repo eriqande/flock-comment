@@ -10,6 +10,7 @@ system):
 ../compile-documents.sh
 ```
 This should result in two PDF files:
+
 | Name of File  | Purpose of File |
 | :-------------| :---------------|
 | flock-comment-one-column-main.pdf   |  Single-column version formatted for submission to MER |
