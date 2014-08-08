@@ -3,13 +3,19 @@
 This is LaTeX code to typeset a comment for Molecular Ecology Resources
 about the similarity between the program FLOCK and structure.
 
-In order to typeset it, `cd` into the `tex` directory and issue these
-commands (note that you have to have a TeX system installed on your
+In order to typeset it, `cd` into the `tex` directory and issue this
+command (note that you have to have a TeX system installed on your
 system):
 ```
-latexmk -pdf flock-comment-main.tex
+../compile-documents.sh
 ```
-The resulting PDF file, `flock-comment-main.pdf` should then be complete.
+This should result in two PDF files:
+| Name of File  | Purpose of File |
+| :-------------| :---------------|
+| flock-comment-one-column-main.pdf   |  Single-column version formatted for submission to MER |
+| flock-comment-main.pdf              |  Two-column version for easy reading                   |
+
+
 
 ## Terms 
 

@@ -4,6 +4,10 @@
 *.aux
 *.bbl
 *.log
+*.fff
+*.lof
+*.dvi
+flock-comment-one-column-main.pdf
 *synctex.gz
 flock-comment-main.pdf
 *.fdb_latexmk

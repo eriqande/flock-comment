@@ -1,21 +1,31 @@
 %!TEX root = flock-comment-main.tex
 
+
 %%%%% THIS IS THE SECTION WHERE THE AUTHOR PUTS IN ALL OF THEIR TITLE AND AFFILIATION
 %%%%% INFORMATION AND  A FEW OTHER THINGS
 \newcommand{\myTitle}{Interpreting the {\sc flock} algorithm from a statistical \\ perspective}
+\title{\myTitle}
 
 % redefine this to make author list. Note affiliation symbols are done manually.
 % All caps tends to look better
-\newcommand{\myAuthors}{ ERIC C.~ANDERSON$^{*,\dagger,\S}$ and PATRICK D. BARRY$^\ddag$}
+\newcommand{\myAuthors}{ ERIC C.~ANDERSON$^{*,\S}$ and PATRICK D. BARRY$^\dagger$}
+\author{ERIC C.~ANDERSON$^{*}$ and PATRICK D. BARRY$^\dagger$}
+
 
 % redefine to make the affiliation list.  Note symbols are done manually
 \newcommand{\myAffiliations}{$^*$Fisheries Ecology Division, 
     Southwest Fisheries Science Center, National Marine Fisheries Service, NOAA,
     110 Shaffer Road,
-    Santa Cruz, CA 95060, USA, $^\dagger$Department of Applied Math and Statistics, University of
-California, Santa Cruz, CA, $^\ddag$University of Alaska, Fairbanks, School of Fisheries and Ocean Science,
+    Santa Cruz, CA 95060, USA, $^\dagger$University of Alaska, Fairbanks, School of Fisheries and Ocean Science,
 17101 Point Lena Loop Rd.,
 Juneau, AK 99801, USA }
+\renewcommand{\AuthorAddresses}{\myAffiliations}
+
+\renewcommand{\KeyWords}{Unsupervised clustering, simulated annealing, software}
+
+\renewcommand{\CorrespondingAuthor}{Eric C. Anderson, Fisheries Ecology Division, Southwest Fisheries Science
+Center, 110 Shaffer Road, Santa Cruz, CA 95060. eric.anderson@noaa.gov}
+
 
 % the email address for the corresponding author
 \newcommand{\myEmailAddress}{eric.anderson@noaa.gov}
@@ -27,6 +37,7 @@ Juneau, AK 99801, USA }
 % here you can put a running title (a short title that goes on the left of the 
 % even pages)
 \newcommand{\myRunningTitle}{A statistical perspective on {\sc flock}}
+\renewcommand{\RunningTitle}{\myRunningTitle}
 
 % and here you put the running author (short listing of authors for the
 % upper right header on the odd pages)
