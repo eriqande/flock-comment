@@ -367,7 +367,8 @@ epidemiology, and conservation
 genetics. The most commonly used program for doing this is {\sc structure} \citep{Pritchardetal2000,Falushetal2003}, 
 a full-featured program with many options that is widely-used, well-tested, and universally regarded as a standard tool amongst molecular ecologists. 
 We've shown here that {\sc flock} is essentially equivalent to the program {\sc structure} using the no-admixture model with non-correlated allele frequencies. In comparing results from {\sc flock} and {\sc structure} 
-on a real data set from {\em O. mykiss} we find that the two programs give similar results, only {\sc flock}'s results at higher values of $K$ appear to be more variable.
+on a real data set from {\em O. mykiss} we find that the two programs give similar results, only, at values of
+$K>4$, {\sc flock}'s results appear to be more variable.
 
 
 Though we observed similar results
@@ -404,7 +405,7 @@ to one iteration of {\sc flock} (50 different starting allocations that are real
 as both were used to provide one of 6 total estimates (per value of $K$) of the partition of individuals into 
 clusters. Though
 it is difficult to reliably assess differences in program run times when there is no clear consensus on what 
-constitutes a reasonable comparison with respect to run length and number of runs, {\sc flock} did not carry a distinct run-time advantage over {\sc structure} in our analyses.
+constitutes a reasonable comparison with respect to run length and number of runs, our results indicate that {\sc flock} did not carry a distinct run-time advantage over {\sc structure}.
 
 While there has been lengthy 
 discourse over the choice of estimators for $K$ in {\sc structure} 
@@ -425,9 +426,9 @@ multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} a
 determine plateaus amongst {\sc flock}'s replicate solutions not by identical LLOD, but by visual inspection of 
 partitions that
 are very similar but are perhaps not identical; however such an approach would be labor-intensive
-and would rely on arbitrary, difficult-to-reproduce decisions.  It might be better to use {\sc structure} in such cases.
-Estimating $K$ is a hard problem---especially in real populations that seldom conform to the assumptions of genetic clustering models---and should be undertaken with caution, regardless of the method 
-used. 
+and would rely on arbitrary, difficult-to-reproduce decisions.  It probably better to use {\sc structure} in such cases, keeping in mind, of course, that
+estimating $K$ is a hard problem and should only be undertaken with caution, regardless of the method 
+used. This is especially true in real populations that do not conform to the assumptions of genetic clustering models.
 
 
 We made our comparison between {\sc flock} and the {\em no-admixture} model in 
@@ -451,7 +452,8 @@ frameworks, and this, in turn, can help guide improvement of those algorithms.  
 genetics, the ``Markov recursion'' algorithm of \citet{Gri&Tav1994-AI} was identified by \citet{Felsensteinetal1999} 
 as a special case of importance sampling \citep{Ham&Han1964}, a perspective which allowed 
 \citet{Ste&Don2000} to improve upon the algorithm dramatically.  Here we have identified the {\sc flock}
-algorithm as a limiting case of simulating annealing upon {\sc structure}'s no-admixture model. We hope this will
+algorithm as a limiting case of simulating annealing upon {\sc structure}'s no-admixture model with uncorrelated
+allele frequencies. We hope this will
 help users to understand and interpret {\sc flock}'s behavior and will provide insights that may be useful 
 to {\sc flock}'s authors if they further develop their algorithm.   
 
