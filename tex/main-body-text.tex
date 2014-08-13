@@ -137,7 +137,7 @@ proposing changes to the number of clusters.
 
 
 \subsection*{{\sc flock}}
-Here we translate the recipe given by \citeauthor{Duc&Tur2009} for the 
+Here we translate the procedure given by \citeauthor{Duc&Tur2009} for the 
 {\sc flock} algorithm into a specification in terms of the variables
 defined in the previous section.  We provide the description for a case in which
 it is assumed there are $K$ clusters.
@@ -333,7 +333,8 @@ the $\Delta K$ method supported a $K$ of 3.
 from {\sc flock} made with the program {\sc distruct}. Each horizontal plot represents an individual run of the program {\sc structure}, or the `best run' from a series of runs in {\sc flock}. Within each plot 
 $q_i$ values from {\sc structure} and the normalized likelihood values 
 from {\sc flock}  are represented by a 
-gray-scale vertical bar. The numbers in parentheses on the right indicate how many {\sc structure} runs (out of 6, as indicated) reached the same visually indistinguishable solution, or how many groups of {\sc flock} runs (out of 6) had the same `best run.'}
+%gray-scale
+vertical bar. The numbers in parentheses on the right indicate how many {\sc structure} runs (out of 6, as indicated) reached the same visually indistinguishable solution, or how many groups of {\sc flock} runs (out of 6) had the same visually indistinguishable `best run.'}
     \label{fig:qplots}
 \end{center}
 \end{figure*}
@@ -370,9 +371,11 @@ We've shown here that {\sc flock} is essentially equivalent to the program {\sc 
 on a real data set from {\em O. mykiss} we find that the two programs give similar results, only, at values of
 $K>4$, {\sc flock}'s results appear to be more variable.
 
-
 Though we observed similar results
 between the two programs at low values of $K$, {\sc flock}'s `best-run' solutions became somewhat inconsistent at higher values of $K$.
+This observation was consistent with \citet{Duc&Tur2012}'s comparison of the 
+two programs using simulated data (Fig. 4 in \citet{Duc&Tur2012})
+for $K=4 \& 8, L=10$. 
 This is likely a consequence of the rapidly increasing size of the search space over possible 
 partitions as $K$ and $n$, the number of individuals, increase. 
 The likelihood surface defined on partitions of this space will often
@@ -381,11 +384,18 @@ The peak that  {\sc flock}'s deterministic algorithm finds is entirely determine
 individuals, as it is a deterministic algorithm.
 If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
-possible partitions making it less likely that many (if any at all) will converge to the same local mode. This coupled with the fact that there is 
+possible partitions making it less likely that many (if any at all) will converge to the same local mode. 
+This coupled with the fact that there is 
 ambiguity in what defines a `best run' when all plateaus are of length zero complicates the interpretation
 of results from {\sc flock} if no non-zero plateaus are encountered. The problem of getting 
 caught in local modes is not unique to {\sc flock}---{\sc structure} also can converge to 
-different solutions in complex spaces; however our results suggest this is a bigger problem for {\sc flock}. 
+different solutions in complex spaces; however our results suggest this is a bigger problem for {\sc flock}.
+By increasing the number of loci used in their simulations \citet{Duc&Tur2012} showed, surprisingly, that 
+{\sc flock} did converge on $K=8$, but held no advantage in inference of $K$ over {\sc structure}. We suspect that this 
+resulted from the confined search space defined
+by the small number of individuals (n=240) used in the analysis. 
+%They simulated data using 500 individuals per population but only used 30 of them in the analysis.
+% if you have more loci than individuals per population with high Fst between groups it does great!    
 
  
 One of the advantages of {\sc flock} over other methods for genetic clustering
@@ -395,7 +405,8 @@ comparisons, we did not observe this advantage in our analysis. This appears to 
 our example data set was an order of magnitude larger than the largest data set analyzed in \citet{Duc&Tur2012}.  
 Second, in the comparison by \citet{Duc&Tur2012}, 
 {\sc flock} was set to perform 50 runs and 20 iterations for each $K$ starting at 2 and ending when 
-one of the stopping conditions was met, and computing times for that analysis were compared to ten iterations of {\sc structure} using 
+one of the stopping conditions was met, and computing times for that analysis were compared to ten iterations of 
+the admixture and correlated allele frequency model in {\sc structure} using 
 a 50,000 sweep burn-in followed 
 by a 200,000 sweep sample from the posterior for values of $K$ from 1 to three more than the true 
 value of $K$. 
@@ -455,6 +466,6 @@ as a special case of importance sampling \citep{Ham&Han1964}, a perspective whic
 algorithm as a limiting case of simulating annealing upon {\sc structure}'s no-admixture model with uncorrelated
 allele frequencies. We hope this will
 help users to understand and interpret {\sc flock}'s behavior and will provide insights that may be useful 
-to {\sc flock}'s authors if they further develop their algorithm.   
+in the potential development of the {\sc flock} algorithm.   
 
  
