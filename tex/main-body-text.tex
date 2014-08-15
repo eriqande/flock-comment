@@ -137,7 +137,7 @@ proposing changes to the number of clusters.
 
 
 \subsection*{{\sc flock}}
-Here we translate the procedure given by \citeauthor{Duc&Tur2009} for the 
+Here we translate the procedure given by \citet{Duc&Tur2009} for the 
 {\sc flock} algorithm into a specification in terms of the variables
 defined in the previous section.  We provide the description for a case in which
 it is assumed there are $K$ clusters.
@@ -367,15 +367,15 @@ the number of genetic clusters ($K$) in a collection has dramatically increased 
 epidemiology, and conservation
 genetics. The most commonly used program for doing this is {\sc structure} \citep{Pritchardetal2000,Falushetal2003}, 
 a full-featured program with many options that is widely-used, well-tested, and universally regarded as a standard tool amongst molecular ecologists. 
-We've shown here that {\sc flock} is essentially equivalent to the program {\sc structure} using the no-admixture model with non-correlated allele frequencies. In comparing results from {\sc flock} and {\sc structure} 
+We've shown here that the model incorporated by {\sc flock} is essentially equivalent to the no-admixture model with non-correlated allele frequencies within the program {\sc structure}. In comparing results from {\sc flock} and {\sc structure} 
 on a real data set from {\em O. mykiss} we find that the two programs give similar results, only, at values of
 $K>4$, {\sc flock}'s results appear to be more variable.
 
 Though we observed similar results
 between the two programs at low values of $K$, {\sc flock}'s `best-run' solutions became somewhat inconsistent at higher values of $K$.
 This observation was consistent with \citet{Duc&Tur2012}'s comparison of the 
-two programs using simulated data (Fig. 4 in \citet{Duc&Tur2012})
-for $K=4 \& 8, L=10$. 
+two programs using simulated data 
+for $K=4$ \& 8, $L=10$ (Fig. 4 in \citet{Duc&Tur2012}). 
 This is likely a consequence of the rapidly increasing size of the search space over possible 
 partitions as $K$ and $n$, the number of individuals, increase. 
 The likelihood surface defined on partitions of this space will often
@@ -390,10 +390,8 @@ ambiguity in what defines a `best run' when all plateaus are of length zero comp
 of results from {\sc flock} if no non-zero plateaus are encountered. The problem of getting 
 caught in local modes is not unique to {\sc flock}---{\sc structure} also can converge to 
 different solutions in complex spaces; however our results suggest this is a bigger problem for {\sc flock}.
-By increasing the number of loci used in their simulations \citet{Duc&Tur2012} showed, surprisingly, that 
-{\sc flock} did converge on $K=8$, but held no advantage in inference of $K$ over {\sc structure}. We suspect that this 
-resulted from the confined search space defined
-by the small number of individuals (n=240) used in the analysis. 
+By increasing the number of loci used in their simulations, \citet{Duc&Tur2012} showed  that 
+{\sc flock} was able to converge in a simulated data set with $K=8$, but held no advantage in inference of $K$ over {\sc structure}. That simulated data set, with $n=240$ was considerably smaller and less complex than the real data investigated here.
 %They simulated data using 500 individuals per population but only used 30 of them in the analysis.
 % if you have more loci than individuals per population with high Fst between groups it does great!    
 
@@ -437,9 +435,9 @@ multiple small batches and using the programs {\sc clumpp} \citep{Jak&Ros2007} a
 determine plateaus amongst {\sc flock}'s replicate solutions not by identical LLOD, but by visual inspection of 
 partitions that
 are very similar but are perhaps not identical; however such an approach would be labor-intensive
-and would rely on arbitrary, difficult-to-reproduce decisions.  It probably better to use {\sc structure} in such cases, keeping in mind, of course, that
+and would rely on arbitrary, difficult-to-reproduce decisions.  It is probably better to use {\sc structure} in such cases, keeping in mind, of course, that
 estimating $K$ is a hard problem and should only be undertaken with caution, regardless of the method 
-used. This is especially true in real populations that do not conform to the assumptions of genetic clustering models.
+used. This is especially true in real populations which do not conform to the assumptions of genetic clustering models.
 
 
 We made our comparison between {\sc flock} and the {\em no-admixture} model in 
@@ -447,7 +445,7 @@ We made our comparison between {\sc flock} and the {\em no-admixture} model in
 its {\em with-admixture} model.  Such a model explicitly tries to account for the admixed origin
 of individuals in the sample and thus may be a more appropriate model than the no-admixture model,
 or {\sc flock}, when the sample contains individuals that are admixed between populations.  A further advantage
-of the with-admixture model is that it allows inferences for the population of origin of individual alleles at 
+of the with-admixture model is that it allows inference of the population of origin of individual alleles at 
 different loci within individuals, and not just of the individuals themselves.   We also note that {\sc flock} 
 corresponds to {\sc structure}'s model with uncorrelated allele frequency priors. \citet{Falushetal2003} found that
 using their ``$F$-model,'' which assumes that allele frequencies between populations are correlated {\em a priori}, 
