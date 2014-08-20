@@ -1,0 +1,47 @@
+\documentclass[11pt]{letter}
+\usepackage{graphicx}
+
+
+\textwidth = 6.5 in
+\textheight = 10 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = -.75 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+
+\date{}
+
+\address{\mbox{}\vspace*{-1.0in}
+\mbox{}\hfill
+\includegraphics*{./images/NMFS_letterhead.pdf}\\} 
+
+\signature{Eric C. Anderson \\ \mbox{} \\ eric.anderson@noaa.gov\\ ph.~831-420-3983}
+
+\begin{document}
+
+\begin{letter}{ \today 
+
+Editor \\
+Molecular Ecology Resources\\
+}
+
+\opening{Dear Editor:}
+This letter accompanies our submission of, ``Interpreting the {\sc flock} algorithm from a statistical perspective,'' by Eric C. Anderson and Patrick D. Barry.  In this short comment we show that the method employed in the software {\sc flock} (published in {\em Molecular Ecology Resources} in 2009) can be identified as a special case of simulated annealing upon one of the models implemented in the software {\sc structure}.  
+
+In two publications {\sc flock}'s authors have been somewhat outspoken in asserting that {\sc flock} is very different from {\sc structure}. Indeed, we embarked upon this project because numerous colleagues were recommending we try the program {\sc flock} in cases where {\sc structure} did not reveal much population structure.  Upon a close reading of the mathematical details of {\sc flock}'s algorithm, however, it was clear that {\sc flock} is very similar to {\sc structure}.  We describe this from a mathematical perspective and then perform analyses on a real data set to confirm it.  These analyses additionally expose some very real problems suffered by the {\sc flock} approach to estimating $K$, the number of clusters.  While we feel our findings would easily substantiate a position that there were few, if any, reasons to use {\sc flock} instead of {\sc structure}, we don't assert that point strongly in the paper. Rather, in consideration of the work that has been done to develop {\sc flock}, we try to adopt a neutral tone, stating our mathematical and simulation findings as plainly as possible and allowing readers to make up their own minds.  Of course, if the editors felt that a stronger stance were appropriate, we could provide that, as well.
+
+
+We suspect that {\sc flock} is being recommended to many others in our field as, ``very different from other clustering programs," which is something of a shame given that {\sc structure} is a firmly established and well-tested analytical tool in our field.  Consequently, we find our paper very relevant to the readership of {\em Molecular Ecology Resources}. 
+
+A draft of this paper was sent to Julie Turgeon (the corresponding author on the original {\sc flock} paper) a little over one month ago, inviting her and her coauthor to provide comments and/or recommend any changes, but she has chosen to respond after submission.
+
+
+\closing{Best regards,}
+\setlength{\topmargin}{0in}
+\textheight = 9 in
+\end{letter}
+
+ \end{document}   
