@@ -27,7 +27,8 @@ entirely deterministic'' \citep[][p.~736]{Duc&Tur2012}.
 However, here we identify 
 the close relationship between {\sc flock}'s algorithm and the program
 {\sc structure}.  Although the algorithm in {\sc flock}
-is, as the authors point out, entirely deterministic, it can be interpreted as a 
+is, as the authors point out, deterministic (apart from a random initial allocation of 
+individuals to cluster), it can be interpreted as a 
 limiting case of a probabilistic search algorithm applied to one of {\sc structure}'s
 models.  More specifically, the {\sc flock} 
 algorithm is a special case of the simulated annealing
@@ -380,7 +381,7 @@ This is likely a consequence of the rapidly increasing size of the search space 
 partitions as $K$ and $n$, the number of individuals, increase. 
 The likelihood surface defined on partitions of this space will often
 be multimodal---possessing numerous local peaks and troughs.
-The peak that  {\sc flock}'s deterministic algorithm finds is entirely determined by the initial allocation of 
+The peak that  {\sc flock}'s algorithm finds is entirely determined by the initial, random, allocation of 
 individuals, as it is a deterministic algorithm.
 If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
@@ -464,6 +465,8 @@ as a special case of importance sampling \citep{Ham&Han1964}, a perspective whic
 algorithm as a limiting case of simulating annealing upon {\sc structure}'s no-admixture model with uncorrelated
 allele frequencies. We hope this will
 help users to understand and interpret {\sc flock}'s behavior and will provide insights that may be useful 
-in the potential development of the {\sc flock} algorithm.   
+in the potential development of {\sc flock} or other clustering algorithms.   
 
- 
+
+\section*{Acknowledgments}
+We are grateful to Robin Waples for helpful comments on a draft of this paper.
