@@ -9,7 +9,7 @@ Google Scholar.  A variety of other
 clustering methods have been developed that are all closely related to 
 {\sc structure}, for example {\sc NewHybrids} \citep{And&Tho2002}, {\sc 
 BayesAss+} \citep{Wil&Ran2003}, and {\sc baps} 
-\citep{Coranderetal2004}. An overview of the similarities between these methods can be 
+\citep{Coranderetal2004}. An overview of the similarities between several of these methods can be 
 found in \citet{Anderson2009PGAC}.
 
 The recently introduced software {\sc flock} \citep{Duc&Tur2009} has
@@ -28,7 +28,7 @@ However, here we identify
 the close relationship between {\sc flock}'s algorithm and the program
 {\sc structure}.  Although the algorithm in {\sc flock}
 is, as the authors point out, deterministic (apart from a random initial allocation of 
-individuals to cluster), it can be interpreted as a 
+individuals to clusters), it can be interpreted as a 
 limiting case of a probabilistic search algorithm applied to one of {\sc structure}'s
 models.  More specifically, the {\sc flock} 
 algorithm is a special case of the simulated annealing
@@ -107,7 +107,7 @@ the full conditional distribution of $Z_i$ becomes somewhat more involved,
 but can be computed by the following reasoning. First, the 
 conditional distribution of $Y_{i\ell}$, given that individual $i$ is from subpopulation $k$
 (\ie $Z_i=k$), depends on the 
-cluster memberships and genotypes  of all the remaining individuals,
+cluster memberships and genotypes at locus $\ell$ of all the remaining individuals,
 which we denote by  $Z_{(-i)}$ and $Y_{(-i)\ell}$, respectively.
 This full conditional for $Y_{i\ell}$ follows 
 a Compound Dirichlet Multinomial distribution (CDM):
@@ -118,12 +118,20 @@ a Compound Dirichlet Multinomial distribution (CDM):
 \end{eqnarray}
 where $\#_{(-i)}(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$
 found in individuals {\em other than individual $i$} that currently
-belong to cluster $k$. Thus, calculating (\ref{eq:cdm}) for each value of $Z_i=k \in 
+belong to cluster $k$. Thus, calculating the product of (\ref{eq:cdm}) across all the loci
+($\ell = 1,\ldots,L$) gives the full conditional multilocus genotype probability 
+for individual $i$:
+\begin{eqnarray}
+\lefteqn{P(Y_{i}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)}) =}  \label{eq:cdm-multi-prob} \\
+& &  \prod_{\ell=1}^L P(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell}). \nonumber
+\end{eqnarray}
+Computing (\ref{eq:cdm-multi-prob}) for 
+for each value of $Z_i=k \in 
 \{1,\ldots,K\}$ 
 and normalizing to sum to one gives the full conditional distribution for 
 $Z_i$:
 \begin{equation}
-P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})~~,~~k=1,\ldots,K.
+P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)})~~,~~k=1,\ldots,K.
 \label{eq:fc}
 \end{equation}
 A new value of $Z_i$ would be drawn from (\ref{eq:fc}) if doing Gibbs sampling in this
@@ -161,17 +169,18 @@ also employed the ``Bayesian'' approach of \citet{Ran&Mou1997} in their
 software {\sc geneclass2}  \citep{Piryetal2004}.  If \citeauthor{Duc&Tur2009}
 use the approach of \citet{Ran&Mou1997}, then the $i\thh$ individual will
 be reallocated to whichever cluster gives the highest value to 
-$P(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell})$, which is exactly the probability
-defined in (\ref{eq:cdm}).  
+$P(Y_{i}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)})$, which is 
+exactly the probability
+defined in (\ref{eq:cdm-multi-prob}).  
 If \citeauthor{Duc&Tur2009} use the simpler ``add 0.01 and renormalize''
 formulation of \citet{Paetkauetal1995}, then their reallocations are based
 on maximizing a likelihood that, although it may not be formally identical to
-that in (\ref{eq:cdm}), is nearly identical to it.   
+the probability defined in (\ref{eq:cdm-multi-prob}), is nearly identical to it.   
 
 It is worth pointing out that, since the
 {\sc structure} model without admixture assumes a uniform prior over 
-the $K$ different clusters, $P(Y_{i\ell}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)\ell})$
-is exactly proportional to $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})$, which 
+the $K$ different clusters, $P(Y_{i}~|~Z_i=k,~Z_{(-i)},~Y_{(-i)})$
+is exactly proportional to $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)})$, which 
 we have shown is the
 full conditional distribution for $Z_i$ in the {\sc structure} model after
 integrating out $\theta$.  Thus, we have shown that, doing Gibbs
@@ -179,14 +188,14 @@ sampling for $Z_i$ in  the {\sc structure} model in which $\theta$ has been
 integrated out would involve sampling a new value of $Z_i$ from the 
 probability distribution,
 \[
-P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})
+P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)})
 \]
 and that the updates that
 {\sc flock} makes to each $Z_i$ involve assigning to $Z_i$
 \begin{equation}
-\arg\max_k P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell}),
+\arg\max_k P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)}),
 \end{equation}
-\ie the value of $k$ that maximizes $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})$
+\ie the value of $k$ that maximizes $P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)})$
 (or, as stated above, a nearly identical function of $k$, depending on how
 the program {\sc flock} treats alleles that are not observed in certain clusters).
 
@@ -206,7 +215,7 @@ no correlated allele frequency prior, after integrating out the unknown
 allele frequencies, the updates for each $Z_i$ would be made from the 
 distribution
 \[
-\biggl[P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)\ell})\biggr]^\beta
+\biggl[P(Z_i=k~|~Y_i, ~Z_{(-i)},~Y_{(-i)})\biggr]^\beta
 \]
 which is the same full conditional distribution as the marginalized {\sc structure}
 model (equation~\ref{eq:fc}), raised
@@ -304,7 +313,7 @@ of runs with $K = 2$ to 4, {\sc flock} obtained a nearly identical clustering of
 runs yielded identical clustering (same mean LLOD score) while all other runs 
 differed by at most the allocation of 13 individuals. As 
 $K$ increased so did the number of solutions
-that {\sc flock} found (Fig 1). For all groups of runs for $K > 2$, no plateaus were observed---all intial 
+that {\sc flock} found (Fig 1). For all groups of runs for $K > 2$, no plateaus were observed---all initial 
 allocations resulted in solutions that differed. 
 {\sc flock} still produced estimates of the LLOD by individual for the 
 'best run', however, it is unclear in these cases what constitutes the 'best run' as all plateau lengths are 
@@ -382,7 +391,7 @@ partitions as $K$ and $n$, the number of individuals, increase.
 The likelihood surface defined on partitions of this space will often
 be multimodal---possessing numerous local peaks and troughs.
 The peak that  {\sc flock}'s algorithm finds is entirely determined by the initial, random, allocation of 
-individuals, as it is a deterministic algorithm.
+individuals, as the algorithm proceeds deterministically after the initial random allocation.
 If the number of initial allocations does not increase
 as $K$ is increased, the starting allocations become diffusely scattered in the space of all
 possible partitions making it less likely that many (if any at all) will converge to the same local mode. 
