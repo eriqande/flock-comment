@@ -237,25 +237,22 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 {\sc flock} seems to find the same solution less consistently than does {\sc structure}.
 
 
-
 \section*{Comparison of {\sc structure} and {\sc flock} results}
-Data sets with known $K$ were simulated
-(code provided on GitHub repository https://github.com/eriqande/flock-comment)
+Data sets were simulated (code provided on GitHub repository 
+https://github.com/eriqande/flock-comment)
 and evaluated in the programs {\sc flock} and {\sc structure} 
-for the known value.The first dataset simulated was composed of five populations of 
-sizes 500, 500, 800, 1100, and 1100 comprised of individuals 
-with 15 loci and an average pairwise $F_{ST} = 0.03$ between populations. 
-The second and third dataset were simulated with population sizes
-250, 250, 400, 550, and 550 and average pairwise $F_{ST} = 0.02 and 0.01$
-respectively. {\sc flock} was run nine times using the default setting for all 
+for the known value ($K=5$). Each dataset was composed of five populations of 
+sizes 250, 250, 400, 550, and 550 comprised of individuals 
+with 15 loci and an average pairwise $F_{ST} = 0.03, 0.02, 0.01, and 0.005$ among
+populations. {\sc flock} was run nine times at $K=5$ with the default setting for all 
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
-LLOD threshold = 0) for the known value of $K$. The no-admixture, 
-uncorrelated-allele-frequency model implemented in {\sc structure} was run nine times with 
-a 5,000 sweep burn-in followed by a 20,000 sweep sample from the posterior. 
-% Looking back some of the runs were under different conditions, not huge differences. 
-% But 1000 burn-in and 5,000 sweep look about the same
-All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB
+LLOD threshold = 0). The default model in {\sc structure}, the no-admixture and correlated
+allele frequency (NA-C) model, the no-admixture and non-correlated allle frequency (NA-NC) model, 
+and the no-admixture and non-correlated allele frequency (NA-NC) model 
+were run nine times with a 5,000 sweep burn-in followed by a 20,000 sweep sample 
+from the posterior. All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB
 of RAM running 64-bit Windows 7. 
+
 
 For each set of runs, {\sc flock} reports the 
 normalized likelihood values (the exponentiated log-likelihood value for an individual's 
@@ -276,13 +273,15 @@ have converged to the same solution by detecting that they have the same mean LL
 {\sc flock} parlance, a series of runs that have converged to the same solution are termed a ``plateau.'' 
 The plateau record is a list of how many runs converged to the same allocation
 of individuals. 
-\citet{Duc&Tur2012} developed two stopping rules that they use to estimate $K$.\citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau of
+\citet{Duc&Tur2012} developed two stopping rules that they use to estimate $K$. 
+\citet{Duc&Tur2012} advocate running  {\sc flock} until either a single plateau of
 $\geq 6$ runs is reached or four consecutive $K$ values yield no plateaus. If the first stopping condition is satisfied,
 the $K$ for which there is a single plateau of $\geq 6$ runs is the point estimate for $K$. Alternatively, 
 if multiple plateaus are observed with at least one plateau of $\geq 6$ runs, the largest value of $K$ that satisfies 
 this conditon should be taken as the lower bound estimate of $K$. If no plateaus of $\geq 6$ runs are observed, $K$
 is declared {\em undecided}.  
  
+%This section may get cut depending on how much we want to talk about estimating K.
 It is now common practice to use the approximate marginal likelihood ($\ln P(D)$) from {\sc structure}
 or a derived quantity such as $\Delta K$ \citep{Evannoetal2005} to try to estimate $K$.
 While we take the stance that estimates of $K$ made with {\em any} unsupervised clustering algorithm
@@ -292,61 +291,63 @@ estimating $K$ to results obtained using $\ln P(D)$ and $\Delta K$, and we do so
 
 \subsection*{Results} 
 Run times for both programs were relatively short, albeit in the case of {\sc flock} 
-non-trivial. {\sc flock} averaged 67.3 minutes
+non-trivial. {\sc flock} averaged 32.8 minutes
 for each run of the first simulated dataset, while each group of 
-9 iterations for {\sc structure} averaged 18 minutes. CALCULATE
-TIME FOR OTHER SIMULATIONS
+9 iterations for {\sc structure} averaged 14.7, 15.3 and 18.7 minutes
+for the NA-NC, NA-C, and A-C models respectively. 
  
 {\sc flock} and {\sc structure} provide nearly identical results in 
 terms of how individuals are allocated among runs for 
 all simulations (Fig.~\ref{fig:Sims}). As $F_{ST}$ decreases 
-between populations the solutions that {\sc flock} are more variable. 
-The average Euclidean distance between the known $q_i$ value and 
-the infered value from each program increases as the genetic 
-differentiation among populations decreases. {\sc flock} had an 
-smaller mean Euclidean distance over all runs for simulations 
-1 and 2, but had much larger variation in simulation 3 (Fig.~\ref{fig:ED}).
-%calculate Euclidean distance between flock and structure values. 
+between populations the solutions that {\sc flock} found were more variable.
+Of the nine runs of {\sc flock} for the first simulated dataset, between 0 and 22
+differences between the final arrangement of indivuals within the ($K=5$)
+clusters. Of the nine runs, four pairs of runs found the 
+same solution (runs 1 \& 2, 5 \& 6, 3 \& 7, and 4\&9). Run 8, which 
+had no plateaus, was the most different with an average of 19.86 differences.
+For the third simulated dataset, the number 
+of differences ranged from 482 to 911.  {\sc structure} showed less variation for 
+each set of simulations. Solutions for the first simulated dataset differed by the
+placement of between 0 and 4 individuals and between 5 and 17 for the third 
+dataset.
+%Create a figure comparing all of the values. All the text is somewhat hard to read
  
-There was very little variation in the 'best-run' returned by {\sc flock}. 
-From the nine different sets of runs for the first simulated dataset, 
-three groups of runs ended with 
-identical clusters (runs 2,8 \& 9, runs 1 \& 3, and runs 4 \& 7). 
-Of the other 31 pairwise comparisions that were not identical
-15 differed by the placement of 1 indvidual, 11 differed by the placement
-of 2 individuals, and 5 differed by the placement of 3 individuals. 
-
-Despite the similar allocation of individuals into $K$ clusters, the 
+Plateau lengths greater than 0 were only obsered for the first simulated dataset. For each
+of the nine runs of {\sc flock} the plateau lengths varied from 0 to 4. In no analysis 
+did we observe a plateau lenght greater than 6. Despite the similar allocation of individuals into $K$ clusters, the 
 plateau analysis to estimate $K$ in {\sc flock} did not support $K = 5$. 
-For the first simulated dataset plateaus of varioius lengths were observed, 
+
 but none greater than 5 while no plateaus were observed for either second or 
 third simulated datasets.
 
+
+
 \begin{figure*}
 \begin{center}
-    \includegraphics[width=\textwidth]{images/Figures-Pat/Simulations_Fig1.pdf}   % Use this if we want it color (I'll make greyscale later)  
+    \includegraphics[width=\textwidth]{images/Figures-Pat/Fig_AllSim.pdf}   % Use this if we want it color (I'll make greyscale later)  
     \caption{Plots of $q_i$ values from {\sc structure} and the normalized likelihood values 
 of {\sc flock} made with the program {\sc distruct}. Each horizontal plot represents one of nine individual runs of the program {\sc structure}, or the `best run' from a series of nine runs in {\sc flock} at $K=5$. Within each plot 
 $q_i$ values from {\sc structure} and the normalized likelihood values 
 from {\sc flock}  are represented by a 
 %gray-scale
-vertical bar. Simulation 1 was composed of populations of 
-size 500, 500, 800, 1100, and 1100 with an average pairwise $F_{ST} = 0.03$ between populations. 
-The second and third dataset were simulated with population sizes
-250, 250, 400, 550, and 550 and average pairwise $F_{ST} =$ 0.02 and 0.01
-respectively.}
+vertical bar. Each dataset is comprised of five populations of sizes 550, 550, 400, 250, and 250 individuals. The 
+average pairwise $F_{ST}$ among populations was 0.03, 0.02, 0.01, and 0.005 for simulations 1, 2, 3, and 4 respecitively. 
+}
     \label{fig:Sims}
 \end{center}
 \end{figure*}
 
 \begin{figure*}
 \begin{center}
-    \includegraphics[width=0.5\textwidth]{images/Figures-Pat/ED_fig2.pdf}   
-% HIDEOUS GRAPH, we will talk and I might make one with actual distributions! 
-    \caption{Eucledian distance between true $q_i$ value and inferred value from {\sc structure} and {\sc flock} .}
-    \label{fig:ED}
+    \includegraphics[width=0.5\textwidth]{images/Figures-Pat/Loss.pdf}
+    \caption{Comparision of zero-One loss for the admixture and correlated allele frequency (A-C) model, 
+the no-admixture and correlated allele frequency (NA-C) model, the no-admixture and non-correlated 
+allle frequency (NA-NC) model, the no-admixture and non-correlated allele frequency (NA-NC) 
+model in {\sc structure} and the {\sc flock} model for each of the four simulated datasets.}
+    \label{fig:Loss}
 \end{center}
 \end{figure*}
+
 
 \section*{Conclusions}
 In the past decade, the use of genetic markers to identify population structure and to attempt inference of
