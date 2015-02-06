@@ -235,16 +235,29 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 {\sc flock} seems to find the same solution less consistently than does {\sc structure}.
 
 \section*{Comparison of {\sc structure} and {\sc flock}}
-The implementation of {\sc flock} as a VBA procedure (macro) in Microsoft Excel precludes
-a rigorous evaluation of its behavior due to the inability to efficiently batch process. Consequenty, 
-we adapted the source code from {\sc structure} as describe above to create {\sc flockture}
-(code provided on GitHub repository https://github.com/eriqande/flockture) in order to accurately
-assess the strengths and weaknesses of the {\sc flock} algorithm. First, using simulated 
-data we demonstrated that {\sc flock} and {\sc flockture} are essentially equivalent programs.
-Second, we simulated and analyzed datasets with {\sc flockture} and three models in {\sc structure} 
-(the admixture and correlated allele frequency (A-C) model, 
-the no-admixture and correlated allele frequency (NA-C) model, 
-and the no-admixture and non-correlated allele frequency (NA-NC) model) to help better understand
+{\sc flock}, initially designed to map admixture in hybrid populations 
+\citep{Duc&Tur2009}, was recently proposed as an alternative to 
+{\sc structure} to estimate the number of populations from a collection with 
+unsampled source populations \citep{Duc&Tur20123}. In doing so, 
+{\sc flock} relies on individuals with like genotypes clustering together 
+through an iterative process. It stands to reason then, a reasonable way 
+to gauge how well the algorithm accomplishes the main objective 
+clustering of individuals into correct groups is to simulate data of known 
+population structure with varying levels of differentiation and 
+evaluate how well it does assuming the correct number of populations. 
+The implementation of {\sc flock} as a VBA procedure (macro) in 
+Microsoft Excel precludes a rigorous evaluation of its behavior due 
+to the inability to efficiently batch process. Consequenty, we adapted 
+the source code from {\sc structure} as describe above to create {\sc flockture}
+(code provided on GitHub repository https://github.com/eriqande/flockture) 
+in order to accurately assess the strengths and weaknesses of the {\sc flock} 
+algorithm. First, using simulated data we demonstrated that {\sc flock} 
+and {\sc flockture} are essentially equivalent programs.
+Second, we simulated and analyzed datasets with {\sc flockture} 
+and three models in {\sc structure} (the admixture and correlated 
+allele frequency (A-C) model, the no-admixture and correlated 
+allele frequency (NA-C) model, and the no-admixture and non-correlated 
+allele frequency (NA-NC) model) to help better understand
 under what conditions, if any, running {\sc flock} may be preferable to {\sc structure} . 
 
 For each set of runs, {\sc flock} reports the 
@@ -253,7 +266,7 @@ membership to each of $K$ clusters, scaled to sum to one) for a run belonging to
 longest plateau - refered to as the 'best run' by \citep{Duc&Tur2012} (see below).
 These values can be compared to the $q_i$ values
 returned by {\sc structure}, which, in the no-admixture case, are posterior 
-probabilities of cluster membership.\citet{Duc&Tur2012} describe a method 
+probabilities of cluster membership. \citet{Duc&Tur2012} describe a method 
 for using {\sc flock} to estimate, $K$, the number of
 subpopulations. The user must specify both the number of runs (different initial allocations of individuals 
 to each cluster) as well as the number of iterations. (In each iteration every individual 
@@ -286,10 +299,12 @@ following criteria: (1) Clustering of individuals into corrected population as d
 processor and 8GB of RAM running 64-bit Windows 7. 
 
 Once we were confident that no major differences in inference existed between  {\sc flock} and {\sc flockture}
-we used  {\sc flockture} to analyze a many more datasets that encompassed a broader 
-range of population differentiation. Fourteen datasets were simulated as above (five populations 
-comprised of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes)
-with average pairwise $F_{ST}$ values ranging between 0.11 and 0.005. 
+we used  {\sc flockture} to analyze 48 datasets for two marker types 
+(microsatellites and single nucleotide polymorphisms (SNPs))  that encompassed a broader 
+range of population differentiation. The 96 datasets were simulated as above (five populations 
+comprised of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes for the micro satellites
+and 96 loci for the SNPs)
+with average pairwise $F_{ST}$ values ranging between 0.005 and 0.040. 
  {\sc flockture} was run with the default run parameters and each run of 
 {\sc structure} consisted of a 5,000 sweeep burn-in followed by a 20,000 sweep sample
 from the posterior distribution. All runs were performed on a Macbook with a 2.3 GHz i7 processor
@@ -319,14 +334,6 @@ the largest plateau (Supp. Table 1). Multiple runs of {\sc flockture} demonstrat
 variability that we would expect from randomizing the initial grouping of individuals to 
 initiate the algorithms.
 
-Run times for both programs were relatively short, albeit in the case of {\sc flock} 
-non-trivial. {\sc flock} averaged 1966.67 ($\pm 64.32$) seconds
-over all runs, while {\sc flockture} averaged 9.83 ($\pm 0.21$) seconds. Run times showed a 
-general increase as population structure became more subtle, however {\sc flock} did not 
-demonstrate a linear increase. % this is surprising to me as it is coin the same thing irrespective of FST
-% What I assume is happening is that as FST increases you have a lot more individuals being shuffled around
-% at later iterations leading to increased process times. Seems reasonable.  
-
 \begin{figure*}
 \centering
 \begin{minipage}{.45\textwidth}
@@ -345,6 +352,14 @@ with average pairwise $F_{ST} = $ 0.03. }
   \label{fig:FvFqi}
 \end{minipage}
 \end{figure*}
+
+Run times for both programs were relatively short, albeit in the case of {\sc flock} 
+non-trivial. {\sc flock} averaged 1966.67 ($\pm 64.32$) seconds
+over all runs, while {\sc flockture} averaged 9.83 ($\pm 0.21$) seconds. Run times showed a 
+general increase as population structure became more subtle, however {\sc flock} did not 
+demonstrate a linear increase. % this is surprising to me as it is coin the same thing irrespective of FST
+% What I assume is happening is that as FST increases you have a lot more individuals being shuffled around
+% at later iterations leading to increased process times. Seems reasonable.  
 
 \subsection*{{\sc flockture} and {\sc structure}} 
 As expected {\sc flockture} and {\sc structure} both perform extremely well on datasets with
@@ -373,19 +388,26 @@ data (Fig.~\ref{fig:FvSdistruct}  Simulation 13). {\sc district} plots of the no
 {\sc flockture} were consistent and suggestive of population structure within the dataset until simulation 17
 after which the majority of the 'best runs' were substantially different in how they clustered individuals. 
  
- 
+  \begin{figure*}
+\centering
+\includegraphics[width=.9\linewidth]{images/Figures-Pat/uSatloss.pdf}%Need to make a greyscale version
+  \caption{Zero-one loss over 9 replicate runs of the admixture and correlated allele 
+  frequency (A.C) model, 
+the no-admixture and correlated allele frequency (NA.C) model, 
+and the no-admixture and non-correlated allele frequency (NA.NC) model in {\sc structure} and {\sc flockture}.}
+  \label{fig:uSatLoss}
+\end{figure*} 
+
  \begin{figure*}
 \centering
-  \includegraphics[width=.9\linewidth]{images/Figures-Pat/FvSloss1.pdf}
+  \includegraphics[width=.9\linewidth]{images/Figures-Pat/SNPloss.pdf}%Need to make a greyscale version
   \caption{Zero-one loss over 9 replicate runs of the admixture and correlated allele 
-  frequency (A-C) model, 
-the no-admixture and correlated allele frequency (NA-C) model, 
-and the no-admixture and non-correlated allele frequency (NA-NC) model in {\sc structure} and {\sc flockture}. 
-Average pairwise $F_{ST}$ 
-values between populations is listed above each graph.}
-  \label{fig:FvSloss}
-\end{figure*} % These graphs need to be redone so that text is legible and corrected for the NA-C NOT the A-NC 
-%model in structure. I probably had a transcription error in R. Check code to be sure.
+  frequency (A.C) model, 
+the no-admixture and correlated allele frequency (NA.C) model, 
+and the no-admixture and non-correlated allele frequency (NA.NC) model in {\sc structure} and {\sc flockture}.}
+  \label{fig:SNPloss}
+\end{figure*} 
+
 
  \begin{figure*}
 \centering
