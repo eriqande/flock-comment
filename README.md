@@ -28,33 +28,21 @@ own before we pubish it.
 
 See TERMS.md for more information.
 
-## R script 'Flock2Structure' 
-The R script 'Flock2Structure' will read Flock formatted results files (excel .XLS), 
-create population q values and extract individual q values. These values will be 
-placed inside of the output format of Structure (StructOuput_skeleton_k=*.txt files) 
-so that results can be run through the programs CLUMPP and Distruct. If the user wishes
-to run more k, similarly formatted skeleton files should be added to the directory.
-The raw output from Flock should be stored in the working directory in a folder 
-titled 'Flock-output-Raw' and the skeleton files should be stored in the working directory. 
+## R script 'FLOCKTUREvSTURCTUREnew.R' 
 
-To format Flock output so that it can be compared with Structure output, 
-open the Flock2Structure.R script in an editor such as Rstudio (our favorite),
-Tinn-R, Vim (with VimR), etc. You should be working in the 'ForPipeline' 
-directory where Flock2Structure lives. All Flock results are stored in 
-the folder 'Flock-output-Raw'. Run the R script in the blocks separated by #s.
-Note that this should be done on a Mac or Linux OS as system commands are
-employed that cannot be passed to DOS. Part of the code uses Java to read from
-Excel. Most moderately equipped machines should not have issues, but if heap 
-errors are encountered the java parameters options on line 37 may help ameliorate
-the problem. 
+The R script 'Flock2Structure.new' will rerun the analyses comparing Structure and FLOCKTURE from the manuscript. The code is divided into 5 main parts: (1) Simulate data (2) Run FLOCKTURE (3) Run STRUCTURE (4) Run CLUMPP and DISTRUCT, & (5) Compute zero-one loss and graph output.  In order to do this you will need to clone a few git repositories:
 
-Once the code is executed a folder named 'Flock-output-Formatted' should be created
-with Flock results now formatted such that they can be processed by the programs 
-CLUMPP and Distruct. 
+```sh
+git clone https://github.com/eriqande/flock-comment.git
+git clone https://github.com/eriqande/flockture.git
+git clone https://github.com/eriqande/slg_pipe.git
+```
+Please note that the executables in the slg_pipe are for Mavericks OS and should be changed if you have a different OS. Follow the instructions in each of the readme files on how to (1) compile the FLOCKTURE code and (2) set up slg_pipe.
 
-After CLUMP and Distruct have been run, code exists at the end of the R script to 
-import relabeled individual q values for comparison. Relabeled CLUMP output
-should be stored in a folder titled 'intermediate' and  be of the form 
-'Output_00K.perms_X' where K is the number of clusters and X is the iteration.
+Once FLOCKTURE and the slg_pipe are setup, open the FLOCKTUREvSTRUCTUREnew.R script in your favorite editor such as Rstudio, Tinn-R, Vim (with VimR), etc. The code should be executed for each of the 5 main parts separately. There are a few options that can be changed:
+(1) Marker type (line10): Set to 1 for microsatellites and 2 for SNPs
+(2) Reps (line33): How many times do you want to run all models. Can be set from 1-9.
+(3) MGrate (lines37/40): This is a vector of migration rates for the coalescent simulation. These values determine the amount of population differentiation among the five populations simulated. 
+(3) Seedset (line32): Set from 1-3. These are seeds for simulating data. In the manuscript we simulated 16 datasets with varying migration rates using the same random seeds, and then changed the random seeds twice to simulate the remaining 32 for each marker type. Setting this to 3 will run the full set of simulations.
 
 
