@@ -39,7 +39,7 @@ git clone https://github.com/eriqande/slg_pipe.git
 ```
 Please note that the executables in the slg_pipe are for Mavericks OS and should be changed if you have a different OS. Follow the instructions in each of the readme files on how to (1) compile the FLOCKTURE code and (2) set up slg_pipe.
 
-Once FLOCKTURE and the slg_pipe are setup, open the FLOCKTUREvSTRUCTUREnew.R script in your favorite editor such as Rstudio, Tinn-R, Vim (with VimR), etc. The code should be executed for each of the 5 main parts separately. There are a few options that can be changed:
+Once FLOCKTURE and the slg_pipe are setup, open the FLOCKTUREvSTRUCTURE.R script in your favorite editor such as Rstudio, Tinn-R, Vim (with VimR), etc. The code should be executed for each of the 5 main parts separately. There are a few options that can be changed:
 (1) Marker type (line10): Set to 1 for microsatellites and 2 for SNPs
 (2) Reps (line33): How many times do you want to run all models. Can be set from 1-9.
 (3) MGrate (lines37/40): This is a vector of migration rates for the coalescent simulation. These values determine the amount of population differentiation among the five populations simulated. 

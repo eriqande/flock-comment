@@ -1,5 +1,13 @@
 #### FLOCKTURE vs STRUCTURE ####
+#load some useful libraries
+library(ggplot2)
+library(stringr)
+library(plyr)
+library(reshape2)
+library(miscFuncs)
 #Overall Goal - Run both programs a number of times ~9 on various levels of population differentiation
+
+marker=1 #### RUN WITH MICROSATELLITES (=1) OR SNPS (=2) 
 
 #set wd
 system('find /Users -name "flock-comment" -print 2>/dev/null')
@@ -15,22 +23,24 @@ flockcommentDIR<-readLines('flock-commentDIR.txt')
 #flockture - this will be where we simulate all of our datasets
 system('find /Users -name "flockture" -print 2>/dev/null -quit > flocktureDIR.txt') # this should always be the first result
 flocktureDIR<-readLines('flocktureDIR.txt')
-#StructureArea - this is where clump_and_distruct live
-system('find /Users -name "StructureArea" -print 2>/dev/null > StructureAreaDIR.txt')
-StructureAreaDIR<-readLines('StructureAreaDIR.txt')
+#slg_pipe - this is where clump_and_distruct live
+system('find /Users -name "slg_pipe" -print 2>/dev/null > slg_pipeDIR.txt')
+slg_pipeDIR<-readLines('slg_pipeDIR.txt')
+#Structure - this is where structure lives
+system('find /Users -name "structure" -print 2>/dev/null > StructureDIR.txt')
+StructureDIR<-readLines('StructureDIR.txt')
 
-
+########## PART 1 #################################################################
 ##### Set up the parameters to run simulations and run flockture and structure ####
 Seedset<-3
 Reps<-9 #how many reps do we want to run for each program
 Npops<- 5
 N<-2000
-marker=1 #1 for usats 2 for SNPs for simulation purposes
 if(marker==1){
-  MGrate<-c(20,24,28,30,31,32,36,37,37.5,38,40,50,60,75,90,125)
+  MGrate<-c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
 }
 if(marker==2){
-  MGrate<-c(20,24,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
+  MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
 }
 DatNum<-length(MGrate)#how many datasets do we have?
 qi_indLoss<-F #set true if you want graphs of qi values and loss by simulation
@@ -118,15 +128,9 @@ if(marker==2){
   }
 }
 }
-##########################################################################
+#################PART 2 ###################################################
 ############## Run flockture on all of these datasets ####################
 setwd(flocktureDIR)
-#load some useful libraries
-library(ggplot2)
-library(stringr)
-library(plyr)
-library(reshape2)
-library(miscFuncs)
 
 # source the flockture code... it should be compiled first 
 # by running 'make' in terminal within scr folder
@@ -217,7 +221,7 @@ for (Ds in 1:(DatNum*Seedset)){
   lapply(1:length(files2mov),function(y) system(path[[y]][1]))
 }#over Ds datasets
 
-###############################################################
+#################### PART 3 ###################################
 #################### Now run STRUCTURE ########################
 if(marker==1){
   mark<-'uSat'
@@ -226,7 +230,7 @@ if(marker==2){
   mark<-'SNPs'
 }
 
-StructFilePath<-paste(StructureAreaDIR,'/bin/structure',sep="")
+StructFilePath<-StructureDIR
 main_param<-paste(flockcommentDIR,'/mainparams_',sep="") #note this has an _ because it will change depending on the model that is run
 ex_param<-paste(flockcommentDIR,'/extraparams',sep="")#for these models we don't have any extraparams so we can use the same blank file
 
@@ -255,40 +259,42 @@ for (SDt in 1:(DatNum*Seedset)){ # goes into different SimDat folders
   write.table(x=NoAdmixCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/NoAdmixCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
   write.table(x=NoAdmixNonCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/NoAdmixNonCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
 }
-###################################################################
+############ PART 4 ###############################################
 ############ Run Distruct & Clumpp on datasets #################### 
-
-DistClumpFold<-paste(StructureAreaDIR,'/arena',sep="")
+#we need to make an arena in ForStructure
+system(paste('mkdir ',slg_pipeDIR,'/inputs/ForStructure/arena',sep=''))
+#Arena - this is where we want to paste all our files lives
+DistClumpFold<-paste(slg_pipeDIR,'/inputs/ForStructure/arena',sep="")
 
 for (i in (1:(DatNum*Seedset))){
   #start by removing old directories 
   system(paste('rm ',DistClumpFold,'/StructOuput_genos_slg_pipe.txt* -print 2>/dev/null',sep=""))
-  system(paste('rm -R ',StructureAreaDIR,'/clump_and_distruct/final_* -print 2>/dev/null',sep=""))
-  system(paste('rm -R ',StructureAreaDIR,'/clump_and_distruct/intermediate -print 2>/dev/null',sep=""))
+  system(paste('rm -R ',slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/final_* -print 2>/dev/null',sep=""))
+  system(paste('rm -R ',slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/intermediate -print 2>/dev/null',sep=""))
   
   #move each set of results for each Simulate dataset
   SysCmd<-paste('cp ',flockcommentDIR,'/SimDat',i,'/StructOuput_genos_slg_pipe.txt* ', DistClumpFold,sep="") #cp source destination
   system(SysCmd)
   
   #Then we just need to make sure a few files are correct
-  write.table(Npops,file=paste(StructureAreaDIR,'/clump_and_distruct/num_pops.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.table(paste(seq(from=1,to=Npops),seq(from=1,to=Npops),sep=" "),file=paste(StructureAreaDIR,'/clump_and_distruct/pop_names2.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.table(Nloci,file=paste(StructureAreaDIR,'/input/L.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.table(N,file=paste(StructureAreaDIR,'/input/N.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(Npops,file=paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/num_pops.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(paste(seq(from=1,to=Npops),seq(from=1,to=Npops),sep=" "),file=paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/pop_names2.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(Nloci,file=paste(slg_pipeDIR,'/inputs/ForStructure/L.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(N,file=paste(slg_pipeDIR,'/inputs/ForStructure/N.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
   
   #Now run clump and distruct!
-  setwd(paste(StructureAreaDIR,'/clump_and_distruct',sep=""))
+  setwd(paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct',sep=""))
   ClmpDistCmd<- './script/ClumpAndDistructAll.sh 6'
   system(ClmpDistCmd)
   
   # move clump intermediate folder and all the ind pdfs
-  cmd<-paste('cp -R ',StructureAreaDIR,'/clump_and_distruct/final_* ', flockcommentDIR,'/SimDat',i,sep="")
+  cmd<-paste('cp -R ',slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/final_* ', flockcommentDIR,'/SimDat',i,sep="")
   system(cmd)
-  cmd<-paste('cp -R ',StructureAreaDIR,'/clump_and_distruct/intermediate ', flockcommentDIR,'/SimDat',i,sep="")
+  cmd<-paste('cp -R ',slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/intermediate ', flockcommentDIR,'/SimDat',i,sep="")
   system(cmd)
 }#over i simdat sets
 
-###############################################################
+###################### PART 5 #################################
 ###################### Zero-One loss ##########################
 index<-seq(from=1,to=((Reps*4)-(Reps-1)),by=Reps)
 
