@@ -64,44 +64,51 @@ if(any(lapply(paste("SimDat", 1:(DatNum*Seedset), sep = ""), dir.create) == FALS
 }
 
 if(marker==1){
-#### FOR uSATs####
-# move MGrate into sim_data_MIG_RATE.sh
-# loops over our MGrate vector to create simulated datasets and stores them in 
-# folders named SimDatX where X is the number of the simulation
-# details on the simulation are stored in SimDiets to see the pairwise Fst Values etc.
-Nloci<-15
-setwd(paste(flockcommentDIR,"/simdata",sep=""))
-seedsms<-readLines('uSat_seedsms.txt')
-seedsms2geno<-readLines('uSat_seedsms2geno.txt')
-index<-seq(from=1,to=DatNum*Seedset,by=DatNum)
-for (s in 1:Seedset){
-  path<-paste("sed 's/SEEDS1/",seedsms[s],"/' sim_data_MIG_RATE.sh > sim_data_MIG_RATE_DAT1.sh",sep="")
-  system(path)
-  path<-paste("sed 's/SEEDS2/",seedsms2geno[s],"/' sim_data_MIG_RATE_DAT1.sh > sim_data_MIG_RATE_DAT2.sh",sep="")
-  system(path)
+  # ECA says: this does:
+  # 1. set seeds
+  # 2. rewrite script with different mig setting: replace with postional pars in script
+  # 3. run simulation
+  # 4. compute Average pairwise Fst
+  # 5. move files to SimDataX folder
+  #### FOR uSATs####
+  # move MGrate into sim_data_MIG_RATE.sh
+  # loops over our MGrate vector to create simulated datasets and stores them in 
+  # folders named SimDatX where X is the number of the simulation
+  # details on the simulation are stored in SimDets to see the pairwise Fst Values etc.
+  Nloci<-15
   
-  for(x in 1:DatNum){ 
-  path<-paste("sed 's#^M=.*#M=",MGrate[x],"#' sim_data_MIG_RATE_DAT2.sh > sim_data_MIG_RATE_DAT.sh",sep="")
-  system(path)
-  system('chmod 755 sim_data_MIG_RATE_DAT.sh')
-  # run the shell command to generate baseline and structure file
-  system('./sim_data_MIG_RATE_DAT.sh > SimDets.txt')
+  setwd(file.path(flockcommentDIR, "simdata"))
   
-  #what is the avg. pariwise FST?
-  AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=12,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
-  write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
+  seedsms<-readLines("uSat_seedsms.txt")
+  seedsms2geno<-readLines("uSat_seedsms2geno.txt")
   
-  # add pop label to the structure input file
-  # we need this to run clump_and_distruct late on
-  # we will ignore the pop.q values for now and focus on the indq values
-  AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
-  system(AWKcmd)
-  
-  files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
-  path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
-  lapply(1:length(files2mov),function(y) system(path[[y]][1]))
-}
-}#do for uSats
+  index<-seq(from=1,to=DatNum*Seedset,by=DatNum)
+  for (s in 1:Seedset) {
+    # set seeds
+    cat(seedsms[s], file = "seedms")
+    cat(seedsms2geno[s], file = "ms2geno_seeds")
+     
+    for(x in 1:DatNum) { 
+      
+      # run the shell command to generate baseline and structure file
+      message(paste("Simulating microsat data set x =", x, "and s=", s))
+      system(paste("./sim_data_MIG_RATE.sh", MGrate[x], "> SimDets.txt"))
+      
+      # what is the avg. pariwise FST?
+      AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=12,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
+      write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
+      
+      # add pop label to the structure input file
+      # we need this to run clump_and_distruct late on
+      # we will ignore the pop.q values for now and focus on the indq values
+      AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
+      system(AWKcmd)
+      
+      files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
+      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
+      lapply(1:length(files2mov),function(y) system(path[[y]][1]))
+    }
+  }#do for uSats
 }
 
 if(marker==2){
