@@ -37,10 +37,10 @@ Reps<-9 #how many reps do we want to run for each program
 Npops<- 5
 N<-2000
 if(marker==1){
-  MGrate<-c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
+  MGrate<-c(20,24,28,30,31,32,36,37,37.5,38,40,50,60,75,90,125)
 }
 if(marker==2){
-  MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
+  MGrate<-c(20,24,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
 }
 DatNum<-length(MGrate)#how many datasets do we have?
 qi_indLoss<-F #set true if you want graphs of qi values and loss by simulation
@@ -538,8 +538,8 @@ ggsave(plot=p1,filename=paste(flockcommentDIR,'/SimDat',ds,'/QiCompRep',j,'SimDa
 
 ################################################################
 ################# Make final figure ############################
-SumMat<-matrix(data=NA,ncol=3,nrow=Reps*4*DatNum)
-for (i in 1:DatNum){
+SumMat<-matrix(data=NA,ncol=3,nrow=Reps*4*(DatNum*Seedset))
+for (i in 1:(DatNum*Seedset)){
 Fst<-round(unlist(rep(read.table(paste(wd,'/SimDat',i,'/AvgFst.txt',sep="")),Reps*4)),6)
 LossMat<-read.csv(paste(wd,'/SimDat',i,'/ZeroOneLoss_SimDat',i,'.csv',sep=""),sep=",",colClasses=c('character',rep('numeric',4)))
 LossMelt<-melt(LossMat)
@@ -568,7 +568,11 @@ P1<-ggplot(SumMat2,aes(x=Fst ,y=Loss,color=Model,fill=Model))  +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))+
   labs(x=expression('F'['ST']))
 
-ggsave(plot=P1,filename=paste(wd,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=6,height=6,units='in') 
-ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(wd,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=6,height=6,units='in')
+ggsave(plot=P1,filename=paste(wd,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=10.75,height=8.25,units='in') 
+ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(wd,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=10.75,height=8.25,units='in')
 #########################################################
 #########################################################
+
+#Lets Take a look at the Plateaus
+
+Plata<-
