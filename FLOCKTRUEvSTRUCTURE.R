@@ -573,6 +573,29 @@ ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(wd,'/Loss',mark,
 #########################################################
 #########################################################
 
+#Plateau Table
+setwd(wd)
+Plata<-matrix(data=NA,ncol=Reps+1,nrow=(DatNum*Seedset))
 #Lets Take a look at the Plateaus
 
-Plata<-
+for (d in 1:(DatNum*Seedset)){
+  for (r in 1:Reps){
+  Fst<-scan(file=paste(wd,'/SimDat',d,'/AvgFst.txt',sep=""))
+  Plata[d,1]<-Fst
+  plateau<-scan(file=paste(wd,'/SimDat',d,'/FlockturePlateaus.csv',sep=""),what="character",nlines=1,skip=(r-1))
+  plateau<-paste(unlist(str_split(plateau,","))[which(unlist(str_split(plateau,","))>1)],collapse=",") 
+  Plata[d,r+1]<-plateau
+  }
+}
+colnames(Plata)<-c('Fst',paste('Rep',seq(1,9,1),sep=''))
+Plata<-Plata[order(Plata[,1]),]
+sink(file=paste('LatexPlateauTable_',mark,'.txt',sep=''),append=F)
+print(xtable(Plata), include.rownames=FALSE)
+sink()
+
+system(paste("sed '/INSERTFILEHERE/r LatexPlateauTable_",mark,".txt' <Table2.tex >PlateuTable_",mark,"INT.tex",sep=""))
+system(paste("sed 's/INSERTFILEHERE//' <PlateuTable_",mark,"INT.tex >PlateuTable_",mark,".tex",sep=""))
+system("rm *INT.tex")            
+
+##### clean up all the misc files sitting around
+system("rm *DIR.txt")
