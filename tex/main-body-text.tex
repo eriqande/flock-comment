@@ -237,12 +237,12 @@ solutions in the analysis of a large microsatellite data set, though, as expecte
 \section*{Comparison of {\sc structure} and {\sc flock}}
 {\sc flock}, initially designed to map admixture in hybrid populations 
 \citep{Duc&Tur2009}, was recently proposed as an alternative to 
-{\sc structure} to estimate the number of populations from a collection with 
-unsampled source populations \citep{Duc&Tur20123}. In doing so, 
+{\sc structure} for estimating the number of populations from a collection with 
+unsampled source populations \citep{Duc&Tur2012}. In doing so, 
 {\sc flock} relies on individuals with like genotypes clustering together 
 through an iterative process. It stands to reason then, a reasonable way 
 to gauge how well the algorithm accomplishes the main objective 
-clustering of individuals into correct groups is to simulate data of known 
+of clustering individuals into their correct groups is to simulate data of known 
 population structure with varying levels of differentiation and 
 evaluate how well it does assuming the correct number of populations. 
 The implementation of {\sc flock} as a VBA procedure (macro) in 
@@ -289,7 +289,7 @@ is declared {\em undecided}.
 To compare {\sc flock} and {\sc flockture} 4 datasets composed of 5 populations
 were simulated using a coalescent based program (code provided on GitHub repository 
 https://github.com/eriqande/flock-comment/simdata). Each of the 5 populations
-were comprised of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes
+were composed of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes
 and an average pairwise $F_{ST}$ of 0.03, 0.02, 0.01, and 0.005 among
 populations. Both programs were run nine times at $K=5$ with the default setting for all 
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
@@ -302,9 +302,9 @@ Once we were confident that no major differences in inference existed between  {
 we used  {\sc flockture} to analyze 48 datasets for two marker types 
 (microsatellites and single nucleotide polymorphisms (SNPs))  that encompassed a broader 
 range of population differentiation. The 96 datasets were simulated as above (five populations 
-comprised of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes for the micro satellites
+composed of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes for the microsatellites
 and 96 loci for the SNPs)
-with average pairwise $F_{ST}$ values ranging between 0.005 and 0.040. 
+with average pairwise $F_{ST}$ values ranging between 0.004 and 0.045. 
  {\sc flockture} was run with the default run parameters and each run of 
 {\sc structure} consisted of a 5,000 sweeep burn-in followed by a 20,000 sweep sample
 from the posterior distribution. All runs were performed on a Macbook with a 2.3 GHz i7 processor
@@ -314,20 +314,22 @@ while the program {\sc district} \citep{Rosenberg2004} was used to plot individu
 
 \subsection*{{\sc flock} and {\sc flockture}} 
 {\sc flock} and {\sc flockture} provided similar clustering of individuals among all four 
-simulated datasets. The zero-one loss across all datasets had eqivalent results Fig.~\ref{fig:FvFloss}.
+simulated datasets. The zero-one loss across all datasets had eqivalent results (Fig.~\ref{fig:FvFloss}).
 When genetic differentiation is high both programs correctly apportion the majority of individuals and 
 as genetic differentiation degrades among populations both programs show corresponding declines in 
 assignment ability. Neither the mean nor range of loss between {\sc flock} and {\sc flockture} differs
 substantially among the simulated datasets. These assignments were dependent on the normalized likelihood
 values ($q_i$), which while they were comparable may be slightly biased toward the bounds (0,1)
-for {\sc flock}. In an attempt to understand the deviations being observed we took a subset of the 
+for {\sc flock} (Fig.~\ref{fig:FvFqi}). In an attempt to understand the deviations being observed we took a subset of the 
 first dataset (29 individuals from population 1 and 21 individuals from population 2) and initiated 
 {\sc flock} with all individuals coming from population 1 starting in reference population 1 and all 
 individuals from population 2 starting in reference population 2. {\sc flock} was run a second time
 with the same starting clusters, but with the reference population labels switched. While the final allocation
 of individuals matched the mean LLOD was slightly different (5.045009 vs. 5.028084). As a result, comparisons
 between {\sc flock} and {\sc flockture} were limited to random initial starting points and should not 
-be identical, but should have displayed equivalent behavior. Plateaus were only observed for the dataset 
+be identical, but should have displayed equivalent behavior. 
+
+Plateaus were only observed for the dataset 
 with the highest pairwise $F_{ST}$ value $(0.03)$. Plateau records were similar, although 
 the length of each plateau record was slightly longer for {\sc flockture} and on average had more runs converging on
 the largest plateau (Supp. Table 1). Multiple runs of {\sc flockture} demonstrated that the differences are well within the
@@ -363,20 +365,22 @@ demonstrate a linear increase. % this is surprising to me as it is coin the same
 
 \subsection*{{\sc flockture} and {\sc structure}} 
 As expected {\sc flockture} and {\sc structure} both perform extremely well on datasets with
-well differentiated populations. Both programs have less than 1\% assignment error for most runs 
-at values of $F_{ST}  \geq$ 0.0603 (Fig.~\ref{fig:FvSloss}). Infrequently, the 
-NA-NC and NA-C models in {\sc structure} grouped two populations as one and 
-assign individuals from another to two separate populations (Fig.~\ref{fig:FvSdistruct}  Simulation 1). This phenomena 
-disappears as population differentiation declines. As the subtlety of genetic structure 
-increased loss for both programs increases. 
-Performance of the two programs as $F_{ST}$ approaches 0.0238 is relatively similar
-characterized by the A-C model in {\sc structure} having the largest loss, the NA-C and NA-NC models performing
-relatively similar and {\sc flockture} fluctuating around the results of the other three models. The scale of these 
-differences is extremely small - on the order of 10 individuals being misassigned. As genetic 
-differentiation continues to decline {\sc flockture}  showed consistently better performance 
-at levels of $F_{ST}$ between 0.0238 to 0.0229.  Again, these differences are on the scale of roughly 20 individuals
-or 1\%. In simulation 12 we observed the variation in {\sc flockture} results increase drastically (Fig.~\ref{fig:FvSloss}),
-and for all other simulated datasets {\sc structure} had a lower assignment error.
+well differentiated populations. Infrequently, at higher levels of population differentiation the 
+NA-NC and NA-C models in {\sc structure} could be trapped in a local mode resulting in the 
+assignment of individuals from two groups into one while individuals from another 
+were separated into two populations (Fig.~\ref{fig:FvSdistruct}  Simulation 1). This phenomena 
+(only present in the microsatellite datasets) disappears as population differentiation 
+declines. As the subtlety of genetic structure 
+increased loss for both programs increases and differences among markers emerged.
+For the microsatellite dataset we observed that both programs
+produce roughtly equivalent results at higher levels of population differentiation. At intermediate 
+values, the variance of the loss incurred by each model increases and certain models do marginally
+better in assignment. No model does consistently better than the others, until $F_{ST}$ drops 
+below 0.0136 after which the loss for {\sc flockture} was markedly larger as was the among run
+variance. The drastic increase in variance among runs was also observed with the SNP datasets. 
+ {\sc flockture} did, however, have consistenlty smaller loss than  {\sc structure} at high to intermediate 
+values of $F_{ST}$. Once $F_{ST}$ fell below 0.016 {\sc structure} began correctly assigning a 
+higher proportion of individuals. 
 
 The number of plateaus {\sc flockture} encountered and the number of runs that ended on the same plateau quickly 
 diminished as the amount of differentiation among populations decreased. For simulations 1-4 a single plateau
