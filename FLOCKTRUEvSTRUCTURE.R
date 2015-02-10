@@ -1,55 +1,67 @@
-#### FLOCKTURE vs STRUCTURE ####
-#load some useful libraries
+#### FLOCKTURE vs STRUCTURE
+
+
+#### load some useful libraries ####
 library(ggplot2)
 library(stringr)
 library(plyr)
 library(reshape2)
 library(miscFuncs)
-#Overall Goal - Run both programs a number of times ~9 on various levels of population differentiation
 
-marker=1 #### RUN WITH MICROSATELLITES (=1) OR SNPS (=2) 
 
-#set wd
-system('find /Users -name "flock-comment" -print 2>/dev/null')
-wd<-getwd()
+#### Top-level settings and paths and stuff  ####
 
-# We are going to need a few folders to do all this
-# I wrote in some system commands to find relavent folders for people that might install 
-# directories in different places. 
+### Set paths
+# Your R working directory should be the flock-comment directory
+# and flockture and slg_pipe should be directories one level above.
+# If you are using RStudio and opened the flock-comment project you should
+# be good to go.
 
-#flock-comment - this will be our main working directory
-system('find /Users -name "flock-comment" -print 2>/dev/null >flock-commentDIR.txt')
-flockcommentDIR<-readLines('flock-commentDIR.txt')
-#flockture - this will be where we simulate all of our datasets
-system('find /Users -name "flockture" -print 2>/dev/null -quit > flocktureDIR.txt') # this should always be the first result
-flocktureDIR<-readLines('flocktureDIR.txt')
-#slg_pipe - this is where clump_and_distruct live
-system('find /Users -name "slg_pipe" -print 2>/dev/null > slg_pipeDIR.txt')
-slg_pipeDIR<-readLines('slg_pipeDIR.txt')
+# now, we want to get absolute paths to a lot of the directories we will be using:
+wd<-getwd()  # where you started...
+flockcommentDIR <- normalizePath("../flock-comment") # main working directory
+flocktureDIR <- normalizePath("../flockture") #  this will be where we simulate all of our datasets
+slg_pipeDIR <- normalizePath("../slg_pipe") # this is where clump and distruct live
+
+## Crazy stuff.  Will have to sort this out later.   Don't know what it should be.
 #Structure - this is where structure lives
-system('find /Users -name "structure" -print 2>/dev/null > StructureDIR.txt')
-StructureDIR<-readLines('StructureDIR.txt')
+#system('find /Users -name "structure" -print 2>/dev/null > StructureDIR.txt')
+#StructureDIR<-readLines('StructureDIR.txt')
 
-########## PART 1 #################################################################
-##### Set up the parameters to run simulations and run flockture and structure ####
-Seedset<-3
-Reps<-9 #how many reps do we want to run for each program
-Npops<- 5
-N<-2000
-if(marker==1){
-  MGrate<-c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
-}
-if(marker==2){
+
+### Set genetic marker type to simulate
+marker=1 # RUN WITH MICROSATELLITES (=1) OR SNPS (=2) 
+
+### Other options to set
+qi_indLoss <- F # set true if you want graphs of qi values and loss by simulation
+
+#### PART 1: Simulate data sets ####
+
+### Set up the parameters controlling the simulations ####
+Seedset <- 3
+Reps <- 9 # how many reps do we want to run for each program
+Npops <- 5
+N <- 2000
+
+# set up migration rates to use 
+if(marker == 1){
+  MGrate <- c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
+} else if(marker == 2){
   MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
+} else {
+  stop("Unrecognized value for variable marker")
 }
-DatNum<-length(MGrate)#how many datasets do we have?
-qi_indLoss<-F #set true if you want graphs of qi values and loss by simulation
 
-##########################################################################
-#### Simulate some datasets and store the input files in Dat* folder #####
+DatNum <- length(MGrate) # how many datasets do we have?
 
+
+### Simulate some datasets and store the input files in Dat* folder ####
+
+# create directories to for simulation output
 setwd(flockcommentDIR)
-sapply((1:(DatNum*Seedset)),function(x) system(paste('mkdir ',paste('SimDat',x,sep=""),sep="")))
+if(any(lapply(paste("SimDat", 1:(DatNum*Seedset), sep = ""), dir.create) == FALSE)) {
+  stop("Failed to create SimDat directory.")
+}
 
 if(marker==1){
 #### FOR uSATs####
