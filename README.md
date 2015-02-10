@@ -21,7 +21,12 @@ This should result in two PDF files:
 
 ## Reproducing the simulations
 
-The R script 'Flock2Structure.new' will rerun the analyses comparing Structure and FLOCKTURE from the manuscript. The code is divided into 5 main parts: 
+The R script 'Flock2Structure.new' will rerun the analyses comparing Structure and FLOCKTURE from the 
+manuscript.  In order to make this work you ought to be on a sane Unix system (you will need `rsync`,
+`awk`, `make` and other such utilities.  Easiest, probably, is going to
+be if you are running Mac OS Mavericks or higher with the Developer Tools installed.
+
+The code is divided into 5 main parts: 
 
 1. Simulate data
 2. Run FLOCKTURE
@@ -29,12 +34,41 @@ The R script 'Flock2Structure.new' will rerun the analyses comparing Structure a
 4. Run CLUMPP and DISTRUCT
 5. Compute zero-one loss and graph output.  
 
-In order to do this you will need to clone a few git repositories:
+In order to do this you will need to clone a few git repositories: `flock-comment`, `flockture` and 
+`slg_pipe`.  With the latter two there are some further setup things that must be done as described
+in their READMEs.  See the README section at 
+[https://github.com/eriqande/flockture](https://github.com/eriqande/flockture) and
+[https://github.com/eriqande/slg_pipe](https://github.com/eriqande/slg_pipe)
+
+When you do this, make sure that you clone all the repositories so that the directories
+that get cloned all appear together at the same directory level.  When I do this it looks like
+so:
 
 ```sh
+# first get the three repositories
 git clone https://github.com/eriqande/flock-comment.git
 git clone https://github.com/eriqande/flockture.git
 git clone https://github.com/eriqande/slg_pipe.git
+
+# notice how these are all together in the same directory level:
+ls
+
+## output is: flock-comment/ flockture/     slg_pipe/
+
+
+# Now make flockture:
+cd flockture/src/
+make
+cd ../../   # return to the directory that holds the cloned repos
+
+
+# Then get the necessary binaries for slg_pipe and place them where needed
+curl -o slg_pipe_binaries.tar.gz  https://dl.dropboxusercontent.com/u/19274778/slg_pipe_binaries.tar.gz
+gunzip slg_pipe_binaries.tar.gz 
+tar -xvf slg_pipe_binaries.tar 
+rsync -avh slg_pipe_binaries/* slg_pipe
+
+
 ```
 Please note that the executables in the slg_pipe are for Mavericks OS and should be changed if you have a different OS. Follow the instructions in each of the readme files on how to:
 
