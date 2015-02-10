@@ -584,6 +584,7 @@ for (d in 1:(DatNum*Seedset)){
   Plata[d,1]<-Fst
   plateau<-scan(file=paste(wd,'/SimDat',d,'/FlockturePlateaus.csv',sep=""),what="character",nlines=1,skip=(r-1))
   plateau<-paste(unlist(str_split(plateau,","))[which(unlist(str_split(plateau,","))>1)],collapse=",") 
+  if(is.na(as.numeric(unlist(str_split(plateau,","))[1]))){plateau<-"1"}
   Plata[d,r+1]<-plateau
   }
 }
