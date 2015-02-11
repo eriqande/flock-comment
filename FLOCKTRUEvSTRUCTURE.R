@@ -7,26 +7,24 @@ library(stringr)
 library(plyr)
 library(reshape2)
 library(miscFuncs)
+library(dplyr)  # for the %>% operator
 
 
-#### Top-level settings and paths and stuff  ####
+##### Top-level settings and paths and stuff  ####
 
 ### Set paths
 # Your R working directory should be the flock-comment directory
-# and flockture and slg_pipe should be directories one level above.
+# and flockture and slg_pipe should be directories that sit beside flock-comment
+# one directory level above.
 # If you are using RStudio and opened the flock-comment project you should
 # be good to go.
 
 # now, we want to get absolute paths to a lot of the directories we will be using:
-wd<-getwd()  # where you started...
+wd<-getwd()  # where you started...in case we need to use it later...
 flockcommentDIR <- normalizePath("../flock-comment") # main working directory
 flocktureDIR <- normalizePath("../flockture") #  this will be where we simulate all of our datasets
 slg_pipeDIR <- normalizePath("../slg_pipe") # this is where clump and distruct live
-
-## Crazy stuff.  Will have to sort this out later.   Don't know what it should be.
-#Structure - this is where structure lives
-#system('find /Users -name "structure" -print 2>/dev/null > StructureDIR.txt')
-#StructureDIR<-readLines('StructureDIR.txt')
+StructBinaryPath <- normalizePath("../slg_pipe/inputs/ForStructure/structure2.3.4")
 
 
 ### Set genetic marker type to simulate
@@ -35,15 +33,15 @@ marker=1 # RUN WITH MICROSATELLITES (=1) OR SNPS (=2)
 ### Other options to set
 qi_indLoss <- F # set true if you want graphs of qi values and loss by simulation
 
-#### PART 1: Simulate data sets ####
+##### PART 1: Simulate data sets ####
 
-### Set up the parameters controlling the simulations ####
+### Set up the parameters controlling the simulations 
 Seedset <- 3
 Reps <- 9 # how many reps do we want to run for each program
 Npops <- 5
 N <- 2000
 
-# set up migration rates to use 
+## set up migration rates to use 
 if(marker == 1){
   MGrate <- c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
 } else if(marker == 2){
@@ -55,24 +53,18 @@ if(marker == 1){
 DatNum <- length(MGrate) # how many datasets do we have?
 
 
-### Simulate some datasets and store the input files in Dat* folder ####
+### Simulate some datasets and store the input files in Dat* folder
 
 # create directories to for simulation output
 setwd(flockcommentDIR)
 if(any(lapply(paste("SimDat", 1:(DatNum*Seedset), sep = ""), dir.create) == FALSE)) {
-  stop("Failed to create SimDat directory.")
+  stop("Failed to create SimDat directory. Perhaps they already exist? If so, put 'em somewhere else!")
 }
 
 if(marker==1){
-  # ECA says: this does:
-  # 1. set seeds
-  # 2. rewrite script with different mig setting: replace with postional pars in script
-  # 3. run simulation
-  # 4. compute Average pairwise Fst
-  # 5. move files to SimDataX folder
-  #### FOR uSATs####
-  # move MGrate into sim_data_MIG_RATE.sh
-  # loops over our MGrate vector to create simulated datasets and stores them in 
+
+  ## FOR uSATs
+  # loop over our MGrate vector to create simulated datasets and store them in 
   # folders named SimDatX where X is the number of the simulation
   # details on the simulation are stored in SimDets to see the pairwise Fst Values etc.
   Nloci<-15
@@ -82,7 +74,7 @@ if(marker==1){
   seedsms<-readLines("uSat_seedsms.txt")
   seedsms2geno<-readLines("uSat_seedsms2geno.txt")
   
-  index<-seq(from=1,to=DatNum*Seedset,by=DatNum)
+  i <- 0  # to number data sets
   for (s in 1:Seedset) {
     # set seeds
     cat(seedsms[s], file = "seedms")
@@ -94,19 +86,34 @@ if(marker==1){
       message(paste("Simulating microsat data set x =", x, "and s=", s))
       system(paste("./sim_data_MIG_RATE.sh", MGrate[x], "> SimDets.txt"))
       
-      # what is the avg. pariwise FST?
-      AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=12,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
-      write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
+      # compute average pairwise Fst between all the simulated pops
+      tmp <- readLines("SimDets.txt")  # read in the simulation log file
+      tmp <- tmp[str_detect(tmp, "^PAIRWISE_FST")]  # get the lines that have pairwise Fst on them
+      strsplit(tmp, ":") %>%             # split on the colon
+        sapply(., "[", 4)  %>%               # grab the fourth field
+        as.numeric  %>%                      # make it numeric
+        mean  %>%                            # compute mean
+        cat(., file = "AvgFst.txt", sep = "\n")          # write it to file
       
-      # add pop label to the structure input file
-      # we need this to run clump_and_distruct late on
-      # we will ignore the pop.q values for now and focus on the indq values
-      AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
-      system(AWKcmd)
+       
+      # add pop label to the structure input file and save it into file SimDatInX
+      # here is some fun regex foo to do that  
+      i <- i + 1
+      tmp <- readLines("struct_input_1.txt")
+      str_match(tmp, "^(Pop_([0-9]+)_BaseInd_[0-9]+)(.*$)")[, -1] %>%    # pick out and put back that number
+        write.table(., sep = "  ", quote = FALSE, row.names = FALSE, col.names = FALSE, 
+                    file = paste("SimDatIn", i, sep = ""))
       
-      files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
-      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
-      lapply(1:length(files2mov),function(y) system(path[[y]][1]))
+        
+      # now, name some files we wish to move into "../SimDatX"
+      files2mov<-c("AvgFst.txt", 
+                   "SimDets.txt", 
+                   dir(pattern = "BaseFile*"),    #use * just in case we want to generate more inputfiles
+                   dir(pattern = "struct_input*"), 
+                   paste("SimDatIn", i, sep = "")
+                   ) 
+      
+      lapply(files2mov, function(x) file.rename(x, paste("../SimDat", i, "/", x, sep = "")))
     }
   }#do for uSats
 }
@@ -123,39 +130,39 @@ if(marker==2){
     path<-paste("sed 's/SEEDS2/",seedsms2geno[s],"/' sim_data_snps_MIG_RATE_DAT1.sh > sim_data_snps_MIG_RATE_DAT2.sh",sep="")
     system(path)
     
-  for(x in 1:DatNum){ 
-    setwd(paste(flockcommentDIR,"/simdata",sep=""))
-    path<-paste("sed 's#^M=.*#M=",MGrate[x],"#' sim_data_snps_MIG_RATE_DAT2.sh > sim_data_snps_MIG_RATE_DAT.sh",sep="")
-    system(path)
-    system('chmod 755 sim_data_snps_MIG_RATE_DAT.sh')
-    # run the shell command to generate baseline and structure file
-    system('./sim_data_snps_MIG_RATE_DAT.sh > SimDets.txt')
-    
-    #what is the avg. pariwise FST?
-    AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=113,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
-    write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
-    
-    # add pop label to the structure input file
-    # we need this to run clump_and_distruct late on
-    # we will ignore the pop.q values for now and focus on the indq values
-    AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
-    system(AWKcmd)
-    
-    files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
-    path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
-    lapply(1:length(files2mov),function(y) system(path[[y]][1]))
+    for(x in 1:DatNum){ 
+      setwd(paste(flockcommentDIR,"/simdata",sep=""))
+      path<-paste("sed 's#^M=.*#M=",MGrate[x],"#' sim_data_snps_MIG_RATE_DAT2.sh > sim_data_snps_MIG_RATE_DAT.sh",sep="")
+      system(path)
+      system('chmod 755 sim_data_snps_MIG_RATE_DAT.sh')
+      # run the shell command to generate baseline and structure file
+      system('./sim_data_snps_MIG_RATE_DAT.sh > SimDets.txt')
+      
+      #what is the avg. pariwise FST?
+      AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=113,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
+      write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
+      
+      # add pop label to the structure input file
+      # we need this to run clump_and_distruct late on
+      # we will ignore the pop.q values for now and focus on the indq values
+      AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
+      system(AWKcmd)
+      
+      files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
+      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
+      lapply(1:length(files2mov),function(y) system(path[[y]][1]))
+    }
   }
 }
-}
-#################PART 2 ###################################################
-############## Run flockture on all of these datasets ####################
+
+##### PART 2: Run flockture on all of these datasets #####
 setwd(flocktureDIR)
 
 # source the flockture code... it should be compiled first 
 # by running 'make' in terminal within scr folder
 source("R/flockture.R")
 
-#### Run FLOCKTURE ####
+### Run FLOCKTURE 
 # We ran FLOCK 9 times with 50 reps and 20 interations...
 datasets<-1 #how many datasets for each of the simulations did we make?
 for (Ds in 1:(DatNum*Seedset)){
@@ -205,7 +212,8 @@ for (Ds in 1:(DatNum*Seedset)){
     Best.rep<-Max.reps[which(Max.reps$log.prob==max(Max.reps$log.prob))[1],1]
     
     Fkture.ref<-out$indivs[out$indivs$rep==Best.rep,4]
-    #### Write out qi values ####    
+    
+    #### Write out qi values 
     ResOut<-round(out$indivs[out$indivs$rep==Best.rep,(5:9)],3)    
     write.table(format(ResOut,digits=4),paste('FLOCKTUREqi_REP',P,'.txt',sep=""),sep=' ',row.names=FALSE,col.names=FALSE,quote=FALSE)
     
@@ -224,12 +232,13 @@ for (Ds in 1:(DatNum*Seedset)){
     sedcmd<-paste("sed '/INSERT_INDQ_HERE/d' '",flockcommentDIR,"/Intrmd.txt' >",flockcommentDIR,"/SimDat",Ds,"/StructOuput_genos_slg_pipe.txt_dat00",Ds,"_k005_Rep03",P,".txt_f",sep="")
     system(sedcmd)
     
-    #### MOVE or DELETE the original qi files from flockture ####
+    #### MOVE or DELETE the original qi files from flockture
     # move the flockture results into the SimDat folder
     cmd<-paste('mv FLOCKTUREqi* ', flockcommentDIR,'/SimDat',Ds,sep="" )
     system(cmd)
     
   }#over P reps of Flockture
+  
   write.table(x=FLCTR_PlateauRec,file='FlockturePlateaus.csv',sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
   write.table(x=Flockture.Runtime,file='FlocktureRuntime.csv',sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
   
@@ -240,8 +249,7 @@ for (Ds in 1:(DatNum*Seedset)){
   lapply(1:length(files2mov),function(y) system(path[[y]][1]))
 }#over Ds datasets
 
-#################### PART 3 ###################################
-#################### Now run STRUCTURE ########################
+##### PART 3:  Now run STRUCTURE ########################
 if(marker==1){
   mark<-'uSat'
 }
@@ -249,7 +257,7 @@ if(marker==2){
   mark<-'SNPs'
 }
 
-StructFilePath<-StructureDIR
+
 main_param<-paste(flockcommentDIR,'/mainparams_',sep="") #note this has an _ because it will change depending on the model that is run
 ex_param<-paste(flockcommentDIR,'/extraparams',sep="")#for these models we don't have any extraparams so we can use the same blank file
 
@@ -263,23 +271,24 @@ for (SDt in 1:(DatNum*Seedset)){ # goes into different SimDat folders
   for (R in 1:Reps){
     #AdmixCorr
     ptm<-proc.time()
-    system(paste(StructFilePath,' -m ',main_param,'AdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep00',R,'.txt', sep=""),wait=TRUE)     
+    system(paste(StructBinaryPath,' -m ',main_param,'AdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep00',R,'.txt', sep=""),wait=TRUE)     
     AdmixCorrRuntime[R]<-(proc.time()-ptm)[3]
     #NoAdmixCorr
     ptm<-proc.time()
-    system(paste(StructFilePath,' -m ',main_param,'NoAdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep01',R,'.txt', sep=""),wait=TRUE)
+    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep01',R,'.txt', sep=""),wait=TRUE)
     NoAdmixCorrRuntime[R]<-(proc.time()-ptm)[3]
     #NoAdmixNonCorr
     ptm<-proc.time()
-    system(paste(StructFilePath,' -m ',main_param,'NoAdmixNonCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep02',R,'.txt', sep=""),wait=TRUE)
+    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixNonCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep02',R,'.txt', sep=""),wait=TRUE)
     NoAdmixNonCorrRuntime[R]<-(proc.time()-ptm)[3]
   }
   write.table(x=AdmixCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/AdmixCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
   write.table(x=NoAdmixCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/NoAdmixCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
   write.table(x=NoAdmixNonCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/NoAdmixNonCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
 }
-############ PART 4 ###############################################
-############ Run Distruct & Clumpp on datasets #################### 
+
+
+##### PART 4: Run Distruct & Clumpp on datasets #### 
 #we need to make an arena in ForStructure
 system(paste('mkdir ',slg_pipeDIR,'/inputs/ForStructure/arena',sep=''))
 #Arena - this is where we want to paste all our files lives
@@ -313,8 +322,8 @@ for (i in (1:(DatNum*Seedset))){
   system(cmd)
 }#over i simdat sets
 
-###################### PART 5 #################################
-###################### Zero-One loss ##########################
+
+##### PART 5: Compute Zero-One loss ####
 index<-seq(from=1,to=((Reps*4)-(Reps-1)),by=Reps)
 
 lossvc<-vector()
@@ -488,7 +497,7 @@ for (ds in (1:(DatNum*Seedset))){#how many data sets did we simulate
     
     STRUCTrelab<-mapvalues(STRUCTref,Lab[,2],Lab[,1])
     
-    #### Zero-One Loss #####
+    #### Zero-One Loss
     # Let's compute the 0-1 loss for each run. We relabelled any mixups in the labeling above,
     # so it is straightforward using those labels and mach them to what exisits in each of the 
     # ref pops
@@ -555,8 +564,10 @@ ggsave(plot=p1,filename=paste(flockcommentDIR,'/SimDat',ds,'/QiCompRep',j,'SimDa
 }#over j reps
 }#over all ds datasets
 
-################################################################
-################# Make final figure ############################
+
+
+##### STEP 6: Make final figure ####
+
 SumMat<-matrix(data=NA,ncol=3,nrow=Reps*4*DatNum)
 for (i in 1:DatNum){
 Fst<-round(unlist(rep(read.table(paste(wd,'/SimDat',i,'/AvgFst.txt',sep="")),Reps*4)),6)
@@ -589,5 +600,3 @@ P1<-ggplot(SumMat2,aes(x=Fst ,y=Loss,color=Model,fill=Model))  +
 
 ggsave(plot=P1,filename=paste(wd,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=6,height=6,units='in') 
 ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(wd,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=6,height=6,units='in')
-#########################################################
-#########################################################
