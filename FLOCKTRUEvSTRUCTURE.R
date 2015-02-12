@@ -180,6 +180,7 @@ for (Ds in 1:(DatNum*Seedset)){
   Flockture.Runtime<-vector()
   FlocktureReps<-Reps #how many times are we running flockture
   for (P in 1:FlocktureReps){
+    message("Doing Flockture run on SimDat ", Ds, " out of ", DatNum * Seedset, "    Rep ", P, " of ", FlocktureReps)
     # run flockture on it and grab the results out
     ptm<-proc.time()
     catch <- run_flockture_bin(D, K = 5, iter = 20, reps = 50)
@@ -261,7 +262,7 @@ if(marker==2){
 main_param<-paste(flockcommentDIR,'/mainparams_',sep="") #note this has an _ because it will change depending on the model that is run
 ex_param<-paste(flockcommentDIR,'/extraparams',sep="")#for these models we don't have any extraparams so we can use the same blank file
 
-# need to run 3 model AdmixCorr, NonAdmixCorr, NonAdmixNonCorr - might want to make this user specified
+# need to run 3 models:  AdmixCorr, NonAdmixCorr, NonAdmixNonCorr - might want to make this user specified
 # seach SimDat file Rep times
 for (SDt in 1:(DatNum*Seedset)){ # goes into different SimDat folders
   # lets make some vectors to store some processing times
@@ -269,17 +270,22 @@ for (SDt in 1:(DatNum*Seedset)){ # goes into different SimDat folders
   NoAdmixCorrRuntime<-vector()
   NoAdmixNonCorrRuntime<-vector()
   for (R in 1:Reps){
+    message(paste("Running Structure:  SimDat", SDt, "of", DatNum*Seedset, "   Rep Number", R, "of", Reps))
+    
     #AdmixCorr
+    message("     AdmixCorr")
     ptm<-proc.time()
-    system(paste(StructBinaryPath,' -m ',main_param,'AdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep00',R,'.txt', sep=""),wait=TRUE)     
+    system(paste(StructBinaryPath,' -m ',main_param,'AdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep00',R,'.txt > structureDumpola.txt', sep=""),wait=TRUE)     
     AdmixCorrRuntime[R]<-(proc.time()-ptm)[3]
     #NoAdmixCorr
+    message("     NoAdmixCorr")
     ptm<-proc.time()
-    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep01',R,'.txt', sep=""),wait=TRUE)
+    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep01',R,'.txt  > structureDumpola.txt', sep=""),wait=TRUE)
     NoAdmixCorrRuntime[R]<-(proc.time()-ptm)[3]
     #NoAdmixNonCorr
+    message("     NoAdmixNonCorr")
     ptm<-proc.time()
-    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixNonCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep02',R,'.txt', sep=""),wait=TRUE)
+    system(paste(StructBinaryPath,' -m ',main_param,'NoAdmixNonCorr_',mark,' -e ',ex_param,' -i ',flockcommentDIR,'/SimDat',SDt,'/SimDatIn',SDt,' -o ',flockcommentDIR,'/SimDat',SDt,'/StructOuput_genos_slg_pipe.txt_dat00',SDt,'_k005_Rep02',R,'.txt  > structureDumpola.txt', sep=""),wait=TRUE)
     NoAdmixNonCorrRuntime[R]<-(proc.time()-ptm)[3]
   }
   write.table(x=AdmixCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/AdmixCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
