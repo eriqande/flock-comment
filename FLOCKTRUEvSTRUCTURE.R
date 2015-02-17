@@ -20,11 +20,26 @@ library(dplyr)  # for the %>% operator
 # be good to go.
 
 # now, we want to get absolute paths to a lot of the directories we will be using:
-wd<-getwd()  # where you started...in case we need to use it later...
 flockcommentDIR <- normalizePath("../flock-comment") # main working directory
 flocktureDIR <- normalizePath("../flockture") #  this will be where we simulate all of our datasets
 slg_pipeDIR <- normalizePath("../slg_pipe") # this is where clump and distruct live
 StructBinaryPath <- normalizePath("../slg_pipe/inputs/ForStructure/structure2.3.4")
+
+# now, this is a bit of a hack.  We need some of the binaries to be in a bin directory
+# in the clump_and_distruct directory.  So we will just copy everything in the StructureArea bin to there.
+file.copy(file.path(slg_pipeDIR, "inputs/ForStructure/bin"),
+          file.path(slg_pipeDIR, "inputs/ForStructure/clump_and_distruct/"),
+          recursive = TRUE
+)
+# and, another issue, the distruct executable in there does not see to run
+# on Yosemite.  We need distruct_BIG anyway, probably, so copy that over.
+file.copy(file.path(slg_pipeDIR, "inputs/ForStructure/clump_and_distruct/bin/distruct_BIG"),
+          file.path(slg_pipeDIR, "inputs/ForStructure/clump_and_distruct/bin/distruct"),
+          overwrite = TRUE
+)
+# Also, we have have to make this directory to put N.txt into it later during clumping and distructing.
+dir.create(file.path(slg_pipeDIR, "/inputs/ForStructure/input"))  
+ 
 
 
 ### Set genetic marker type to simulate
@@ -37,13 +52,15 @@ qi_indLoss <- F # set true if you want graphs of qi values and loss by simulatio
 
 ### Set up the parameters controlling the simulations 
 Seedset <- 3
-Reps <- 9 # how many reps do we want to run for each program
+### ECA: gotta set reps back after testing
+Reps <- 2  #9 # how many reps do we want to run for each program
 Npops <- 5
 N <- 2000
 
 ## set up migration rates to use 
 if(marker == 1){
-  MGrate <- c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
+  ## ECA gott set MGrate back after testing
+  MGrate <- c(20, 24)   #c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
 } else if(marker == 2){
   MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
 } else {
@@ -149,7 +166,7 @@ if(marker==2){
       system(AWKcmd)
       
       files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
-      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',wd,'/SimDat',(index[s]-1)+x,sep=""))
+      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',flockcommentDIR,'/SimDat',(index[s]-1)+x,sep=""))
       lapply(1:length(files2mov),function(y) system(path[[y]][1]))
     }
   }
@@ -167,7 +184,7 @@ source("R/flockture.R")
 datasets<-1 #how many datasets for each of the simulations did we make?
 for (Ds in 1:(DatNum*Seedset)){
   
-  dat<-paste(wd,'/SimDat',Ds,'/struct_input_',datasets,'.txt',sep='')
+  dat<-paste(flockcommentDIR,'/SimDat',Ds,'/struct_input_',datasets,'.txt',sep='')
   
   # read in a data set:
   D <- read.table(dat, row.names = 1)
@@ -293,7 +310,6 @@ for (SDt in 1:(DatNum*Seedset)){ # goes into different SimDat folders
   write.table(x=NoAdmixNonCorrRuntime,file=paste(flockcommentDIR,'/SimDat',SDt,'/NoAdmixNonCorrRuntime.csv',sep=""),sep=",",quote=FALSE,append=TRUE,row.names=FALSE,col.names=FALSE)
 }
 
-
 ##### PART 4: Run Distruct & Clumpp on datasets #### 
 #we need to make an arena in ForStructure
 system(paste('mkdir ',slg_pipeDIR,'/inputs/ForStructure/arena',sep=''))
@@ -312,9 +328,9 @@ for (i in (1:(DatNum*Seedset))){
   
   #Then we just need to make sure a few files are correct
   write.table(Npops,file=paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/num_pops.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.table(paste(seq(from=1,to=Npops),seq(from=1,to=Npops),sep=" "),file=paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/pop_names2.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(paste(seq(from=1,to=Npops),seq(from=1,to=Npops),sep=" "),file=paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/pop_names.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.table(Nloci,file=paste(slg_pipeDIR,'/inputs/ForStructure/L.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.table(N,file=paste(slg_pipeDIR,'/inputs/ForStructure/N.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.table(N,file=paste(slg_pipeDIR,'/inputs/ForStructure/input/N.txt',sep=""),row.names=FALSE,col.names=FALSE,quote=FALSE)
   
   #Now run clump and distruct!
   setwd(paste(slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct',sep=""))
@@ -327,7 +343,6 @@ for (i in (1:(DatNum*Seedset))){
   cmd<-paste('cp -R ',slg_pipeDIR,'/inputs/ForStructure/clump_and_distruct/intermediate ', flockcommentDIR,'/SimDat',i,sep="")
   system(cmd)
 }#over i simdat sets
-
 
 ##### PART 5: Compute Zero-One loss ####
 index<-seq(from=1,to=((Reps*4)-(Reps-1)),by=Reps)
@@ -524,7 +539,7 @@ for (ds in (1:(DatNum*Seedset))){#how many data sets did we simulate
 
 a<-melt(ZeroOneLosstab)
 colnames(a)<-c('rep','model','loss')
-pwFST<-as.character(round(read.table(paste(flockcommentDIR,'/SimDat',ds,'/AvgFST.txt',sep="")),4))
+pwFST<-as.character(round(read.table(paste(flockcommentDIR,'/SimDat',ds,'/AvgFst.txt',sep="")),4))
 my.ylab = bquote(F[ST] == .(pwFST))
 Ls<- ggplot(a, aes(x=model, y=loss)) + geom_boxplot() + labs(title=my.ylab)
   guides(fill=FALSE)+
@@ -576,8 +591,8 @@ ggsave(plot=p1,filename=paste(flockcommentDIR,'/SimDat',ds,'/QiCompRep',j,'SimDa
 
 SumMat<-matrix(data=NA,ncol=3,nrow=Reps*4*DatNum)
 for (i in 1:DatNum){
-Fst<-round(unlist(rep(read.table(paste(wd,'/SimDat',i,'/AvgFst.txt',sep="")),Reps*4)),6)
-LossMat<-read.csv(paste(wd,'/SimDat',i,'/ZeroOneLoss_SimDat',i,'.csv',sep=""),sep=",",colClasses=c('character',rep('numeric',4)))
+Fst<-round(unlist(rep(read.table(paste(flockcommentDIR,'/SimDat',i,'/AvgFst.txt',sep="")),Reps*4)),6)
+LossMat<-read.csv(paste(flockcommentDIR,'/SimDat',i,'/ZeroOneLoss_SimDat',i,'.csv',sep=""),sep=",",colClasses=c('character',rep('numeric',4)))
 LossMelt<-melt(LossMat)
 SumMat[(((Reps*4*i)-(Reps*4)+1):(Reps*4*i)),(1:3)]<-as.matrix(cbind(LossMelt,Fst))
 }
@@ -604,5 +619,5 @@ P1<-ggplot(SumMat2,aes(x=Fst ,y=Loss,color=Model,fill=Model))  +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))+
   labs(x=expression('F'['ST']))
 
-ggsave(plot=P1,filename=paste(wd,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=6,height=6,units='in') 
-ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(wd,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=6,height=6,units='in')
+ggsave(plot=P1,filename=paste(flockcommentDIR,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=6,height=6,units='in') 
+ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(flockcommentDIR,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=6,height=6,units='in')
