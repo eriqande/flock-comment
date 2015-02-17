@@ -51,7 +51,7 @@ qi_indLoss <- F # set true if you want graphs of qi values and loss by simulatio
 ##### PART 1: Simulate data sets ####
 
 ### Set up the parameters controlling the simulations 
-Seedset <- 3
+Seedset <-  1 # 3
 ### ECA: gotta set reps back after testing
 Reps <- 2  #9 # how many reps do we want to run for each program
 Npops <- 5
