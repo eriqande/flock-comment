@@ -59,7 +59,7 @@ N <- 2000
 
 ## set up migration rates to use 
 if(marker == 1){
-  ## ECA gott set MGrate back after testing
+  ## ECA got to set MGrate back after testing
   MGrate <- c(20, 24)   #c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
 } else if(marker == 2){
   MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
