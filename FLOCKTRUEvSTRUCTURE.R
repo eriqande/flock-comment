@@ -8,7 +8,7 @@ library(plyr)
 library(reshape2)
 library(miscFuncs)
 library(dplyr)  # for the %>% operator
-
+library(xtable)
 
 ##### Top-level settings and paths and stuff  ####
 
@@ -43,7 +43,7 @@ dir.create(file.path(slg_pipeDIR, "/inputs/ForStructure/input"))
 
 
 ### Set genetic marker type to simulate
-marker=1 # RUN WITH MICROSATELLITES (=1) OR SNPS (=2) 
+marker=2 # RUN WITH MICROSATELLITES (=1) OR SNPS (=2) 
 
 ### Other options to set
 qi_indLoss <- F # set true if you want graphs of qi values and loss by simulation
@@ -53,16 +53,16 @@ qi_indLoss <- F # set true if you want graphs of qi values and loss by simulatio
 ### Set up the parameters controlling the simulations 
 Seedset <-  1 # 3
 ### ECA: gotta set reps back after testing
-Reps <- 2  #9 # how many reps do we want to run for each program
+Reps <- 1  #9 # how many reps do we want to run for each program
 Npops <- 5
 N <- 2000
 
 ## set up migration rates to use 
-if(marker == 1){
+if(marker == 1) {
   ## ECA got to set MGrate back after testing
   MGrate <- c(20, 24)   #c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
-} else if(marker == 2){
-  MGrate<-c(20,24)#,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
+} else if(marker == 2) {
+  MGrate<-c(20,24) #,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
 } else {
   stop("Unrecognized value for variable marker")
 }
@@ -78,7 +78,7 @@ if(any(lapply(paste("SimDat", 1:(DatNum*Seedset), sep = ""), dir.create) == FALS
   stop("Failed to create SimDat directory. Perhaps they already exist? If so, put 'em somewhere else!")
 }
 
-if(marker==1){
+if(marker==1) {
 
   ## FOR uSATs
   # loop over our MGrate vector to create simulated datasets and store them in 
@@ -135,42 +135,57 @@ if(marker==1){
   }#do for uSats
 }
 
-if(marker==2){
+if(marker==2) {
   Nloci<-96
   setwd(paste(flockcommentDIR,"/simdata",sep=""))
   seedsms<-readLines('SNPs_seedsms.txt',warn=F)
   seedsms2geno<-readLines('SNPs_seedsms2geno.txt',warn=F)
   index<-seq(from=1,to=DatNum*Seedset,by=DatNum)
-  for (s in 1:Seedset){
-    path<-paste("sed 's/SEEDS1/",seedsms[s],"/' sim_data_snps_MIG_RATE.sh > sim_data_snps_MIG_RATE_DAT1.sh",sep="")
-    system(path)
-    path<-paste("sed 's/SEEDS2/",seedsms2geno[s],"/' sim_data_snps_MIG_RATE_DAT1.sh > sim_data_snps_MIG_RATE_DAT2.sh",sep="")
-    system(path)
+  
+  i <- 0  # to number data sets
+  for (s in 1:Seedset) {
+    # set seeds
+    cat(seedsms[s], file = "seedms")
+    cat(seedsms2geno[s], file = "ms2geno_seeds")
     
     for(x in 1:DatNum){ 
-      setwd(paste(flockcommentDIR,"/simdata",sep=""))
-      path<-paste("sed 's#^M=.*#M=",MGrate[x],"#' sim_data_snps_MIG_RATE_DAT2.sh > sim_data_snps_MIG_RATE_DAT.sh",sep="")
-      system(path)
-      system('chmod 755 sim_data_snps_MIG_RATE_DAT.sh')
+      
       # run the shell command to generate baseline and structure file
-      system('./sim_data_snps_MIG_RATE_DAT.sh > SimDets.txt')
+      message(paste("Simulating SNP data set x =", x, "and s=", s))
+      system(paste("./sim_data_snps_MIG_RATE.sh", MGrate[x], "> SimDets.txt"))
       
       #what is the avg. pariwise FST?
-      AvgFst<-mean(as.numeric(scan('SimDets.txt',skip=113,nlines=10,what='character',sep=":")[seq(from=4,to=10*4,by=4)]))
-      write.table(AvgFst,'AvgFst.txt',sep=" ",col.name=FALSE,row.name=FALSE,quote=FALSE)
+      # compute average pairwise Fst between all the simulated pops
+      tmp <- readLines("SimDets.txt")  # read in the simulation log file
+      tmp <- tmp[str_detect(tmp, "^PAIRWISE_FST")]  # get the lines that have pairwise Fst on them
+      strsplit(tmp, ":") %>%             # split on the colon
+        sapply(., "[", 4)  %>%               # grab the fourth field
+        as.numeric  %>%                      # make it numeric
+        mean  %>%                            # compute mean
+        cat(., file = "AvgFst.txt", sep = "\n")          # write it to file
+        
       
-      # add pop label to the structure input file
-      # we need this to run clump_and_distruct late on
-      # we will ignore the pop.q values for now and focus on the indq values
-      AWKcmd<-paste("awk '{split($0,a,\"_\"); print $1,a[2],",paste(paste('$',(seq(from=2, to=(Nloci*2+1),by=1)),sep=""),collapse=","),"}' FS=\"    \" OFS=\"    \" struct_input_1.txt > SimDatIn",(index[s]-1)+x,sep="")
-      system(AWKcmd)
+      # add pop label to the structure input file and save it into file SimDatInX
+      # here is some fun regex foo to do that  
+      i <- i + 1
+      tmp <- readLines("struct_input_1.txt")
+      str_match(tmp, "^(Pop_([0-9]+)_BaseInd_[0-9]+)(.*$)")[, -1] %>%    # pick out and put back that number
+        write.table(., sep = "  ", quote = FALSE, row.names = FALSE, col.names = FALSE, 
+                    file = paste("SimDatIn", i, sep = ""))
       
-      files2mov<-c('AvgFst.txt','SimDets.txt','BaseFile*','struct_input*',paste("SimDatIn",(index[s]-1)+x,sep=""))#use * just in case we want to generate more inputfiles
-      path<-lapply(1:length(files2mov),function (y) paste('mv ',files2mov[y],' ',flockcommentDIR,'/SimDat',(index[s]-1)+x,sep=""))
-      lapply(1:length(files2mov),function(y) system(path[[y]][1]))
+        
+      # now, name some files we wish to move into "../SimDatX"
+      files2mov<-c("AvgFst.txt", 
+                   "SimDets.txt", 
+                   dir(pattern = "BaseFile*"),    #use * just in case we want to generate more inputfiles
+                   dir(pattern = "struct_input*"), 
+                   paste("SimDatIn", i, sep = "")
+                   ) 
+      
+      lapply(files2mov, function(x) file.rename(x, paste("../SimDat", i, "/", x, sep = "")))
     }
   }
-}
+}  # end if(marker == 2) 
 
 ##### PART 2: Run flockture on all of these datasets #####
 setwd(flocktureDIR)
@@ -585,7 +600,6 @@ ggsave(plot=p1,filename=paste(flockcommentDIR,'/SimDat',ds,'/QiCompRep',j,'SimDa
 }#over j reps
 }#over all ds datasets
 
-
 ##### STEP 6: Make final figure ####
 
 SumMat<-matrix(data=NA,ncol=3,nrow=Reps*4*DatNum)
@@ -636,7 +650,7 @@ for (d in 1:(DatNum*Seedset)){
   Plata[d,r+1]<-plateau
   }
 }
-colnames(Plata)<-c('Fst',paste('Rep',seq(1,9,1),sep=''))
+colnames(Plata)<-c('Fst',paste('Rep',seq(1,Reps,1),sep=''))
 Plata<-Plata[order(Plata[,1]),]
 sink(file=paste('LatexPlateauTable_',mark,'.txt',sep=''),append=F)
 print(xtable(Plata), include.rownames=FALSE)
@@ -647,4 +661,4 @@ system(paste("sed 's/INSERTFILEHERE//' <PlateuTable_",mark,"INT.tex >PlateuTable
 system("rm *INT.tex")            
 
 ##### clean up all the misc files sitting around
-system("rm *DIR.txt")
+system("rm *DIR.txt") 
