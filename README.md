@@ -21,7 +21,7 @@ This should result in two PDF files:
 
 ## Reproducing the simulations
 
-The R script 'Flock2Structure.new' will rerun the analyses comparing Structure and FLOCKTURE from the 
+The R script 'Flock2Structure' will rerun the analyses comparing Structure and FLOCKTURE from the 
 manuscript.  In order to make this work you ought to be on a sane Unix system (you will need `rsync`,
 `awk`, `make` and other such utilities.  Easiest, probably, is going to
 be if you are running Mac OS Mavericks or higher with the Developer Tools installed.

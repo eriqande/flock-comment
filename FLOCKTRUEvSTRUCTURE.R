@@ -51,18 +51,18 @@ qi_indLoss <- F # set true if you want graphs of qi values and loss by simulatio
 ##### PART 1: Simulate data sets ####
 
 ### Set up the parameters controlling the simulations 
-Seedset <-  1 # 3
+Seedset <-  3
 ### ECA: gotta set reps back after testing
-Reps <- 1  #9 # how many reps do we want to run for each program
+Reps <- 9 # how many reps do we want to run for each program
 Npops <- 5
 N <- 2000
 
 ## set up migration rates to use 
 if(marker == 1) {
   ## ECA got to set MGrate back after testing
-  MGrate <- c(20, 24)   #c(20,24,28,30)#,31,32,36,37,37.5,38,40,50,60,75,90,125)
+  MGrate <- c(20,24,28,30,31,32,36,37,37.5,38,40,50,60,75,90,125)
 } else if(marker == 2) {
-  MGrate<-c(20,24) #,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
+  MGrate<-c(20,24,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
 } else {
   stop("Unrecognized value for variable marker")
 }
@@ -632,8 +632,8 @@ P1<-ggplot(SumMat2,aes(x=Fst ,y=Loss,color=Model,fill=Model))  +
   theme(axis.text.x = element_text(angle = 25, hjust = 1))+
   labs(x=expression('F'['ST']))
 
-ggsave(plot=P1,filename=paste(flockcommentDIR,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=6,height=6,units='in') 
-ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(flockcommentDIR,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=6,height=6,units='in')
+ggsave(plot=P1,filename=paste(flockcommentDIR,'/Loss',mark,'_Color.pdf',sep=''),dpi=300,width=11,height=8.5,units='in') 
+ggsave(plot=P1+scale_colour_grey(start=.8,end=0),filename=paste(flockcommentDIR,'/Loss',mark,'_BW.pdf',sep=''),dpi=300,width=11,height=8.5,units='in')
 
 #Plateau Table
 setwd(flockcommentDIR)

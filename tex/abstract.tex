@@ -8,8 +8,19 @@ allele frequency priors. The computational routine in {\sc flock} is
 equivalent to searching for the maximum-{\em a-posteriori}
 estimate of this restricted {\sc structure} model via a simulated 
 annealing algorithm with an extreme cooling 
-schedule (namely, the exponent on the objective function~$\rightarrow \infty$).  By analysis of a large, real data set we
-confirm that {\sc flock} yields results similar to {\sc structure} with the no-admxixture
-model and uncorrelated allele frequency prior with more variability 
-from run to run. Interpreting {\sc flock}'s algorithm as a special case of the model in 
-{\sc structure} should aid in  understanding the program's output and behavior. 
+schedule (namely, the exponent on the objective function~$\rightarrow \infty$).  We 
+demonstrate the similarities between the two programs in a two step approach. First,
+we modified the source code of  {\sc structure} to resemble {\sc flock} producing
+the program {\sc flockture}. With simulated data we confirm similar behavior between 
+{\sc flock}  and {\sc flockture} by assing the programs' performance
+to assign individuals back to their correct population with a 
+0-1 loss function (ie. a loss of 1 is incurred if an individual is assinged 
+to an incorrect group). Second, we simulated many datasets under varying 
+levels of population differentiation for both microsatllite and SNP genoyptes. We show that
+{\sc flockture} yields results similar to {\sc structure} although with much larger 
+variability from run to run. {\sc flockture} did perform better than {\sc structure} 
+when genotypes were composed of SNPs and differentiation was moderate 
+($F_{ST}=0.022-0.032$). When differentiation was low, {\sc structure} had a lower loss
+for both marker types. Interpreting {\sc flock}'s algorithm as a special case of the model in 
+{\sc structure} should aid in understanding the program's output and behavior. 
+
