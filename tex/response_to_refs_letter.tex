@@ -193,7 +193,7 @@ comparisons relative to K values other than the estimate
 \reply{We have eliminated issues of what can and can't be said about allocation of individuals  at a
 certain value of $K$ by doing all the simulations and the analyses at a known value of $K$.}
 \item Comparisons of estimates of K cannot be performed with sufficient rigor
-\reply{We agree with the referee here.  In fact, we weren't entirely comfortably addressing the issue of estimating
+\reply{We agree with the referee here.  In fact, we weren't entirely comfortable addressing the issue of estimating
 $K$ in the previous version of the manuscript, lest it appear that we were implicitly encouraging it. 
 Therefore, we now focus entirely on allocation of individuals.}
 \item The speed comparisons are based on an ill-chosen processing unit
@@ -216,7 +216,7 @@ In fact, similar iterative methods have been around for a very long time (e.g. N
 In fact, rather than viewing it as special case of simulated annealing, one could just as well
 note that {\sc flock} is a type of gradient descent-algorithm attempting to maximize the
 likelihood of the data given a configuration of clusters.
-Regardless of what name is given to it, since it is effectively an algorithm
+Regardless of what name is given to it, since it is an algorithm
 that (intentionally or not) yields solutions with 
 high (and possibly maximal) likelihood, we find it quite clear that  
 the conceptual framework of statistics is at least as ``truly pertinent,''
@@ -289,7 +289,7 @@ prevalent problem for {\sc flockture}.''
 \reply{See above.  Note that we don't vary $K$ now so we don't call it a problem ``with large $K$'' any
 longer.}
 \item (p.16) It is probably better to use STRUCTURE in such cases...
-\reply{We don't use this phrase specifically, but we do point out that {\sc flock} is not best-suited to high-gene-flow
+\reply{We no longer use this phrase specifically, but we do point out that {\sc flock} is not best-suited to high-gene-flow
 species with very low $F_\mathrm{ST}$.}
 \end{itemize}
 
@@ -305,7 +305,7 @@ built for.''  I had the pleasure of visiting Jonathan Pritchard in Oxford shortl
 {\sc structure} paper was published. At that time, the members of the Donnelly lab were not eagerly using
 {\sc structure} to estimate $K$ from different samples; they were using {\sc structure} to correct
 for population admixture when doing association tests in human genetics---our understanding
-is {\em that} was the task that structure was original built for.  Furthermore, when I contacted
+is {\em that} was the task that structure was originally built for.  Furthermore, when I contacted
 Jonathan a few years later to ask him some details about how $\ln P(D)$ was calculated by {\sc structure},
 he pointed out to me (while getting his notes out of his filing cabinet) that the method for estimating
 $K$ was added into the paper to satisfy a referee who had requested it, and that Matthew Stephens 
@@ -344,7 +344,7 @@ The answer is simple: there is no best run. The term `best run' applies exclusiv
 \reply{This seems strange to us.  What happens in the situation where the
 ``true $K$'' is known and you just want to cluster individuals? If there are no plateaus
 amongst the runs at that value of $K$ should one discard {\sc flock} and use
-a different program altogether? In most of the simulated data sets we investigated {\sc flock},
+a different program altogether? In most of the simulated data sets we investigated, {\sc flock},
 like {\sc flockture},
 would not have seen any plateaus at all!---and yet it is still delivering useful clustering
 inference that is competitive with, and at times better than, {\sc structure}.  We discuss

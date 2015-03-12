@@ -427,7 +427,7 @@ values for assignment remain high in contrast to the $q_i$ values in each of the
   \begin{figure*}
 \centering
 \includegraphics[width=.9\linewidth]{images/Figures-Pat/uSatLoss.pdf}%uSatloss_BW.pdf is a greyscale version
-  \caption{Zero-one loss for nine runs of {\sc flockture} and the admixture and correlated allele 
+  \caption{Zero-one loss (lower values = better performance) for nine runs of {\sc flockture} and the admixture and correlated allele 
   frequency (A.C) model, the no-admixture and correlated allele frequency (NA.C) model, 
 and the no-admixture and non-correlated allele frequency (NA.NC) model in {\sc structure}. Forty-eight 
 datasets, composed of 2,000 individuals with 15 microsatellite genotypes comprising
@@ -506,10 +506,11 @@ individuals, as the algorithm proceeds deterministically after the initial rando
 Decreasing $F_{ST}$ leads to more homogenous 
 populations whose multilocus genotypes have a smaller difference in 
 likelihood of assigning to any given cluster. This likely increases the number of
-local peaks, leading {\sc flockture} and {\sc flock} to settle on many different solutions in each run. The problem presented by having multiple modes in the likelihood surface 
+local peaks, leading {\sc flockture} and {\sc flock} to settle on settle on different solutions in 
+different runs. The problem presented by having multiple modes in the likelihood surface 
 is not unique to {\sc flock}---{\sc structure} also can converge to 
 different solutions in complex spaces; however our simulations suggest this is a more  
-prevalent problem for {\sc flockture}.
+prevalent problem for the {\sc flock} algorithm.
 {\sc flock} is not best-suited to species characterized by large
 subpopulations and low divergence, as is the case with many 
 marine fish.   
