@@ -41,7 +41,7 @@ estimate from a marginalized form of the {\sc structure} model with no
 admixture and non-correlated allele frequencies.  Thus, while the models underlying
 {\sc structure} and {\sc flock} are nearly indistinguishable, {\sc structure}'s inference
 relies on MCMC samples from the posterior distribution, while
-{\sc flock}'s inference involves finding a local maximum in the posterior surface.
+{\sc flock}'s inference involves finding local maxima in the posterior surface.
 
 Recognizing {\sc flock}'s underpinnings in this fashion should help users
 interpret output from {\sc flock} and predict when it might and might not
@@ -97,7 +97,8 @@ at iteration $t =0, 1, 2, \ldots, T-1$:
 the full conditional distribution of $Z_i$ given
 $Y_i$ and $\theta^{(t)}$ (the current estimate of the allele frequencies).  This
 distribution is found using Bayes' theorem. In {\sc structure}'s formulation, the 
-prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$, implying the belief that the subpopulations are equallyrepresented in the sample before observing the genotypes present.    
+prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$, implying the belief that the subpopulations are equally
+represented in the sample before observing the genotypes present.    
 \item $\theta^{(t)}$ is updated to $\theta^{(t+1)}$ from its full conditional distribution.  For each 
 cluster
 $k$ and locus $\ell$, the full conditional for $\theta_{k\ell}$ is independently a 
@@ -258,15 +259,15 @@ evaluate how well it does in recovering that structure when the data are
 analyzed assuming
 the number of subpopulations is exactly the number of subpopulations in the simulation. The 
 algorithm performance can then be measured with a zero-one 
-loss function (where a loss of 1 is incurred if an individual is group with the wrong cluster).
+loss function (where a loss of 1 is incurred for each individual that is grouped with the wrong cluster).
 
 The implementation of {\sc flock} as a VBA procedure (macro) in 
 Microsoft Excel retards rigorous evaluation of its behavior due 
-the its slow execution speed and 
+to its slow execution speed and 
 the inability to efficiently batch-process multiple data sets. Consequenty, we adapted 
 the source code from {\sc structure} as described above to create {\sc flockture}
 (code provided on GitHub repository https://github.com/eriqande/flockture) 
-in order to accurately assess the strengths and weaknesses of the {\sc flock} 
+in order to accurately and reproducibly assess the strengths and weaknesses of the {\sc flock} 
 algorithm. First, using simulated data we demonstrate that {\sc flock} 
 and {\sc flockture} are essentially equivalent programs.
 Second, we simulate and analyze datasets with {\sc flockture} 
@@ -276,32 +277,34 @@ allele frequency (NA.C) model, and the no-admixture and non-correlated
 allele frequency (NA.NC) model) to help better understand
 under what conditions, if any, running {\sc flock} may be preferable to {\sc structure}. 
 
-For each set of runs, {\sc flock} reports the 
-normalized likelihood values (the exponentiated log-likelihood value for an individual's 
-membership to each of $K$ clusters, scaled to sum to one) for a run belonging to the 
-longest plateau---refered to as the `best run' by \citep{Duc&Tur2012} (see below).
-These values can be compared to the $q_i$ values
-returned by {\sc structure}, which, in the no-admixture case, are posterior 
-probabilities of cluster membership. In {\sc flock} the user must specify both the number of runs 
+For a single excecution of {\sc flock} the user must specify both the number of runs 
 (different initial allocations of individuals 
 to each cluster) as well as the number of iterations (in each iteration every individual 
 has the opportunity to be reallocated 
-to a different cluster).  At the conclusion of each run, the log-likelihood value for 
+to a different cluster). At the conclusion of each run, the log-likelihood value for 
 membership to all $K$ clusters is computed
-and the log likelihood difference (LLOD), the difference between the 
+and the log likelihood difference (LLOD)---the difference between the 
 cluster with the highest likelihood 
-and second highest likelihood, is calculated for each individual. {\sc flock} 
+and second highest likelihood---is calculated for each individual. {\sc flock} 
 identifies runs that have converged to the same solution by detecting 
 that they have the same mean LLOD score, and, in 
-{\sc flock} parlance, a series of runs that have converged to the same 
-solution are termed a ``plateau.'' The plateau record is a list of 
-how many runs converged to the same allocation
+{\sc flock} parlance multiple runs that have converged to the same 
+allocation of individuals are termed a ``plateau.'' The plateau record is a list of 
+how many runs in the program execution have converged to the same allocation
 of individuals.
-
+When all 50  runs have completed, 
+{\sc flock} reports as its solution the cluster membership and 
+normalized likelihood values (the exponentiated log-likelihood value for an individual's 
+membership to each of $K$ clusters, scaled to sum to one) for one of the 50 runs belonging to the 
+longest plateau---refered to as the `best run' by \citep{Duc&Tur2012}.
+These normalized likelihood values can be compared to the $q_i$ values
+returned by {\sc structure}, which, in the no-admixture case, are posterior 
+probabilities of cluster membership. 
+ 
 
 To compare {\sc flock} and {\sc flockture}, 4 datasets composed of 5 populations
-were simulated using a coalescent based program (code provided on GitHub repository 
-https://github.com/eriqande/flock-comment/simdata). The 5 populations
+were simulated using a coalescent-based program (code provided at 
+https://github.com/eriqande/flock-comment/). The 5 populations
 were composed of 250, 250, 400, 550, and 550 individuals, respectively, all typed  at 15 loci.
 Each of the four data sets was simulated with a different 
 average pairwise $F_{ST}$ between the populations: 0.03, 0.02, 0.01, and 0.005. 
@@ -309,24 +312,29 @@ Both {\sc flock} and {\sc flockture} were run nine times at $K=5$ with the defau
 run parameters (initial partition = random, number of iterations = 20, number of runs = 50, 
 LLOD threshold = 0). We judged {\sc flockture} as an accurate 
 representation of {\sc flock} based on the
-following criteria: (1) Clustering of individuals into corrected population as
+following criteria: (1) Clustering of individuals into correct population as
  defined by the zero-one loss function, (2) individual $q_i$ values, and (3) plateau records. 
 All runs were performed on a JNCS D685 with an i7 3.40GHz processor and 8GB of 
 RAM running 64-bit Windows 7. 
 
 Once we were confident that no major differences in inference existed between 
 {\sc flock} and {\sc flockture} we used {\sc flockture} to analyze 48 datasets for each of two marker types 
-(microsatellites and single nucleotide polymorphisms (SNPs))  that encompassed a broader 
-range of population differentiation. The 96 datasets were simulated as above (five populations 
-composed of 250, 250, 400, 550, and 550 individuals with 15 loci genotypes for the microsatellites
+(microsatellites and single nucleotide polymorphisms (SNPs))  that encompassed a broader range
+of population differentiation. The 96 datasets were simulated as above (five populations 
+composed of 250, 250, 400, 550, and 550 individuals with 15 loci for the microsatellites
 and 96 loci for the SNPs)
 with average pairwise $F_{ST}$ values ranging between 0.004 and 0.045. 
  {\sc flockture} was run with the default run parameters and each run of 
 {\sc structure} consisted of a 5,000 sweep burn-in followed by a 20,000 sweep sample
-from the posterior distribution. All runs were performed on a Macbook with a 2.3 GHz i7 processor
+from the posterior distribution. Each dataset was analyzed 9 times by each of the different
+methods. All runs were performed on a Macbook with a 2.3 GHz i7 processor
 and 16GB of RAM running OS X ver. 10.7.5. The program {\sc clumpp} \citep{Jak&Ros2007} 
 was used to relabel clusters among different runs,
 while the program {\sc distruct} \citep{Rosenberg2004} was used to plot individual \textit{$q_i$} values.
+
+When {\sc flock} does not have a `best run' because the plateau record contains no plateaus, the program still returns a solution, but it is not clear how that solution is chosen.  In
+our analyses  with {\sc flockture}, when the plateau record did not indicate a `best run,' we used the
+run with the highest likelihood as the solution.
 
 \subsection*{{\sc flock} and {\sc flockture}} 
 {\sc flock} and {\sc flockture} provided similar clustering of individuals among all four 
@@ -339,7 +347,8 @@ substantially among the simulated datasets.
 We attempted for some time to develop {\sc flockture} to yield
 completely identical results to those from {\sc flock}; however we did not
 persist in those endeavors when we realized that {\sc flock} itself does
-not provide consistent results when expected by symmetry.  Briefly, In an attempt to understand the 
+not provide consistent results when expected by symmetry.  Briefly, In an attempt to understand the
+inner workings of {\sc flock} 
 we took a subset of the 
 first dataset (29 individuals from population 1 and 21 individuals from population 2) and initiated 
 {\sc flock} with all individuals originating from population 1 being placed in reference population 1 and all 
@@ -375,20 +384,20 @@ speed.
 
 \subsection*{{\sc flockture} and {\sc structure}} 
 As expected {\sc flockture} and {\sc structure} both perform extremely well on datasets with
-well differentiated populations. Infrequently, at higher levels of population differentiation the 
+well-differentiated populations. Infrequently, at higher levels of population differentiation the 
 NA.NC and NA.C models in {\sc structure} exhibited large losses (Fig.~\ref{fig:uSatLoss})
 resulting from the assignment of individuals from two groups into a single cluster while 
 individuals from another group were separated into two clusters
 with intermediate $q_i$ values (Fig.~\ref{fig:FvSdistruct} A). This phenomenon 
 (only present in a single microsatellite dataset) is an instance of {\sc structure}'s
 Markov chain failing to converge well in the short runs we were using. As the subtlety of genetic structure 
-increased loss for both programs increased and differences in the performance of
+increased, loss for both programs increased and differences in the performance of
 each model with different marker types emerged.
 For the microsatellite dataset we observed that both programs
 produce roughly equivalent results at higher levels of population differentiation. At intermediate 
 values, the variance of the loss incurred by each model increased and certain models did marginally
 better in assignment. No model did consistently better than others, until $F_{ST}$ dropped 
-below 0.0136 after which the loss for {\sc flockture} was markedly larger as was the among run
+below 0.0136 after which the loss for {\sc flockture} was markedly larger as was the among-run
 variance. The drastic increase in variance among runs was also observed with the SNP datasets. 
 {\sc flockture} did, however, have consistently smaller loss than  {\sc structure} at high to intermediate 
 values of $F_{ST}$. Once $F_{ST}$ fell below 0.016, however, {\sc structure} began correctly assigning a 
@@ -404,7 +413,7 @@ were concordant.
 Only simulated datasets with pairwise $F_{ST}$ values greater 0.0323 had plateau records with a 
 plateau greater than six. Despite the lack of plateaus observed for many of the simulated datasets, 
 graphs of the normalized likelihood values from the {\sc flockture} run with the highest 
-likelihood were suggestive of population structure.  
+likelihood were indicative of population structure (Fig~\ref{fig:FvSdistruct}).  
 
 Plots of the normalized likelihood values from {\sc flockture} can be useful in discerning the presence of 
 structure.  In situations where only a single run of {\sc flockture} produced a plateau of length 2 
@@ -459,7 +468,8 @@ of both programs. }
 the no-admixture and correlated allele frequency (NA.C) model, 
 and the no-admixture and non-correlated allele frequency (NA.NC) model. Numbers in 
 parentheses following the model names give the number, out of 9, of replicate runs
-that obtained the same visually-indistinguishable estimate. Each simulation is comprised of
+that obtained the same visually-indistinguishable estimate. (Note that although many of {\sc flocktures}'s solutions in B--D were visually indistinguishable, they were not identical partitions, and would
+hence be considered different for the purposes of creating a {\sc flock} plateau record.) Each simulation is comprised of
  five populations of sizes 250, 250, 400, 550, and 550 individuals with average pairwise $F_{ST}$ values
  indicated above each plot.}
   \label{fig:FvSdistruct}
@@ -484,19 +494,19 @@ we find that the two programs give similar results.
 
 Though we observed similar results
 between the two programs at large values of $F_{ST}$, 
-{\sc flockture}'s `best-run' solutions consistently assigned fewer individuals correctly
-and became inconsistent at lower values of $F_{ST}$.
+{\sc flockture}'s solutions consistently assigned fewer individuals correctly---and the
+replicate solutions for individual data sets became more variable---at lower values of $F_{ST}$.
 This is likely a consequence of the low population divergence which
 makes it possible for many different allocations of individuals to
 have roughly the same likelihood.
 The likelihood surface defined on partitions of this space is then often
 be multimodal---possessing numerous local peaks and troughs.
-The peak that  {\sc flockture}'s algorithm finds is entirely determined by the initial, random, allocation of 
+The peak that the {\sc flock} algorithm finds is entirely determined by the initial, random, allocation of 
 individuals, as the algorithm proceeds deterministically after the initial random allocation.
 Decreasing $F_{ST}$ leads to more homogenous 
 populations whose multilocus genotypes have a smaller difference in 
 likelihood of assigning to any given cluster. This likely increases the number of
-local peaks, leading {\sc flockture} to settle on many different solutions in each run. The problem presented by having multiple modes in the likelihood surface 
+local peaks, leading {\sc flockture} and {\sc flock} to settle on many different solutions in each run. The problem presented by having multiple modes in the likelihood surface 
 is not unique to {\sc flock}---{\sc structure} also can converge to 
 different solutions in complex spaces; however our simulations suggest this is a more  
 prevalent problem for {\sc flockture}.
@@ -512,7 +522,7 @@ Having implemented {\sc flockture} it is clear that the amount of computation re
 single sweep of {\sc structure} is equivalent to an iteration of reallocation of individuals
 in {\sc flock}.
 Hence, if {\sc flock} and {\sc structure} took similar amounts of time for comparable
-computations, one would expect that running flock once with 50 runs, each of 20 iterations,
+computations, one would expect that executing {\sc flock} once with 50 runs, each of 20 iterations,
 would require about the same amount of time as running {\sc structure} on the same
 data set for 1,000 sweeps.  Since it is recommended to run {\sc structure} longer than 1,000 sweeps, {\sc flock} should have a speed advantage. However, {\sc flock} requires far more 
 time for each computation
@@ -524,6 +534,7 @@ a speed advantage.
 If {\sc flock} were to be implemented using good coding practices in a fast language,
 rather than as a VBA routine in Microsoft Excel,
 it could be made much faster. As it is, we found it preferable to implement our own version
+of the {\sc flock} algorithm
 in {\sc flockture} for our simulation assessment of the {\sc flock} algorithm.
 
 
@@ -531,11 +542,10 @@ Many researchers wish to estimate $K$, the number of subpopulations, from geneti
 a difficult task, statistically, because estimating $K$ is a problem in model selection, and hence can
 be exquisitely sensitive to the priors on nuisance parameters as well as to departures from the underlying
 model (e.g. clinal rather than demic structure). For these reasons, it seems inadvisable to us to
-put too much stock in the inference of $K$ from any program with a simple model of population structure which
-is almost undoubtedly violated in reality. Accordingly, we have based our comparison of 
+put too much stock in the inference of $K$ from any program, especially when population structure
+is subtle. Accordingly, we have based our comparison of 
 {\sc flockture} and {\sc structure} on their ability to correctly cluster individuals when the true value
-of $K$ is known. It should always be kept in mind that real data may depart in unexpected ways from
-simulated data. 
+of $K$ is known. 
 
 
 While there has been lengthy 
@@ -545,17 +555,39 @@ individuals
 and the number of starting allocations can affect not only the convergence of different runs of {\sc flock}, but also its 
 inference of $K$. \citeauthor{Duc&Tur2012} developed estimation rules for $K$ based on simulated data 
 sets with a modest number of individuals and different migration regimes and rates, numbers of loci, and $K$. 
-By relying on the number of identical partitions (mean LLOD values) obtained by {\sc flock} over multiple
+By relying on the number of identical partitions obtained by {\sc flock} over multiple
 runs as a means of supporting 
 a particular $K$,  similar---but not identical---partitions
-will provide no support to a given $K$. We have shown that even at intermediate
-values of $F_{ST}$ {\sc flockture} has a tendency to converge to 
-different solutions where no plateaus are encountered. Despite the lack of
-plateaus, plots of the normalized likelihood values demonstrate that
-{\sc flockture} still produces valuable information, and it might be somewhat
-restrictive to insist that {\sc flock}'s clustering of individuals is useful
-only for the most likely $K$, and only if a long plateau has been
-observed (Pierre Duchesne, pers. comm).  
+will provide no support to a given $K$. This could be problematic, 
+since we have shown that even at intermediate
+values of $F_{ST}$,  {\sc flockture} (and, by extension,
+{\sc flock}) may converge to 
+different cluster allocations in every run, so that no plateaus are encountered. 
+
+The above presents a serious conundrum to the user of {\sc flock}.  On the one hand,
+{\sc flock} clearly continues to provide useful inference about population structure
+(as evidenced by the {\sc distruct} plots in Fig.~\ref{fig:FvSdistruct}), even when its
+plateau record includes no plateaus; however, on the other hand, if there were no
+plateaus for $K=5$ in our simulated data, then the {\sc flock} method would lead to an estimate of $K$ that
+was either "undecided" or some value less than $K$. The authors of {\sc flock}
+discourage users from making any inference at a value of $K$ that is not
+the value estimated by {\sc flock}, because, ``outside the estimated $K$, no partitions from {\sc flock}
+ should be considered. Therefore\ldots clusterings from {\sc flock}\ldots for all $K$ except the estimated one are just
+ irrelevant and not valid''(Pierre Duchesne, pers. comm).  To be specific, following 
+this advice of {\sc flock}'s authors would have led to discarding {\sc flockture}'s
+results for any $F_\mathrm{ST} < 0.032$ (almost 90\% of our simulated data sets!), even those that are
+manifestly quite accurate---some competitive
+with or even superior to {\sc structure}'s estimate!  We surmise that this problem with {\sc flock} 
+guidance issues from the fact that the {\em ad-hoc} rules developed by
+\citeauthor{Duc&Tur2012} for estimating $K$ with {\sc flock} were developed empirically
+by reference to a small set of simulations over a fairly limited range of sample sizes.  Since our simulated
+samples (made to mimic the sorts of large, real data sets we collect in our labs)
+fall outside the range of values explored
+by \citeauthor{Duc&Tur2012} it appears that {\sc flock}'s rules of use are inappropriate, 
+and perhaps over-restrictive for these data sets.  Researchers with data that similarly fall beyond the range of 
+data sets tested in \citeauthor{Duc&Tur2012} may wish to approach {\sc flock} analysis with
+caution, or may choose to rely on other programs.
+
 
  
 Often, newly-developed algorithms come to be understood within more general contexts and 
@@ -571,4 +603,6 @@ in the potential development of {\sc flock} or other clustering algorithms.
 
 \section*{Acknowledgments}
 We are grateful to Kristen Ruegg and Robin Waples for helpful comments on a draft of this paper.
+Comments and suggestions from an anonymous referee and Pierre Duchesne helped to strengthen the
+paper considerably.
 P. Barry was supported by a fellowship from the Rasmuson Foundation.

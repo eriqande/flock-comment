@@ -35,10 +35,47 @@ Molecular Ecology Resources \\
 
 \opening{Dear Dr.~Kane:}
 
-\reply{Some notes:  using flockture was mandatory because there is no other way to do a reproducible anaysis
-with {\sc flock}.  Until people start distributing scriptable, reproducible tools, that is what we 
-had to do.}
+Thank you for the opportunity to resubmit our revised manuscript, MER-14-0343 ``Interpreting the FLOCK algorithm
+from a statistical perspective.''  We are very grateful to you and to both of the referees for the many
+suggestions that we have incorporated.  We feel they have improved the manuscript greatly.  We have taken your
+advice and undertaken a set of simulations that provide a thorough assessment of {\sc flock} versus {\sc 
+structure} on data sets with large numbers (2,000) of individuals, like our original steelhead data set.
+We have dropped the steelhead data set from the paper.  
 
+In order to conduct these simulations we implemented the {\sc flock} algorithm by modifying the source code of
+the program {\sc structure}.  We used the resulting program, {\sc flockture}, because {\sc flock} itself
+is 200 times slower than {\sc flockture} and it is also not amenable to scripting and repeated application to 
+multiple data sets in batch mode.  It is simply not possible to prepare a reproducible set of simulations using
+the point-and-click interface of {\sc flock}.  We show simulations in the paper to verify that {\sc flockture} and {\sc flock} yield equivalent results before comparing {\sc structure} to {\sc flockture}.
+
+Another change in the paper is that we focus on the performance of the programs for clustering individuals while
+assuming the correct value of $K$.  We were actually somewhat uncomfortable in our initial submission that
+assessing {\sc flock}'s ability to estimate $K$ might give the impression that we recommend such pursuits---an
+endeavor that I (along with {\sc structure} co-author Matthew Stephens) are reluctant to recommend, especially
+when population structure is weak.  So, we are pleased to be able to offer a rigorous evaluation of program
+performance without going too deeply into the {\em ad-hoc} procedures for estimating $K$ with {\sc flock}.
+
+Overall, we discovered through our simulations that results from the {\sc flock} algorithm tend to be less 
+consistent than {\sc structure}'s, especially at low values of $F_\mathrm{ST}$.  But, on the other hand, we were 
+quite interested to see that the algorithm still worked quite well in some cases.  In fact, it outperformed {\sc structure} 
+using SNPs at intermediate levels of differention.  We also found that in large data sets like those that
+we simulated, {\sc flock}'s individual runs seldom (or never) converge to exactly the same partition.  This 
+presents some serious problems for applying the Duchesne \& Turgeon (2012) recipe for estimating $K$, and we 
+note that in the discussion.  
+
+Below, we address individual comments from you and the referees.  Our replies are in \textcolor{blue}{{\sl blue slant}} font.
+
+Thank you again for your service.  As usual, we have been greatly pleased with the review process
+at {\em Molecular Ecology Resources} and are excited with how much improvement the referees have brought
+to our paper.  We apologize that it has required several months to return these revisions, but do appreciate
+the extra time the journal granted us---it was necessary to write {\sc flockture} and to undertake the
+simulations.  
+
+Best regards,
+
+Eric C. Anderson
+
+\vspace*{3em}
 
 {\bf Editor Comments to Author:}
 
@@ -51,7 +88,14 @@ Molecular Ecology 21 (20), 4925-4930
 
 for some approaches that we used to assess repeatability of analytical procedures in quite a number of Structure datasets.  It would not be necessary to go quite as in-depth as in that article, but I do agree with reviewer 1 that a single dataset is insufficient.  Additionally it would be very helpful to use either simulated datasets or other datasets where we have a good idea of what the 'true' answer should be (e.g. some independent prior knowledge of some kind, or at the least a very thorough existing analysis to give reasonable expectations).
 
+\reply{Thank you for your recommendations.  We have undertaken a set of simulations as suggested.}
+
 Reviewer 1 raises numerous other important points which will improve this paper substantially when dealt with, as does Reviewer 2 (though this reviewer's concerns tend to be much more minor). Despite the large number of suggestions between the reviewers, is should be quite possible to make these changes relatively easily - with the availability of so many existing, well-analyzed datasets it should be relatively easy to run at least a few more through FLOCK and STRUCTURE for a broader set of comparisons.  Alternately, it might make sense to do a fuller analysis of many datasets and re-submit as a full paper. Either would be quite useful to the Molecular Ecology and MER readership.
+
+\reply{We address all reviewer comments in the revision, and detail our responses below.  We are re-submitting
+our manuscript as a revision of our first version; however if you thought that it warranted
+reclassification and publication as
+a full paper rather than as a comment we would be amenable to that.  Thank you.}
 
 I look forward to a revised manuscript.
 
@@ -155,9 +199,7 @@ Therefore, we now focus entirely on allocation of individuals.}
 \item The speed comparisons are based on an ill-chosen processing unit
 \reply{We implemented the {\sc flock} algorithm by modifying the C source code for {\sc structure} and
 adding an R wrapper.  This allows a more direct comparison of the amount of computation involved.  If 
-{\sc flock} were implemented as efficiently as {\sc structure} it would be much faster.  But since it
-runs 200 times slower than it should for what it is doing, there doesn't seem much speed advantage in 
-the data sets we ran.  We report that now in the paper in a way that should be easily understood. }
+{\sc flock} were implemented as efficiently as {\sc structure} it would be much faster.  We report that now in the paper in a way that should be easily understood. }
 \end{enumerate}
 
 I now describe each of those concerns in more detail.
@@ -166,7 +208,7 @@ I now describe each of those concerns in more detail.
 
 It must be emphasized that FLOCK is not an MCMC based algorithm. It has no target function, no transition probabilities and does not move in small measured probabilistic steps. No amount of mathematical analysis will ever change this. 
 
-\reply{I don't believe that we said {\sc flock} was an MCMC algorithm.  We noted that it was a limiting
+\reply{We didn't say {\sc flock} was an MCMC algorithm.  We noted that it was a limiting
  case of a simulated annealing algorithm.}
 
 In fact, similar iterative methods have been around for a very long time (e.g. Newton's method for finding roots), much before the first MCMC algorithms were designed (1950?s). This family of methods should be analysed within a truly pertinent conceptual framework (attractors, basins of attraction, fixed points, orbits, etc). The book A First Course in Discrete Dynamical Systems (RA Holmgren, 1994) provides an excellent introduction to this topic. 
@@ -176,10 +218,11 @@ note that {\sc flock} is a type of gradient descent-algorithm attempting to maxi
 likelihood of the data given a configuration of clusters.
 Regardless of what name is given to it, since it is effectively an algorithm
 that (intentionally or not) yields solutions with 
-high (and possibly maximal) likelihood, we have difficulty understanding
-how the referee can honestly declare that, for purposes of analysis of the algorithm,
-the conceptual framework of dynamical systems is any more ``truly pertinent'' than
-the conceptual framework of statistics.   }
+high (and possibly maximal) likelihood, we find it quite clear that  
+the conceptual framework of statistics is at least as ``truly pertinent,''
+for purposes of analysis of the algorithm, as is
+the conceptual framework of dynamical systems.
+}
 
 
 The current popularity of MCMC methods in the field of genetic analysis does not justify trying to cast every current algorithm into an MCMC framework.
@@ -207,14 +250,14 @@ from different initial conditions.''}
 each and every possible
 partition, since this would be infeasible in most problems, so we thank the referee for pointing out that our reference to a space of all partitions might
 have confused readers in this way.  We have changed that section appropriately.  However, on whether
-or not {\sc flock} samples from the space of partitions, we respectfully submit that the referee is
+or not {\sc flock} samples from the space of partitions, we contend that the referee is
 incorrect when he states that, ``Flock does not sample nor search the surface or space of all partitions.'' 
 Consider this: 1) for each run, the initial starting partition in {\sc flock} is chosen (or you could say,
 sampled) randomly from amongst
 possible partitions with roughly the same number of individuals in each cluster; 2) the starting partition uniquely
 determines the partition that the algorithm will converge to since it is deterministic, 3) different
 starting partitions can lead to different final solutions/partitions.  How is it then that each
-run in {\sc flock} is {\em not} a sample from the partitions?  }
+run in {\sc flock} is {\em not} a sample from the partitions? It is quite clear to us that it is.  }
 \item Line 234: ``individuals would alternate between reference groups'': this, precisely, is an orbit
 \reply{We removed discussions of individuals alternating between reference groups.}
 \end{itemize}
@@ -301,16 +344,15 @@ The answer is simple: there is no best run. The term `best run' applies exclusiv
 \reply{This seems strange to us.  What happens in the situation where the
 ``true $K$'' is known and you just want to cluster individuals? If there are no plateaus
 amongst the runs at that value of $K$ should one discard {\sc flock} and use
-a different program altogether? In most of the simulated data sets we investigated {\sc flock}
-like {\sc flockture}
-would not have converged to a different solution on each of its 50 runs of 20 iterations---there
-would have been no plateaus at all!  and yet it is still delivering useful clustering
+a different program altogether? In most of the simulated data sets we investigated {\sc flock},
+like {\sc flockture},
+would not have seen any plateaus at all!---and yet it is still delivering useful clustering
 inference that is competitive with, and at times better than, {\sc structure}.  We discuss
 this rather restrictive guidance on using {\sc flock} in the Discussion.  }
 
 This same approach (= all K outputs are valuable) also brings the authors to lament ``FLOCK's tendency to converge to different solutions with large K'' and conclude that STRUCTURE would be a better choice for complex problems. This is a surprising conclusion since FLOCK is expected to signal the absence of K components precisely by not repeating solutions for that K and thus producing very short plateaus if any. Clearly, by increasing the value of K, the true value will eventually be surpassed and FLOCK will tend to generate numerous solutions and therefore short plateaus ($< 6$). As for the real dataset, there is no ground to believe that $K > 4$ (line 246--248), so that the reported large variability of the FLOCK results may just be the right signal. Here there is a huge misunderstanding that leads the authors to systematically misinterpret potentially correct answers as a sign of inconsistency or lack of power.
 
-\reply{These points are now largely moot, as we don't address the problem of estimating $K$, and we
+\reply{These points are now largely moot, as we don't focus on the problem of estimating $K$, and we
 only analyze simulated data sets at the correct $K$ value.}
 
 {\em Misinterpretation of the stochasticity of plateau lengths}
@@ -409,14 +451,18 @@ to publish it as a full article, we would agree to that.
 }
 
 
-I also suggest that the authors make an additional effort to better understand plateau analysis especially in connection with variability of solutions i.e. lengths of plateaus. Short plateaus (numerous solutions) are the right answer whenever K is the wrong answer to the `number of populations' problem. If run times are to be compared, the comparisons should follow the above recommendation such that a real user gets a simple message out of it.
+I also suggest that the authors make an additional effort to better understand plateau analysis especially in connection with variability of solutions i.e. lengths of plateaus. Short plateaus (numerous solutions) are the right answer whenever K is the wrong answer to the `number of populations' problem. 
 
+\reply{We have taken the referee's suggestion and worked on obtaining a better understanding of plateau analysis.
+Short plateaus may well be right answer whenever $K$ is the wrong answer.  However, short plateaus are also
+the wrong answer when the $K$ value is correct.  This seems to be major problem for {\sc flock} on data sets
+of the size that we have simulated.  We've addessed this in the 2nd to last paragraph of the discussion. }
 
+If run times are to be compared, the comparisons should follow the above recommendation such that a real user gets a simple message out of it.
+
+\reply{See above.}
 Pierre Duchesne
 
-\closing{Best regards,}
-\setlength{\topmargin}{0in}
-\textheight = 9 in
 \end{letter}
 
  \end{document}   
