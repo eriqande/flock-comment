@@ -57,7 +57,7 @@ performance without going too deeply into the {\em ad-hoc} procedures for estima
 
 Overall, we discovered through our simulations that results from the {\sc flock} algorithm tend to be less 
 consistent than {\sc structure}'s, especially at low values of $F_\mathrm{ST}$.  But, on the other hand, we were 
-quite interested to see that the algorithm still worked quite well in some cases.  In fact, it outperformed {\sc structure} 
+quite interested and pleased to see that the algorithm still works quite well in some cases.  In fact, it outperformed {\sc structure} 
 using SNPs at intermediate levels of differention.  We also found that in large data sets like those that
 we simulated, {\sc flock}'s individual runs seldom (or never) converge to exactly the same partition.  This 
 presents some serious problems for applying the Duchesne \& Turgeon (2012) recipe for estimating $K$, and we 
@@ -68,14 +68,16 @@ Below, we address individual comments from you and the referees.  Our replies ar
 Thank you again for your service.  As usual, we have been greatly pleased with the review process
 at {\em Molecular Ecology Resources} and are excited with how much improvement the referees have brought
 to our paper.  We apologize that it has required several months to return these revisions, but do appreciate
-the extra time the journal granted us---it was necessary to write {\sc flockture} and to undertake the
+the extra time the journal granted us---the extra time was necessary to write {\sc flockture} and to undertake the
 simulations.  
 
 Best regards,
 
+\vspace*{3em}
+
 Eric C. Anderson
 
-\vspace*{3em}
+\vspace*{6em}
 
 {\bf Editor Comments to Author:}
 
@@ -455,7 +457,7 @@ I also suggest that the authors make an additional effort to better understand p
 
 \reply{We have taken the referee's suggestion and worked on obtaining a better understanding of plateau analysis.
 Short plateaus may well be right answer whenever $K$ is the wrong answer.  However, short plateaus are also
-the wrong answer when the $K$ value is correct.  This seems to be major problem for {\sc flock} on data sets
+the wrong answer when the $K$ value is correct.  This seems to be a major problem for {\sc flock} on data sets
 of the size that we have simulated.  We've addessed this in the 2nd to last paragraph of the discussion. }
 
 If run times are to be compared, the comparisons should follow the above recommendation such that a real user gets a simple message out of it.

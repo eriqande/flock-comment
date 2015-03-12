@@ -16,12 +16,14 @@ the program {\sc flockture}. With simulated data we confirmed that results obtai
 {\sc flock}  and {\sc flockture} and very similar (though flockture is some 200 times faster). 
 Second, we simulated multiple large datasets under varying 
 levels of population differentiation for both microsatellite and SNP genotypes. We analyzed them
-with {\sc flockture} and {\sc structure} and assessed each program on its ability to correctly cluster
+with {\sc flockture} and {\sc structure} and assessed each program on its ability to cluster
 individuals to their correct subpopulation.  We show that
 {\sc flockture} yields results similar to {\sc structure} albeit with greater 
 variability from run to run. {\sc flockture} did perform better than {\sc structure} 
 when genotypes were composed of SNPs and differentiation was moderate 
 ($F_{ST}=0.022-0.032$). When differentiation was low, {\sc structure} outperformed {\sc flockture}
-for both marker types. Interpreting {\sc flock}'s algorithm as a special case of the model in 
+for both marker types. On large data sets like those we simulated, it appears that 
+{\sc flock}'s reliance on inference rules regarding its ``plateau record'' are not helpful. 
+Interpreting {\sc flock}'s algorithm as a special case of the model in 
 {\sc structure} should aid in understanding the program's output and behavior. 
 

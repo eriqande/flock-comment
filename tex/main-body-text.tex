@@ -303,7 +303,7 @@ probabilities of cluster membership.
  
 
 To compare {\sc flock} and {\sc flockture}, 4 datasets composed of 5 populations
-were simulated using a coalescent-based program (code provided at 
+were simulated using the coalescent program {\sc makesamples} \citep{Hudson2002} (code provided at 
 https://github.com/eriqande/flock-comment/). The 5 populations
 were composed of 250, 250, 400, 550, and 550 individuals, respectively, all typed  at 15 loci.
 Each of the four data sets was simulated with a different 
@@ -363,7 +363,7 @@ be identical, but do display equivalent behavior.
 Plateaus were only observed for the dataset 
 with the highest pairwise $F_{ST}$ value $(0.03)$. Plateau records were similar, although 
 the length of each plateau record was slightly longer for {\sc flockture} and on average had more runs converging on
-the largest plateau (Supp. Table 1). Multiple runs of {\sc flockture} demonstrated that the differences are well within the
+the largest plateau. Multiple runs of {\sc flockture} demonstrated that the differences are well within the
 variability that we would expect from randomizing the initial grouping of individuals to 
 initiate the algorithms.
 
@@ -454,10 +454,10 @@ of both programs. }
   \includegraphics[width=.8\linewidth]{images/Figures-Pat/FlockturevStructureDistruct.pdf}%B+W version use 'FlockturevStructureDistruct_BW.jpg'
   \caption{
   Program {\sc distruct} plots of cluster membership probabilities of simulated individuals
-  ($q_i$ values from {\sc structure} and the normalized likelihood values from {\sc flock}). 
+  ($q_i$ values from {\sc structure} and the normalized likelihood values from {\sc flockture}). 
   Individuals are grouped left to right into their simulated population samples, and each 
   horizontal plot represents a run of the program
-  {\sc structure}, or the ``longest-plateau-run'' from a series of runs in {\sc flock} (unless
+  {\sc structure}, or the ``longest-plateau-run'' from a series of runs in {\sc flockture} (unless
   there were no plateaus, in which case the run reaching the highest likelihood was chosen).
   Within horizontal plots, each individual is represented by a vertical bar composed of colored
   segments of lengths proportional to the various cluster membership probabilities.
@@ -469,7 +469,8 @@ the no-admixture and correlated allele frequency (NA.C) model,
 and the no-admixture and non-correlated allele frequency (NA.NC) model. Numbers in 
 parentheses following the model names give the number, out of 9, of replicate runs
 that obtained the same visually-indistinguishable estimate. (Note that although many of {\sc flocktures}'s solutions in B--D were visually indistinguishable, they were not identical partitions, and would
-hence be considered different for the purposes of creating a {\sc flock} plateau record.) Each simulation is comprised of
+hence be considered different for the purposes of creating a {\sc flock} plateau record.) In E, all 9
+of {\sc flocktures}'s solutions were visually distinguishable, though we show only one.  Each simulation is comprised of
  five populations of sizes 250, 250, 400, 550, and 550 individuals with average pairwise $F_{ST}$ values
  indicated above each plot.}
   \label{fig:FvSdistruct}
@@ -500,7 +501,7 @@ This is likely a consequence of the low population divergence which
 makes it possible for many different allocations of individuals to
 have roughly the same likelihood.
 The likelihood surface defined on partitions of this space is then often
-be multimodal---possessing numerous local peaks and troughs.
+multimodal---possessing numerous local peaks and troughs.
 The peak that the {\sc flock} algorithm finds is entirely determined by the initial, random, allocation of 
 individuals, as the algorithm proceeds deterministically after the initial random allocation.
 Decreasing $F_{ST}$ leads to more homogenous 
@@ -576,17 +577,17 @@ the value estimated by {\sc flock}, because, ``outside the estimated $K$, no par
  should be considered. Therefore\ldots clusterings from {\sc flock}\ldots for all $K$ except the estimated one are just
  irrelevant and not valid''(Pierre Duchesne, pers. comm).  To be specific, following 
 this advice of {\sc flock}'s authors would have led to discarding {\sc flockture}'s
-results for any $F_\mathrm{ST} < 0.032$ (almost 90\% of our simulated data sets!), even those that are
+results for any $F_\mathrm{ST} < 0.032$ (almost 90\% of our simulated data sets); even those that are
 manifestly quite accurate---some competitive
-with or even superior to {\sc structure}'s estimate!  We surmise that this problem with {\sc flock} 
-guidance issues from the fact that the {\em ad-hoc} rules developed by
+with or even superior to {\sc structure}'s estimate.  We surmise that this problem with the guidance on 
+{\sc flock} stems from the fact that the {\em ad-hoc} rules developed by
 \citeauthor{Duc&Tur2012} for estimating $K$ with {\sc flock} were developed empirically
 by reference to a small set of simulations over a fairly limited range of sample sizes.  Since our simulated
 samples (made to mimic the sorts of large, real data sets we collect in our labs)
 fall outside the range of values explored
-by \citeauthor{Duc&Tur2012} it appears that {\sc flock}'s rules of use are inappropriate, 
+by \citeauthor{Duc&Tur2012}, it appears that {\sc flock}'s rules of use are inappropriate, 
 and perhaps over-restrictive for these data sets.  Researchers with data that similarly fall beyond the range of 
-data sets tested in \citeauthor{Duc&Tur2012} may wish to approach {\sc flock} analysis with
+data sets tested in \citet{Duc&Tur2012} may wish to approach {\sc flock} analysis with
 caution, or may choose to rely on other programs.
 
 
