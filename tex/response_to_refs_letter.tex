@@ -1,0 +1,375 @@
+\documentclass[11pt]{letter}
+\usepackage{graphicx}
+\usepackage{color}
+
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+
+\date{}
+
+\address{\mbox{}\vspace*{-1.0in}
+\mbox{}\hfill
+\includegraphics*{/Users/eriq/Documents/work/nonprj/NMFS_FORMS/NMFS_letterhead.pdf}\\}
+
+\signature{Eric C. Anderson \\ \mbox{} \\ eric.anderson@noaa.gov\\ ph.~831-420-3983}
+
+\newcommand{\reply}[1]{\begin{quotation}\small\sl\textcolor{blue}{#1}\end{quotation}}
+
+
+\begin{document}
+
+\begin{letter}{ \today 
+
+Dr. Nolan Kane\\
+News and Views Editor\\
+Molecular Ecology Resources \\
+}
+
+\opening{Dear Dr.~Kane:}
+
+\reply{Some notes:  using flockture was mandatory because there is no other way to do a reproducible anaysis
+with {\sc flock}.  Until people start distributing scriptable, reproducible tools, that is what we 
+had to do.}
+
+
+{\bf Editor Comments to Author:}
+
+
+This paper, once revised, has the potential to shed light on some of the key similarities and differences among STRUCTURE and FLOCK, both of which are useful and important programs for population genetic analysis.  In that, I agree heartily with reviewer 2. However, reviewer 1 raises many important points that must be dealt with if this is to become acceptable. In particular, it would be important to broaden the scope of the article beyond a single dataset.  There are numerous well-analyzed datasets available these days.  For instance, take:
+
+Recommendations for utilizing and reporting population genetic analyses: the reproducibility of genetic clustering using the program STRUCTURE
+KJ Gilbert, RL Andrew, DG Bock, ...
+Molecular Ecology 21 (20), 4925-4930
+
+for some approaches that we used to assess repeatability of analytical procedures in quite a number of Structure datasets.  It would not be necessary to go quite as in-depth as in that article, but I do agree with reviewer 1 that a single dataset is insufficient.  Additionally it would be very helpful to use either simulated datasets or other datasets where we have a good idea of what the 'true' answer should be (e.g. some independent prior knowledge of some kind, or at the least a very thorough existing analysis to give reasonable expectations).
+
+Reviewer 1 raises numerous other important points which will improve this paper substantially when dealt with, as does Reviewer 2 (though this reviewer's concerns tend to be much more minor). Despite the large number of suggestions between the reviewers, is should be quite possible to make these changes relatively easily - with the availability of so many existing, well-analyzed datasets it should be relatively easy to run at least a few more through FLOCK and STRUCTURE for a broader set of comparisons.  Alternately, it might make sense to do a fuller analysis of many datasets and re-submit as a full paper. Either would be quite useful to the Molecular Ecology and MER readership.
+
+I look forward to a revised manuscript.
+
+Best regards,
+Dr. Nolan Kane
+News and Views Editor, Molecular Ecology Resources
+
+
+
+{\bf Referee Number 2 Comments:}
+
+Editorial suggestions on Manuscript ID: MER-14-0343 ``Interpreting the FLOCK algorithm from a statistical perspective''
+Page and Line numbers are from the pdf file.
+\begin{itemize}
+
+\item Page 2, Abstract. Line 18. See ``...no-admxixture...'' Spelling
+\reply{fixed}
+\item P. 2, Line 19. ``uncorrelated allele frequency prior albeit with more variability...''
+\reply{done}
+\item P. 3, Line 24. ``The best known example of this class ...''
+\reply{done}
+\item P. 3, Lines 44-45. ``Being able to interpret Recognizing FLOCK's in this fashion underpinnings should help users ... when it might and might not give substantially...''
+\reply{superb edit. done}
+\item P. 5. Line 68. ``...to randomly drawn values from the prior, ...''
+\reply{done}
+\item P. 5, Lines 70-71. ``...at iteration t = 0, 1, 2, ..., T,
+1. each ...
+\reply{done}
+\item P. 6, Line 74. ``for all k = 1,..., K, implying the belief that the subpopulations are equally
+represented in the sample before observing the genotypes present.
+\reply{great. done.}
+\item Page 7, Lines 107-108. ``...the program randomly allocates or each of partitions the N
+individuals into (approximately) one of K equal-sized clusters.
+\reply{done}
+\item Page 7, Lines 109- ...each individual is given the chance to be reallocated (i.e., moved to a different cluster). This is done on the basis of maximum likelihood: non-randomly assigned to the cluster for which its multilocus likelihood is maximal: as Duchesne \& Turgeon say ...''
+\reply{This is a great edit. we've incorporated it.}
+\item Page 8, Line 138. ``If, all that was desired...'' Delete comma. 
+\reply{done}
+\item Page 9, Line 155. ``... we can expect that it may be more is susceptible to ...''
+\reply{this line got edited out in other changes}
+\item Page 9, Line158. ``...the same solution among repeat applications to the same data set less consistently than does STRUCTURE.''
+\reply{This line was removed/changed in a previous edit}
+\item Page 10, Line 161. ``...to compare the programs FLOCK and STRUCTURE.'' [add] The criteria for comparison include amount of computer time used, estimates of K, and the allocation of individuals among clusters.'' Now move Lines 177 -- 182 to immediately follow, i.e., ``For FLOCK, the user must specify ... is calculated for each individual.'' Continue with Lines 161 -168, i.e., ``FLOCK was run six times ... running 64-bit Windows 7.'' You might also want to explain the choice of 50,000 sweep burn-in and 150,000 sweep sample.
+\reply{These lines were completely overhauled given the changes in our simulation assessment}
+\item Page 10. Lines 169 `` 175. No change except Page 10, Line 175. ``DISTRICT'' spelling
+\reply{done}
+\item Page 10, Lines 176 `` 198. Omit Lines 177- 182 that have been moved above. Page 11, Line 197. ``...for estimating K with FLOCK to results obtained from
+STRUCTURE using ln P(D) ...''
+\reply{eliminated already}
+\item Page 12, Lines 209 -- 228. Figure 1 is referenced which uses lower case k, while this text
+uses the upper case K.
+\reply{eliminated already}
+\item Page 12, Line 217. ``Both programs idenfity ...'' Spelling
+\reply{done}
+\item Page 12, Lines 230 `` 233. ``To investigate the stability of the partition arrangement of individuals within from the reference populations to move around the partition space, we varied ... Unfortuantely Spelling only the ...is given as FLOCK output.''
+\reply{done}
+\item Page 13, Line 234. ``...during the last later iterations of runs, individuals ...''
+\reply{eliminated already}
+\item Page 14, Lines 247--248. ``...give similar results, only although at values of K > 4, ...
+appear to be more variable among random starting partitions''.
+\reply{eliminated already}
+\item Page 14, Lines 260--262. ``This, coupled with ...of length zero, complicates ... from
+FLOCK. if no non zero plateaus are encountered.
+\reply{eliminated already}
+\item Page 15, Lines 270--271. `` ... in their comparisons, we did not observe this advantage,
+probably for in our analysis. This appears to result from two issues reasons. ``
+\reply{the whole discussion of speed was completely revamped once we implemented {\sc flockture}.}
+\item Page 16, Lines 302--303. ``This is especially true in real populations and the actual conditions under which samples are drawn which may not conform to the assumptions of genetic clustering models.''
+\reply{eliminated already}
+\item Page 16, Lines 304--307. ``We made our comparison between FLOCK and the no- admixture model in STRUCTURE which is not the instead of its default with-admixture model. used in STRUCTURE. Rather, by default, STRUCTURE uses its with admixture model. Such a The default model explicitly tries to account for the admixed origin of individuals in the sample and thus may be is more appropriate model than the no admixture model, or FLOCK, when the sample contains such individuals. that are admixed between populations.''
+\reply{eliminated already}
+\item Page 17, Line 318. ``... with correlated allele frequencies seems like it would seem an interesting challenge, ...''
+\reply{eliminated already}
+\item Page 22 List of Figures. Lines 386 - 393. Program DISTRUCT plots of cluster membership probabilities of steelhead individuals (qi values from STRUCTURE and the normalized likelihood values from FLOCK). Individual fish are grouped left to right into their geographic samples, and each horizontal plot represents a run of the program
+STRUCTURE, or the ``best run'' from a series of runs in FLOCK. Within horizontal plots, each steelhead individual is represented by a vertical bar composed of colored segments of lengths proportional to the various cluster membership probabilities. The numbers in parentheses ... same visually indistinguishable ``best run.''
+\reply{This is an excellent, concise description of those plots. We thank the referee for 
+providing it, and we have used it.}
+\end{itemize}
+
+
+{\bf Referee Number 1 comments}
+
+I have several important concerns over this paper:
+
+\reply{I'll give brief replies to each of the following here as an outline of how we
+changed the paper, and will give more complete details in the following sections}
+\begin{enumerate}\item The conceptual framework is inappropriate since FLOCK is not an MCMC algorithm
+\reply{It is not an MCMC algorithm but it {\em is} an algorithm and an inference procedure and 
+recognizing it as a special case of well known statistical methods is appropriate.}\item There is only one dataset which is way too little to come to conclusions
+\reply{We agree with the referee. We have undertaken a simulation study across a range of different $F_\mathrm{ST}$ values.}\item There are basic flaws in the interpretation of the outputs of FLOCK, leading to invalidcomparisons relative to K values other than the estimate
+\reply{We have eliminated issues of what can and can't be said about allocation of individuals  at a
+certain value of $K$ by doing all the simulations and the analyses at a known value of $K$.}\item Comparisons of estimates of K cannot be performed with sufficient rigor
+\reply{We agree with the referee here.  In fact, we weren't entirely comfortably addressing the issue of estimating
+$K$ in the previous version of the manuscript, lest it appear that we were implicitly encouraging it. 
+Therefore, we now focus entirely on allocation of individuals.}\item The speed comparisons are based on an ill-chosen processing unit
+\reply{We implemented the {\sc flock} algorithm by modifying the C source code for {\sc structure} and
+adding an R wrapper.  This allows a more direct comparison of the amount of computation involved.  If 
+{\sc flock} were implemented as efficiently as {\sc structure} it would be much faster.  But since it
+runs 200 times slower than it should for what it is doing, there doesn't seem much speed advantage in 
+the data sets we ran.  We report that now in the paper in a way that should be easily understood. }
+\end{enumerate}
+I now describe each of those concerns in more detail.
+{\bf 1) Conceptual framework}
+It must be emphasized that FLOCK is not an MCMC based algorithm. It has no target function, no transition probabilities and does not move in small measured probabilistic steps. No amount of mathematical analysis will ever change this. 
+
+\reply{I don't believe that we said {\sc flock} was an MCMC algorithm.  We noted that it was a limiting
+ case of a simulated annealing algorithm.}
+
+In fact, similar iterative methods have been around for a very long time (e.g. Newton's method for finding roots), much before the first MCMC algorithms were designed (1950?s). This family of methods should be analysed within a truly pertinent conceptual framework (attractors, basins of attraction, fixed points, orbits, etc). The book A First Course in Discrete Dynamical Systems (RA Holmgren, 1994) provides an excellent introduction to this topic. 
+\reply{The referee is correct that iterative methods have been around for a long time.
+In fact, rather than viewing it as special case of simulated annealing, one could just as well
+note that {\sc flock} is a type of gradient descent-algorithm attempting to maximize the
+likelihood of the data given a configuration of clusters.
+Regardless of what name is given to it, since it is effectively an algorithm
+that (intentionally or not) yields solutions with 
+high (and possibly maximal) likelihood, we have difficulty understanding
+how the referee can honestly declare that, for purposes of analysis of the algorithm,
+the conceptual framework of dynamical systems is any more ``truly pertinent'' than
+the conceptual framework of statistics.   }
+
+
+The current popularity of MCMC methods in the field of genetic analysis does not justify trying to cast every current algorithm into an MCMC framework.
+
+\reply{Again, we are not so much casting it in an MCMC framework as we are in a 
+statistical/probabilistic framework.  Since it is a problem in statistical inference
+it seems to us reasonable to understand it in terms of the probabilities involved. Those
+probabilities are, for the most part, identical to those in the program {\sc structure} because
+the underlying model is the same in the two programs.  Regarding casting the algorithm in
+comparison to {\sc structure}, it makes sense to us to try to understand and explain the {\sc flock}
+algorithm in those terms since {\sc structure} is so well known and because the models
+underlying it and {\sc flock} are essentially identical.  }
+For example:
+\begin{itemize}
+\item Line 156: it is suggested that Flock can be trapped in a local mode, this is incorrect because Flock does NOT search for maximum values, either local or else
+\reply{We thank the referee for pointing out our erroneous language here.  We should not have used
+the word ``trapped.''  We have updated that sentence to read, ``As such, we should not be surprised
+if it is prone 
+to converging to different parts of the posterior probability surface on runs started
+from different initial conditions.}
+\item Line 254: it is suggested that Flock is searching over all possible partitions. Flock does not sample nor search the surface or space of all partitions.
+\reply{We would not have wanted it to sound like we thought {\sc flock} was searching
+each and every possible
+partition, since this would be infeasible in most problems, so we thank the referee for pointing out that our reference to a space of all partitions might
+have confused readers in this way.  We have changed that section appropriately.  However, on whether
+or not {\sc flock} samples from the space of partitions, we respectfully submit that the referee is
+incorrect when he states that, ``Flock does not sample nor search the surface or space of all partitions.'' 
+Consider this: 1) for each run, the initial starting partition in {\sc flock} is chosen (or you could say,
+sampled) randomly from amongst
+possible partitions with roughly the same number of individuals; 2) the starting partition uniquely
+determines the partition that the algorithm will converge to since it is deterministic, 3) different
+starting partitions can lead to different final solutions/partitions.  How is it then that each
+run in {\sc flock} is {\em not} a sample from the partitions?  }\item Line 234: ?individuals would alternate between reference groups?: this, precisely, is an orbit
+\reply{We removed discussions of individuals alternating between reference groups.}
+\end{itemize}
+
+{\bf 2) Data}
+Performance comparisons between programs based on a single dataset are of little value. The fact that it is large and real does not compensate. For this purpose, one would expect that a large set of simulations spanning several parameter values with or without several real datasets would be used instead of a single empirical dataset. The advantage of simulations is, of course, that the true genetic structure of the data (essentially K) is known and so the relative performances may be compared on a solid basis. Here, unless I missed something, there is no independent (of the two programs) source of knowing with a reasonable degree of certainty the actual number of clusters represented within this collection of genotypes. In fact, there appears to be several candidate values for K with this particular dataset (see below).
+
+\reply{We agree whole-heartedly and undertake a numerous simulations of data like the real
+steelhead data in the previous submission.  Having done this, and analyzed the results,
+we can now address the comments below.}Several (over)generalizations are based on this unique dataset:
+\begin{itemize}\item (p.9 ) FLOCK seems to find the same solution less consistently than does STRUCTURE
+\reply{From our simulations using {\sc flockture} this appears to be true.  One need only look
+at the variability present in the purple boxplots in Figures~2 and~3 to see that there is more
+variability between {\sc flockture} analyses (50 runs of 20 iterations each) on the same data set 
+than between {\sc structure} analyses. }\item (p.14) The problem of getting caught in local modes is not unique to FLOCK...; however our results suggest it is a bigger problem for FLOCK
+\reply{The simulation results bear this out, but we have reworded it to, ``This likely 
+increases the number of
+local peaks, leading {\sc flockture} to settle on many different solutions in 
+each run. The problem presented by having multiple modes in the likelihood surface 
+is not unique to {\sc flock}---{\sc structure} also can converge to 
+different solutions in complex spaces; however our simulations suggest this is a more  
+prevalent problem for {\sc flockture}.''
+}\item (p.16) Given FLOCK'S tendency to converge to different solutions with large K and n...
+\reply{See above.  Note that we don't vary $K$ now so we don't call it a problem ``with large $K$'' any
+longer.}
+\item (p.16) It is probably better to use STRUCTURE in such cases...
+\reply{We don't say this, but we do point out that {\sc flock} is not best-suited to high-gene-flow
+species with very low $F_\mathrm{ST}$.}
+\end{itemize}
+{\bf 3) Interpretation of FLOCK outputs (purpose of FLOCK, best run, stochasticity of plateau lengths)Purpose of FLOCK}
+I agree with the following statement (p. 11):``While we take the stance that estimates of K made with any unsupervised clustering algorithm from data on real (non-idealized) populations should always be interpreted and used cautiously...''I am fully aware that we are dealing with probabilistic statements here, not certainties. However, I am also convinced that the search for the number of genetic units (K) is a central issue. This is precisely what Flock intends to do, and it is also the main task that STRUCTURE was built for.
+
+\reply{We disagree with the referee that estimating $K$ was the ``main task that {\sc structure} was
+built for.''  One of us had the pleasure of visiting Jonathan Pritchard in Oxford shortly after the
+{\sc structure} paper was published. At that time, the members of the Donnelly lab were not eagerly using
+{\sc structure} to estimate $K$ from different samples; they were using {\sc structure} to correct
+for population admixture when doing association tests in human genetics---our understanding
+is {\em that} was the task that structure was original built for.  Furthermore, when I contacted
+Jonathan a few years later to ask him some details about how $Ln P(D)$ was calculated by {\sc structure},
+he pointed out to me (while getting his notes out of his filing cabinet) that the method for estimating
+$K$ was added into the paper to satisfy a referee who had requested it, and that Matthew Stephens 
+(one of the co-authors) was not ever extremely pleased to have it in there.  Finally, I teach an annual
+course with Matthew Stephens, and each year he explains to the students why estimating $K$ is so
+difficult and why estimates of $K$ from {\sc structure} or any other procedure should be 
+regarded with circumspection.  }
+
+Thus, the basic purpose of FLOCK is to estimate K and if the estimate is not undecided, to obtain a reasonably accurate partition of the collection of genotypes. Consistency across different values of K is not intended. By considering outputs for any value of K, the authors make invalid comparisons. Comparisons among clustering solutions for different values of K provided by STRUCTURE are commonly reported in the literature, and the successive clustering solutions may at times make biological sense. That practice, however, is not recommended in FLOCK and therefore cannot serve as basis for evaluating its results outside the estimated value of K.
+
+\reply{We do not share the referee's enthusiasm for estimating $K$ nor for the {\em ad-hoc}
+methods developed to do so with {\sc flock}.  Therefore, in our simulations and assessments
+we limit ourselves in the paper to assessing how well and consistently the programs assign
+individuals to the correct cluster, {\em given an analysis run at the correct value of $K$}.
+Thus, we no longer compare successive clustering solutions across different values of $K$. We 
+understand the referee may have preferred that we assess how well it estimates $K$; however we don't
+for several reasons: 1) we don't find it a particularly well-posed problem (what one calls a
+subpopulation depends on what they think a subpopulation is, and that is typically not well-specified,
+or is specified in terms of a model that makes assumptions that are violated by
+the true arrangement or sampling of populations),
+2) The approach to estimating $K$ in {\sc flock} is not amenable to easy, automatic application to
+numerous simulated data sets, 3) It is more straightforward to interpret program performance in terms
+of clustering accuracy; 4) we are not convinced that ``the basic purpose of {\sc flock} is to
+estimate $K$.''  If that were the case, then we imagine estimating $K$ would have figured
+more prominently in the original 2009 paper introducting {\sc flock}.
+}
+{\em Misinterpretation of `best run'}
+However, the authors are in fact proposing to analyse the output of FLOCK for each K as if it were potentially informative. This, in turn, lead to a misunderstanding of what `best run' means. For instance on p.12, they state:``For all groups of runs for $K> 2$ no plateaus were observed...it is unclear in these cases what constitutes the `best run' as all plateau lengths are equal to one.''
+The answer is simple: there is no best run. The term `best run' applies exclusively to the run with the longest plateau corresponding to the estimate of K. First the stopping rules are applied then the estimation rules. If the estimate is not undecided, the only best run to be considered is the one associated with the estimated K. If the estimate is undecided there is no best run. The documentation and also the flow chart in the latest article (Duchesne and Turgeon 2012) make that clear. In fact, outside the estimated K, no partitions from FLOCK should be considered. Therefore comparisons between clusterings from FLOCK and STRUCTURE for all K except the estimated one are just irrelevant and not valid.
+
+\reply{This seems strange to us.  What happens in the situation where the
+``true $K$'' is known and you just want to cluster individuals? If there are no plateaus
+amongst the runs at that value of $K$ should one discard {\sc flock} and use
+a different program altogether? In most of the simulated data sets we investigated {\sc flock}
+like {\sc flockture}
+would not have converged to a different solution on each of its 50 runs of 20 iterations---there
+would have been no plateaus at all!  and yet it is still delivering useful clustering
+inference that is competitive with, and at times better than, {\sc structure}.  We discuss
+this rather restrictive guidance on using {\sc flock} in the Discussion.  }
+
+This same approach (= all K outputs are valuable) also brings the authors to lament ``FLOCK's tendency to converge to different solutions with large K'' and conclude that STRUCTURE would be a better choice for complex problems. This is a surprising conclusion since FLOCK is expected to signal the absence of K components precisely by not repeating solutions for that K and thus producing very short plateaus if any. Clearly, by increasing the value of K, the true value will eventually be surpassed and FLOCK will tend to generate numerous solutions and therefore short plateaus ($< 6$). As for the real dataset, there is no ground to believe that $K > 4$ (line 246--248), so that the reported large variability of the FLOCK results may just be the right signal. Here there is a huge misunderstanding that leads the authors to systematically misinterpret potentially correct answers as a sign of inconsistency or lack of power.
+
+\reply{These points are now largely moot, as we don't address the problem of estimating $K$, and we
+only analyze simulated data sets at the correct $K$ value.}
+{\em Misinterpretation of the stochasticity of plateau lengths}
+Another misinterpretation of FLOCK output shows when the plateau records for K = 2 are reported (p.12) for each of the six groups of (50) runs and described as varying greatly. However, the important statistic here is the length of the longest plateau for each K as this will determine the decision on K (the main purpose of FLOCK). Here the top lengths for the six groups are: (7, 5, 5, 4, 5, 3). The corresponding decisions are undecided for 5 groups and K = 2+ for one group. And so there is not so much variation among top lengths and, more importantly, practically none at the decision level (5/6 undecided).
+
+\reply{Again, we don't address the issue of estimating $K$. }
+
+{\bf 4) Comparisons of estimates of K}
+(p. 12) The (ln P(D)) values from STRUCTURE was largest at K = 6 which was further supported bythe qi plots, however, the $\Delta K$ method supported a K of 3.
+With STRUCTURE, the authors do not provide a definite estimate for K, and they do not provide support for several alleged estimates.
+As is, the authors used Flock to reach the decision that STRUCTURE supports an estimate of K=6. Flock needed to go up to K=6 to reach a stopping rule and it is on that basis that they decided to run STRUCTURE up to K=6. This is not consistent with what the method actually prescribes nor with what is often (or should be) reported in the literature: K should be estimated from the peak value for (ln P(D)), not just its highest value but one preceded and succeeded by lower values. It is well known that sometimes the (ln P(D)) values from STRUCTURE increase monotonically with K. If one applied the simple largest value rule then obviously the estimate for K would be as large as the largest K that is tested. Here, that led, incorrectly, to the decision that it is the best estimate because Ln(P(D)) is maximum.
+
+As for K = 3 obtained from the $\Delta K$ method, the results presented do not allow to evaluate whether this estimate is truly supported or not. It is well-known that this method, being based on the rate of change of Ln(P(D)) as a function of K, cannot provide support for the lowest value of K tested (here, K=2). For that reason it is customary to run STRUCTURE from K=1 such that K=2 is a possible estimate.??
+Finally, I note that, based on the same dataset and STRUCTURE, K=5 was preferred in Garza et al. 2014 (Trans. Amer. Fish. Soc.) , but that required considering the regional distribution of clusters, and plots of Ln(P(D)) or ?K were not provided.At the very least, the results supporting the estimate of K=6 on the basis of the maximum value of Ln(P(D)) (and K= 3 on the basis of ?K for K=1 to a large value) should be provided.The bottom line is that this dataset does not allow valid comparisons of estimates of K from the STRUCTURE and FLOCK programs, such estimates being the primary task of both programs. There may certainly be cases where FLOCK will provide a different and sometimes less (or more) accurate estimate for K than STRUCTURE, but the comparison made here is not done properly and would in any case concern a single dataset.
+
+\reply{Again.  Largely moot as we no longer focus on estimation of $K$.}
+{\bf 5) Speed comparisons}
+(p. 11) ``All runs of FLOCK completed in 1133 minutes. Each of the six groups of runs averaged 188.8 minutes. All runs of STRUCTURE were completed in 486 minutes and averaged 80.8 minutes to complete each of the six groups of runs.(line 281) Though it is difficult to reliably assess differences in program run times when there is no clear consensus on what constitutes a reasonable comparison with respect to run length and number of runs, our results indicate that Flock did not carry a distinct run-time advantage over STRUCTURE''
+
+I agree with the authors that it is difficult to decide on the unit of comparison.At first sight, their comparison seems to indicate that STRUCTURE is 188.8/80.8 = 2.33 faster than FLOCK. My own opinion is that the right unit of comparison is the run since each run produces the output from a clustering program i.e. a partition of a collection of genotypes into K clusters. Consequently, the speed of execution of cluster programs should be compared on the basis of average run time and not on batches of runs of unequal numbers. If one takes the run as basic unit, given that FLOCK was required to perform 50 runs each time STRUCTURE was required to run once, then the correct speed ratio should be 80.8 X 50/188.8, which means that FLOCK was over 21 times faster than STRUCTURE in clustering this particular dataset. Theoretically, one might argue that one run of STRUCTURE is really the equivalent of 50 runs of FLOCK since 50 runs is the recommended (for validation purposes) number of runs when using FLOCK while STRUCTURE may be run any number of times, including just once. The reason that large numbers of runs are not a standard recommendation for STRUCTURE is precisely that it is too slow. FLOCK is much faster mainly because convergence is very fast (usually in less than 10 iterations = reallocations). It is doubtful that clusterings from STRUCTURE would be of even acceptable quality after 20 iterations. Otherwise why would the authors run a total of 200000 sweeps (one sweep = one iteration), a number consistent with customary usage and recommendations, rather than a mere 20?
+
+
+Another option that has not been formally evaluated but probably deserves considering would be to compare the total computing time required for a user to reach a decision on the best K estimate, ideally with various datasets for which both programs provide the same K estimates. This would require deciding how many runs of STRUCTURE should be used as there are currently no strict rules on the matter. Perhaps the program should be run following the recommendation of Gilbert et al. (2012, Mol. Ecol. Res.), namely 20 replicates for each K, and a range of K-values truly allowing to estimate the peak or plateau value of Ln(P(D)). Using the dataset presented here, this recommendation implies testing for values larger than K=6, and the range used by Garza et al. (2014) in their original analysis, i.e. K=2 to K=10, seems reasonable. That would be a start for a comparison that truly matters to real users. Among the other people who have run the two programs, I feel that there is a general consensus that FLOCK is much faster than STRUCTURE , and I believe that they are referring to this ?real life? experience. It would be interesting to have a quantitative comparison based on processing time to reach a decision on K.
+
+\reply{Since we modified {\sc structure} to become {\sc flockture} it became clear that the 
+there is a direct correspondence between the amount of computation required for one sweep of
+{\sc structure} or one reallocation in {\sc flock}. Our discussion of computing speed now reflects
+this.  It reads: \\
+\mbox{}\\
+``One of the advantages of {\sc flock} over other methods for genetic clustering
+is reported to be the short processing time for each execution of {\sc flock}.
+Duchesne \& Turgeon (2012) observed faster processing times relative to {\sc structure}.
+Having implemented {\sc flockture} it is clear that the amount of computation required for a
+single sweep of {\sc structure} is equivalent to an iteration of reallocation of individuals
+in {\sc flock}.
+Hence, if {\sc flock} and {\sc structure} took similar amounts of time for comparable
+computations, one would expect that running flock once with 50 runs, each of 20 iterations,
+would require about the same amount of time as running {\sc structure} on the same
+data set for 1,000 sweeps.  Since it is recommended to run {\sc structure} longer than 1,000 sweeps, {\sc flock} should have a speed advantage. However, {\sc flock} requires far more 
+time for each computation
+than {\sc structure}, as is clear from the fact that it runs 200 times slower than 
+{\sc flockture}.  Thus, for data sets comparable to the ones we simulated, one can expect
+50 runs of 20 iterations in {\sc flock} (a standard execution of the program) to require as
+much time as running {\sc structure} for 200,000 sweeps. This does not constitute
+a speed advantage.
+If {\sc flock} were to be implemented using good coding practices in a fast language,
+rather than as a VBA routine in Microsoft Excel,
+it could be made much faster. As it is, we found it preferable to implement our own version
+in {\sc flockture} for our simulation assessment of the {\sc flock} algorithm.''} 
+
+{\bf Additional comment:}
+The authors mention the existence of a set of stopping rules in FLOCK but not their absence in STRUCTURE and the possible consequences thereof. For example, if no peak has yet been observed for (ln P(D)) values from STRUCTURE, how long should one process ever larger values of K? Interestingly, this is exactly the situation with the empirical dataset discussed in the paper. The authors chose 6 as the upper bound for K, a value clearly derived from the upper bound from the FLOCK stopping rules. Now this in turn lead them to suggest that K = 6 was to be considered as a plausible number of populations since (ln P(D)) was highest at K = 6, which is obviously a misapplication of the estimation rules for K with STRUCTURE. Then they noticed the large number of solutions from FLOCK, while implicitly assuming the validity of the K = 6 estimate. From this they concluded that FLOCK `seems to find the same solution less consistently than does STRUCTURE'. As explained above, if K = 6 were wrong, and there is no evidence to the contrary, then FLOCK would be expected to produce numerous solutions and the more the better, thereby indicating that there is no support for K=6. And so the absence of stopping rules in STRUCTURE combined with a misapplication of the estimation rule for K for STRUCTURE and a misunderstanding of FLOCK plateau analysis lead the authors to a specific conclusion not supported by their data and, worse still, one that they generalized over the entire domain of application of FLOCK.
+
+\reply{Moot, again, as we don't focus on estimating $K$.}
+{\bf Recommendations:}
+Based on the numerous problems I have described, I think this paper unfit to be published in Molecular Ecology Resources. If the authors intend to establish that `FLOCK yields results similar to STRUCTURE with the no-admixture model and uncorrelated allele frequency prior', they should do so by running FLOCK, STRUCTURE with the no-admixture model and STRUCTURE with the with-admixture model over a large collection of datasets spanning numerous combinations of pertinent parameter values. 
+
+\reply{We have done that}
+
+The object of the comparisons should be the K-value estimated by each algorithm, not the solutions for each processed K-value. 
+
+\reply{We disagree for the reasons listed above.  We have compared the programs on the basis of the
+solutions for the {\em correct} $K$-value.}
+
+The datasets should be mostly
+from simulations so as to compare the performance of each algorithm on a solid basis and also, possibly, on some real datasets whose genetic structure is already well known. 
+
+\reply{We chose to use simulated data entirely.}
+
+This, of course, takes time but there is no analytical shortcut to this work. This data-driven research would hit a double target: compare FLOCK to the two models of STRUCTURE and compare the performances of the two STRUCTURE models on a broad empirical basis. The results would be very useful to all potential users of clustering programs and would practically ensure that they are not misled into false conceptions. 
+
+\reply{We agree with the referee that the present version of our manuscript should be very useful.}
+
+They should be published in a full-fledged article, not just a comment. 
+
+\reply{If, upon reading the present version of our manuscript, the editor feels it would be appropriate
+to publish it as a full article, we would agree to that.
+}
+
+
+I also suggest that the authors make an additional effort to better understand plateau analysis especially in connection with variability of solutions i.e. lengths of plateaus. Short plateaus (numerous solutions) are the right answer whenever K is the wrong answer to the `number of populations' problem. If run times are to be compared, the comparisons should follow the above recommendation such that a real user gets a simple message out of it.
+
+Pierre Duchesne
+
+\closing{Best regards,}
+\setlength{\topmargin}{0in}
+\textheight = 9 in
+\end{letter}
+
+ \end{document}   

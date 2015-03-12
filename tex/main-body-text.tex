@@ -3,7 +3,7 @@
 \section*{Introduction}
 Methods for the unsupervised clustering of genotypes have received 
 considerable attention in the molecular ecology literature.  
-The best known example of this class of methods is {\sc structure} 
+The best known of this class of methods is {\sc structure} 
 \citep{Pritchardetal2000}, with over 12,000 citations identified on 
 Google Scholar.  A variety of other 
 clustering methods have been developed that are all closely related to 
@@ -43,7 +43,7 @@ admixture and non-correlated allele frequencies.  Thus, while the models underly
 relies on MCMC samples from the posterior distribution, while
 {\sc flock}'s inference involves finding a local maximum in the posterior surface.
 
-Being able to interpret {\sc flock} in this fashion should help users
+Recognizing {\sc flock}'s underpinnings in this fashion should help users
 interpret output from {\sc flock} and predict when it might and might not
 give substantially different results than {\sc structure}. Below we describe
 the correspondence between the programs in more detail, and then, for illustration,
@@ -88,16 +88,16 @@ Dirichlet distribution with parameters $(\lambda_{k\ell1},\ldots,\lambda_{k\ell 
 \ell})$,
 which are usually all set to a value such as 1 or $1/A_\ell$.  
 
-After initializing the unknown allele frequencies, $\theta = (\theta_1,\ldots,\theta_K)$, to randomly drawn values,
+After initializing the unknown allele frequencies, $\theta = (\theta_1,\ldots,\theta_K)$, to randomly drawn values from the prior,
 $\theta^{(0)}$, inference in the model proceeds by sampling from the joint posterior of the 
-$Z_i$'s and $\theta$ using Gibbs sampling.  That is,
-at iteration $t = 0, 1, 2, \ldots$:
-\begin{enumerate}
+$Z_i$'s and $\theta$ using Gibbs sampling.  That is, if Gibbs sampling is run for $T$ iterations,
+at iteration $t =0, 1, 2, \ldots, T-1$:
+\begin{itemize}
 \item each $Z^{(t)}_i$ is updated to $Z^{(t+1)}_i$ by sampling a value from 
 the full conditional distribution of $Z_i$ given
 $Y_i$ and $\theta^{(t)}$ (the current estimate of the allele frequencies).  This
 distribution is found using Bayes' theorem. In {\sc structure}'s formulation, the 
-prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$.     
+prior probability that $Z_i=k$ is $1/K$ for all $k=1,\ldots, K$, implying the belief that the subpopulations are equallyrepresented in the sample before observing the genotypes present.    
 \item $\theta^{(t)}$ is updated to $\theta^{(t+1)}$ from its full conditional distribution.  For each 
 cluster
 $k$ and locus $\ell$, the full conditional for $\theta_{k\ell}$ is independently a 
@@ -105,7 +105,7 @@ Dirichlet distribution with parameters $\lambda_{k\ell j} + \#(k,\ell,j)$, for
 $j=1,\ldots, A_\ell$,
 where $\#(k,\ell,j)$ is the number of alleles of type $j$ at locus $\ell$ observed in 
 individuals with $Z^{(t+1)}_i = k$.   
-\end{enumerate}
+\end{itemize}
 
 It will be useful for our comparison with {\sc flock} to point out that another way 
 of pursuing inference in this model would be to first integrate out the 
@@ -162,11 +162,10 @@ defined in the previous section.  We provide the description for a case in which
 it is assumed there are $K$ clusters.
 
 The first step of the {\sc flock} algorithm is initialization, during which 
-the program randomly allocates each of the $N$ individuals to one of 
-$K$ clusters.  Then a number of reallocation steps are performed.  During every one of 
-these steps, each individual is given the chance to be reallocated 
-(\ie moved to a different cluster).  This is done on the basis of 
-maximum likelihood: as \citeauthor{Duc&Tur2009} say (2009, p.~1335), ``Re-allocations are 
+the program randomly allocates or partitions the $N$ individuals into
+approximately equal-sized
+clusters.  Then a number of reallocation steps are performed.  During every one of 
+these steps, each individual is non-randomly assigned to the cluster for which its multilocus likelihood is maximal: as \citeauthor{Duc&Tur2009} say (2009, p.~1335), ``Re-allocations are 
 performed following multilocus maximum likelihood (Paetkau et al. 1995).''
 
 From that description, it is not clear how \citeauthor{Duc&Tur2009} treat 
@@ -241,9 +240,8 @@ It should now be clear that the algorithm in {\sc flock} is a simulated annealin
 algorithm for the {\sc structure} model in which the cooling schedule is
 ``start with $\beta\rightarrow\infty$ and leave it there for the duration of 
 the algorithm.''  As such, we should not be surprised if it is prone 
-to becoming trapped in local modes of the posterior probability, though
-the practical implications of that are not yet clear.
-
+to converging to different parts of the posterior probability surface on runs started
+from different initial conditions.
 
 
 \section*{Comparison of {\sc structure} and {\sc flock}}
@@ -445,12 +443,23 @@ of both programs. }
  \begin{figure*}
 \centering
   \includegraphics[width=.8\linewidth]{images/Figures-Pat/FlockturevStructureDistruct.pdf}%B+W version use 'FlockturevStructureDistruct_BW.jpg'
-  \caption{Plots of $q_i$ values from {\sc structure} and the normalized likelihood values from
-  {\sc flockture} made with the program {\sc distruct}. Each horizontal plot represents one of nine 
- runs of the programs  at $K$ = 5. Three models were run in structure: the admixture and correlated allele 
+  \caption{
+  Program {\sc distruct} plots of cluster membership probabilities of simulated individuals
+  ($q_i$ values from {\sc structure} and the normalized likelihood values from {\sc flock}). 
+  Individuals are grouped left to right into their simulated population samples, and each 
+  horizontal plot represents a run of the program
+  {\sc structure}, or the ``longest-plateau-run'' from a series of runs in {\sc flock} (unless
+  there were no plateaus, in which case the run reaching the highest likelihood was chosen).
+  Within horizontal plots, each individual is represented by a vertical bar composed of colored
+  segments of lengths proportional to the various cluster membership probabilities.
+  Each horizontal plot
+  represents one of nine 
+ runs of the programs  at $K$ = 5 (the true value of $K$). Three models were run in structure: the admixture and correlated allele 
   frequency (A.C) model, 
 the no-admixture and correlated allele frequency (NA.C) model, 
-and the no-admixture and non-correlated allele frequency (NA.NC) model. Each simulation is comprised of
+and the no-admixture and non-correlated allele frequency (NA.NC) model. Numbers in 
+parentheses following the model names give the number, out of 9, of replicate runs
+that obtained the same visually-indistinguishable estimate. Each simulation is comprised of
  five populations of sizes 250, 250, 400, 550, and 550 individuals with average pairwise $F_{ST}$ values
  indicated above each plot.}
   \label{fig:FvSdistruct}
@@ -476,19 +485,20 @@ we find that the two programs give similar results.
 Though we observed similar results
 between the two programs at large values of $F_{ST}$, 
 {\sc flockture}'s `best-run' solutions consistently assigned fewer individuals correctly
-and became somewhat inconsistent at lower values of $F_{ST}$.
-This is likely a consequence of the low population divergence and also
-the large size of the search space over possible partitions. 
-The likelihood surface defined on partitions of this space will often
+and became inconsistent at lower values of $F_{ST}$.
+This is likely a consequence of the low population divergence which
+makes it possible for many different allocations of individuals to
+have roughly the same likelihood.
+The likelihood surface defined on partitions of this space is then often
 be multimodal---possessing numerous local peaks and troughs.
 The peak that  {\sc flockture}'s algorithm finds is entirely determined by the initial, random, allocation of 
 individuals, as the algorithm proceeds deterministically after the initial random allocation.
 Decreasing $F_{ST}$ leads to more homogenous 
 populations whose multilocus genotypes have a smaller difference in 
 likelihood of assigning to any given cluster. This likely increases the number of
-local peaks, leading {\sc flockture} to settle on many different solutions. The problem of getting 
-caught in local modes is not unique to {\sc flock}---{\sc structure} also can converge to 
-different solutions in complex spaces; however our simulationssuggest this is a more  
+local peaks, leading {\sc flockture} to settle on many different solutions in each run. The problem presented by having multiple modes in the likelihood surface 
+is not unique to {\sc flock}---{\sc structure} also can converge to 
+different solutions in complex spaces; however our simulations suggest this is a more  
 prevalent problem for {\sc flockture}.
 {\sc flock} is not best-suited to species characterized by large
 subpopulations and low divergence, as is the case with many 
@@ -496,19 +506,25 @@ marine fish.
    
 
 One of the advantages of {\sc flock} over other methods for genetic clustering
-is reported to be the short processing time for each run of {\sc flock}.
-While \citet{Duc&Tur2012} observed faster processing times (relative to other methods), 
-their comparision was based on setting {\sc flock} to perform 50 runs and 20 iterations for each 
-$K$ starting at 2 and ending when one of the stopping conditions was met, and computing times for that analysis 
-were compared to ten iterations of the admixture and correlated allele frequency model in {\sc structure} using 
-a 50,000 sweep burn-in followed by a 200,000 sweep sample 
-from the posterior for values of $K$ from 1 to three more than the true 
-value of $K$. It is difficult to reliably assess differences in program run times when there is no clear consensus on what 
-constitutes a reasonable comparison with respect to run length and number of runs, however, we show that if 
-{\sc flock} were to be implemented using good coding practices in a fast language, rather than as
-a VBA routine in Microsoft Excel,
-it would be approximately 200 times faster. This is not an inconsequential difference and is one reason
-we used {\sc flockture} for a large-scale simulation assessment of the {\sc flock} algorithm.
+is reported to be the short processing time for each execution of {\sc flock}.
+\citet{Duc&Tur2012} observed faster processing times relative to {\sc structure}.
+Having implemented {\sc flockture} it is clear that the amount of computation required for a
+single sweep of {\sc structure} is equivalent to an iteration of reallocation of individuals
+in {\sc flock}.
+Hence, if {\sc flock} and {\sc structure} took similar amounts of time for comparable
+computations, one would expect that running flock once with 50 runs, each of 20 iterations,
+would require about the same amount of time as running {\sc structure} on the same
+data set for 1,000 sweeps.  Since it is recommended to run {\sc structure} longer than 1,000 sweeps, {\sc flock} should have a speed advantage. However, {\sc flock} requires far more 
+time for each computation
+than {\sc structure}, as is clear from the fact that it runs 200 times slower than 
+{\sc flockture}.  Thus, for data sets comparable to the ones we simulated, one can expect
+50 runs of 20 iterations in {\sc flock} (a standard execution of the program) to require as
+much time as running {\sc structure} for 200,000 sweeps. This does not constitute
+a speed advantage.
+If {\sc flock} were to be implemented using good coding practices in a fast language,
+rather than as a VBA routine in Microsoft Excel,
+it could be made much faster. As it is, we found it preferable to implement our own version
+in {\sc flockture} for our simulation assessment of the {\sc flock} algorithm.
 
 
 Many researchers wish to estimate $K$, the number of subpopulations, from genetic data.  This is
