@@ -1,5 +1,19 @@
 # flock-comment
 
+Notes for eric:
+
+When making the dryad archive we can jettison:
+
+* forms/
+* ForPipeline/
+* inst/
+* reviews1/
+* SimDat1/
+* SimDat2/
+* in tex folder, letters to the editors and stuff.
+
+Then modify README a little, maybe.
+
 This is LaTeX code to typeset a comment for Molecular Ecology Resources
 about the similarity between the program FLOCK and structure.  And now it also 
 includes some R code to reproduce results in the paper.
