@@ -12,7 +12,8 @@ When making the dryad archive we can jettison:
 * SimDat2/
 * in tex folder, letters to the editors and stuff.
 
-Then modify README a little, maybe.
+Then modify README a little to refer to the fact that the full simulated data sets
+are also in the archive.
 
 This is LaTeX code to typeset a comment for Molecular Ecology Resources
 about the similarity between the program FLOCK and structure.  And now it also 
