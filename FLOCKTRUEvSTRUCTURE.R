@@ -52,14 +52,12 @@ qi_indLoss <- F # set true if you want graphs of qi values and loss by simulatio
 
 ### Set up the parameters controlling the simulations 
 Seedset <-  3
-### ECA: gotta set reps back after testing
 Reps <- 9 # how many reps do we want to run for each program
 Npops <- 5
 N <- 2000
 
 ## set up migration rates to use 
 if(marker == 1) {
-  ## ECA got to set MGrate back after testing
   MGrate <- c(20,24,28,30,31,32,36,37,37.5,38,40,50,60,75,90,125)
 } else if(marker == 2) {
   MGrate<-c(20,24,28,30,31,34,36,36.8,37.5,38,40,50,60,75,80,87)
