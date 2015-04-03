@@ -36,6 +36,7 @@ This should result in two PDF files:
 
 ## Reproducing the simulations
 
+### Flockture versus structure
 The R script 'Flock2Structure' will rerun the analyses comparing Structure and FLOCKTURE from the 
 manuscript.  In order to make this work you ought to be on a sane Unix system (you will need `rsync`,
 `awk`, `make` and other such utilities.  Easiest, probably, is going to
@@ -97,14 +98,24 @@ Once FLOCKTURE and the slg_pipe are setup, open the FLOCKTUREvSTRUCTURE.R script
 3. MGrate (lines37/40): This is a vector of migration rates for the coalescent simulation. These values determine the amount of population differentiation among the five populations simulated. 
 4. Seedset (line32): Set from 1-3. These are seeds for simulating data. In the manuscript we simulated 16 datasets with varying migration rates using the same random seeds, and then changed the random seeds twice to simulate the remaining 32 for each marker type. Setting this to 3 will run the full set of simulations.
 
+#### The data sets
+Gzipped versions of the data sets that get simulated in the script are available in the files
+inside `SNPuSAT_InFiles/SNPs_Simulations` and `SNPuSAT_InFiles/uSat_Simulations`.
+
+### Flockture versus Flock
+
+The comparison made between flock and flockture can be re-created using the R
+script `FLOCKvFLOCKture.R`.  There is a little bit of  hand-curation that has 
+to go on because FLOCK is not scriptable. The data needed for these, and the
+FLOCK output are in `FLOCKvFLOCKTURE_data`.  The FLOCK output, in particular, is
+a bit of a beast since it is all stored in Microsoft's xlsx format that doesn't appear
+to be very efficient.
+
 
 ## Terms 
 
 As a work partially of the United States Government, this package is in the
 public domain within the United States. 
-
-Of course, it would be awfully lame of anyone to copy this work and claim it as their
-own before we pubish it.
 
 See TERMS.md for more information.
 
